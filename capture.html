@@ -1,200 +1,254 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Take Your Photos</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+```
+<link rel="stylesheet" href="style.css">
+```
 
 </head>
 
-
 <body class="capture-page">
 
+```
+<!-- ========================================
+     CAMERA FLASH
+======================================== -->
 
-    <!-- FLASH EFFECT -->
+<div id="cameraFlash" class="camera-flash"></div>
 
-    <div
-        id="cameraFlash"
-        class="camera-flash"
-    ></div>
 
+<main class="capture-container">
 
+    <!-- ========================================
+         HEADER
+    ======================================== -->
 
-    <main class="capture-container">
-
-
-        <!-- HEADER -->
-
-        <header class="capture-header">
-
-            <button
-                class="back-button"
-                onclick="goBackHome()"
-            >
-                ← Back
-            </button>
-
-
-            <div>
-
-                <h1>TAKE A PIC</h1>
-
-                <p id="photoCounter">
-                    Ready?
-                </p>
-
-            </div>
-
-        </header>
-
-
-
-        <!-- CAMERA + PREVIEW -->
-
-        <section class="camera-layout">
-
-
-            <!-- CAMERA -->
-
-            <div class="camera-section">
-
-                <div class="camera-frame">
-
-
-                    <!-- LIVE CAMERA -->
-
-                    <video
-                        id="cameraVideo"
-                        autoplay
-                        playsinline
-                        muted
-                    ></video>
-
-
-                    <!-- CAMERA PLACEHOLDER -->
-
-                    <div
-                        id="cameraPlaceholder"
-                        class="camera-placeholder"
-                    >
-
-                        <div class="camera-icon">
-                            📷
-                        </div>
-
-                        <p>
-                            Open your camera to begin
-                        </p>
-
-                    </div>
-
-
-                    <!-- COUNTDOWN -->
-
-                    <div
-                        id="countdown"
-                        class="countdown"
-                    ></div>
-
-                </div>
-
-
-
-                <!-- CAMERA CONTROLS -->
-
-                <div class="camera-controls">
-
-
-                    <button
-                        class="secondary-button"
-                        onclick="startCamera()"
-                    >
-                        OPEN CAMERA
-                    </button>
-
-
-                    <button
-                        id="captureButton"
-                        class="shutter-button"
-                        onclick="capturePhoto()"
-                        disabled
-                    >
-
-                        <span></span>
-
-                    </button>
-
-
-                    <button
-                        class="secondary-button"
-                        onclick="switchCamera()"
-                    >
-                        🔄 SWITCH
-                    </button>
-
-
-                </div>
-
-            </div>
-
-
-
-            <!-- PHOTO PREVIEW -->
-
-            <aside class="preview-section">
-
-                <h2>
-                    YOUR PHOTO STRIP
-                </h2>
-
-
-                <!--
-                    JavaScript will create
-                    the selected layout here.
-                -->
-
-                <div
-                    id="photoPreview"
-                    class="photo-preview"
-                ></div>
-
-
-            </aside>
-
-
-        </section>
-
-
-
-        <!-- FINISH -->
+    <header class="capture-header">
 
         <button
-            id="finishButton"
-            class="main-button"
-            onclick="finishPhotos()"
-            disabled
+            class="back-button"
+            onclick="goBackHome()"
         >
-            FINISH PHOTO
+            ← Back
         </button>
 
+        <div>
 
-    </main>
+            <h1>TAKE A PIC</h1>
+
+            <p id="photoCounter">
+                Ready?
+            </p>
+
+        </div>
+
+    </header>
 
 
+    <!-- ========================================
+         CAMERA + PREVIEW
+    ======================================== -->
 
-    <script src="script.js"></script>
+    <section class="camera-layout">
+
+
+        <!-- ====================================
+             CAMERA SECTION
+        ==================================== -->
+
+        <div class="camera-section">
+
+            <div class="camera-frame">
+
+                <!-- LIVE CAMERA -->
+
+                <video
+                    id="cameraVideo"
+                    autoplay
+                    playsinline
+                    muted
+                ></video>
+
+
+                <!-- CAMERA PLACEHOLDER -->
+
+                <div
+                    id="cameraPlaceholder"
+                    class="camera-placeholder"
+                >
+
+                    <div class="camera-icon">
+                        📷
+                    </div>
+
+                    <p>
+                        Open your camera to begin
+                    </p>
+
+                </div>
+
+
+                <!-- COUNTDOWN -->
+
+                <div
+                    id="countdown"
+                    class="countdown"
+                ></div>
+
+            </div>
+
+
+            <!-- ====================================
+                 FILTER SELECTOR
+            ==================================== -->
+
+            <div class="filter-section">
+
+                <h3>
+                    PHOTO FILTER
+                </h3>
+
+                <div class="filter-options">
+
+                    <button
+                        class="filter-button active"
+                        data-filter="normal"
+                        onclick="selectFilter('normal')"
+                    >
+                        NORMAL
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-filter="vintage"
+                        onclick="selectFilter('vintage')"
+                    >
+                        VINTAGE
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-filter="bw"
+                        onclick="selectFilter('bw')"
+                    >
+                        B&W
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-filter="sepia"
+                        onclick="selectFilter('sepia')"
+                    >
+                        SEPIA
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-filter="cool"
+                        onclick="selectFilter('cool')"
+                    >
+                        COOL
+                    </button>
+
+                    <button
+                        class="filter-button"
+                        data-filter="warm"
+                        onclick="selectFilter('warm')"
+                    >
+                        WARM
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ====================================
+                 CAMERA CONTROLS
+            ==================================== -->
+
+            <div class="camera-controls">
+
+                <button
+                    class="secondary-button"
+                    onclick="startCamera()"
+                >
+                    OPEN CAMERA
+                </button>
+
+
+                <button
+                    id="captureButton"
+                    class="shutter-button"
+                    onclick="capturePhoto()"
+                    disabled
+                >
+                    <span></span>
+                </button>
+
+
+                <button
+                    class="secondary-button"
+                    onclick="switchCamera()"
+                >
+                    🔄 SWITCH
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================
+             PHOTO PREVIEW
+        ==================================== -->
+
+        <aside class="preview-section">
+
+            <h2>
+                YOUR PHOTO STRIP
+            </h2>
+
+
+            <!--
+                JavaScript creates the selected
+                layout here.
+            -->
+
+            <div
+                id="photoPreview"
+                class="photo-preview"
+            ></div>
+
+        </aside>
+
+    </section>
+
+
+    <!-- ========================================
+         FINISH
+    ======================================== -->
+
+    <button
+        id="finishButton"
+        class="main-button"
+        onclick="finishPhotos()"
+        disabled
+    >
+        FINISH PHOTO
+    </button>
+
+</main>
+
+
+<script src="script.js"></script>
+```
 
 </body>
 

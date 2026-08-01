@@ -2832,3 +2832,1247 @@ document.addEventListener(
     }
 
 );
+/* ========================================
+STAGE 5 - CUSTOMIZATION DATA
+======================================== */
+
+let customizationBackground =
+localStorage.getItem("customizationBackground") ||
+"#ffffff";
+
+let customizationFrame =
+localStorage.getItem("customizationFrame") ||
+"none";
+
+let customizationText =
+localStorage.getItem("customizationText") ||
+"";
+
+let customizationShowDate =
+localStorage.getItem("customizationShowDate") === "true";
+
+/* ========================================
+SELECT BACKGROUND
+======================================== */
+
+function selectBackground(color, button) {
+
+```
+customizationBackground = color;
+
+localStorage.setItem(
+    "customizationBackground",
+    color
+);
+
+
+const buttons =
+    document.querySelectorAll(
+        ".background-button"
+    );
+
+
+buttons.forEach(button => {
+
+    button.classList.remove(
+        "active"
+    );
+
+});
+
+
+if (button) {
+
+    button.classList.add(
+        "active"
+    );
+
+}
+
+
+updateCustomizationPreview();
+```
+
+}
+
+/* ========================================
+SELECT FRAME
+======================================== */
+
+function selectFrame(frame, button) {
+
+```
+customizationFrame = frame;
+
+localStorage.setItem(
+    "customizationFrame",
+    frame
+);
+
+
+const buttons =
+    document.querySelectorAll(
+        ".frame-button"
+    );
+
+
+buttons.forEach(button => {
+
+    button.classList.remove(
+        "active"
+    );
+
+});
+
+
+if (button) {
+
+    button.classList.add(
+        "active"
+    );
+
+}
+
+
+updateCustomizationPreview();
+```
+
+}
+
+/* ========================================
+UPDATE CUSTOM TEXT
+======================================== */
+
+function updateCustomText(text) {
+
+```
+customizationText =
+    text;
+
+
+localStorage.setItem(
+    "customizationText",
+    text
+);
+
+
+updateCustomizationPreview();
+```
+
+}
+
+/* ========================================
+TOGGLE DATE
+======================================== */
+
+function toggleDate(enabled) {
+
+```
+customizationShowDate =
+    enabled;
+
+
+localStorage.setItem(
+    "customizationShowDate",
+    enabled
+);
+
+
+updateCustomizationPreview();
+```
+
+}
+
+/* ========================================
+BACK TO CAPTURE
+======================================== */
+
+function backToCapture() {
+
+```
+window.location.href =
+    "capture.html";
+```
+
+}
+
+/* ========================================
+LOAD CUSTOMIZATION PREVIEW
+======================================== */
+
+function createCustomizationPreview() {
+
+```
+const canvas =
+    document.getElementById(
+        "customizeCanvas"
+    );
+
+
+if (!canvas) {
+
+    return;
+
+}
+
+
+capturedPhotos =
+    JSON.parse(
+
+        localStorage.getItem(
+            "capturedPhotos"
+        )
+
+    ) || [];
+
+
+selectedLayout =
+    localStorage.getItem(
+        "selectedLayout"
+    ) || "classic";
+
+
+selectedPhotoCount =
+    parseInt(
+
+        localStorage.getItem(
+            "selectedPhotoCount"
+        )
+
+    ) || 3;
+
+
+customizationBackground =
+    localStorage.getItem(
+        "customizationBackground"
+    ) || "#ffffff";
+
+
+customizationFrame =
+    localStorage.getItem(
+        "customizationFrame"
+    ) || "none";
+
+
+customizationText =
+    localStorage.getItem(
+        "customizationText"
+    ) || "";
+
+
+customizationShowDate =
+    localStorage.getItem(
+        "customizationShowDate"
+    ) === "true";
+
+
+const textInput =
+    document.getElementById(
+        "customText"
+    );
+
+
+if (textInput) {
+
+    textInput.value =
+        customizationText;
+
+}
+
+
+const dateCheckbox =
+    document.getElementById(
+        "showDate"
+    );
+
+
+if (dateCheckbox) {
+
+    dateCheckbox.checked =
+        customizationShowDate;
+
+}
+
+
+const backgroundButton =
+    document.querySelector(
+
+        `[data-background="${customizationBackground}"]`
+
+    );
+
+
+if (backgroundButton) {
+
+    selectBackground(
+
+        customizationBackground,
+
+        backgroundButton
+
+    );
+
+}
+
+
+const frameButton =
+    document.querySelector(
+
+        `[data-frame="${customizationFrame}"]`
+
+    );
+
+
+if (frameButton) {
+
+    selectFrame(
+
+        customizationFrame,
+
+        frameButton
+
+    );
+
+}
+
+
+drawCustomizationCanvas();
+```
+
+}
+
+/* ========================================
+UPDATE PREVIEW
+======================================== */
+
+function updateCustomizationPreview() {
+
+```
+drawCustomizationCanvas();
+```
+
+}
+
+/* ========================================
+DRAW CUSTOMIZATION CANVAS
+======================================== */
+
+async function drawCustomizationCanvas() {
+
+```
+const canvas =
+    document.getElementById(
+        "customizeCanvas"
+    );
+
+
+if (!canvas) {
+
+    return;
+
+}
+
+
+const images =
+    [];
+
+
+let loaded =
+    0;
+
+
+const photos =
+    capturedPhotos.slice(
+
+        0,
+
+        selectedPhotoCount
+
+    );
+
+
+if (!photos.length) {
+
+    return;
+
+}
+
+
+photos.forEach(
+
+    (src, index) => {
+
+        const image =
+            new Image();
+
+
+        image.onload =
+            () => {
+
+                loaded++;
+
+
+                if (
+                    loaded ===
+                    photos.length
+                ) {
+
+                    drawCustomizationLayout(
+
+                        canvas,
+
+                        images
+
+                    );
+
+                }
+
+            };
+
+
+        image.src =
+            src;
+
+
+        images[index] =
+            image;
+
+    }
+
+);
+```
+
+}
+
+/* ========================================
+DRAW CUSTOMIZATION LAYOUT
+======================================== */
+
+function drawCustomizationLayout(
+
+```
+canvas,
+
+images
+```
+
+) {
+
+```
+if (
+    selectedLayout ===
+    "classic"
+) {
+
+    drawCustomClassic(
+
+        canvas,
+
+        images
+
+    );
+
+}
+
+else if (
+    selectedLayout ===
+    "four"
+) {
+
+    drawCustomFour(
+
+        canvas,
+
+        images
+
+    );
+
+}
+
+else if (
+    selectedLayout ===
+    "grid"
+) {
+
+    drawCustomGrid(
+
+        canvas,
+
+        images
+
+    );
+
+}
+```
+
+}
+
+/* ========================================
+CUSTOM CLASSIC
+======================================== */
+
+function drawCustomClassic(
+
+```
+canvas,
+
+images
+```
+
+) {
+
+```
+const width =
+    600;
+
+
+const photoWidth =
+    540;
+
+
+const photoHeight =
+    405;
+
+
+const padding =
+    30;
+
+
+const gap =
+    20;
+
+
+const bottomArea =
+    110;
+
+
+canvas.width =
+    width;
+
+
+canvas.height =
+
+    padding +
+
+    (photoHeight * 3) +
+
+    (gap * 2) +
+
+    bottomArea;
+
+
+drawCustomizationBackground(
+
+    canvas
+
+);
+
+
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+for (
+    let i = 0;
+    i < 3;
+    i++
+) {
+
+    drawCoverImage(
+
+        ctx,
+
+        images[i],
+
+        padding,
+
+        padding +
+
+        i *
+
+        (photoHeight + gap),
+
+        photoWidth,
+
+        photoHeight
+
+    );
+
+}
+
+
+drawCustomizationDetails(
+
+    ctx,
+
+    canvas
+
+);
+```
+
+}
+
+/* ========================================
+CUSTOM FOUR
+======================================== */
+
+function drawCustomFour(
+
+```
+canvas,
+
+images
+```
+
+) {
+
+```
+const width =
+    600;
+
+
+const photoWidth =
+    540;
+
+
+const photoHeight =
+    360;
+
+
+const padding =
+    30;
+
+
+const gap =
+    18;
+
+
+const bottomArea =
+    110;
+
+
+canvas.width =
+    width;
+
+
+canvas.height =
+
+    padding +
+
+    (photoHeight * 4) +
+
+    (gap * 3) +
+
+    bottomArea;
+
+
+drawCustomizationBackground(
+
+    canvas
+
+);
+
+
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+for (
+    let i = 0;
+    i < 4;
+    i++
+) {
+
+    drawCoverImage(
+
+        ctx,
+
+        images[i],
+
+        padding,
+
+        padding +
+
+        i *
+
+        (photoHeight + gap),
+
+        photoWidth,
+
+        photoHeight
+
+    );
+
+}
+
+
+drawCustomizationDetails(
+
+    ctx,
+
+    canvas
+
+);
+```
+
+}
+
+/* ========================================
+CUSTOM GRID
+======================================== */
+
+function drawCustomGrid(
+
+```
+canvas,
+
+images
+```
+
+) {
+
+```
+const width =
+    700;
+
+
+const height =
+    700;
+
+
+const padding =
+    30;
+
+
+const gap =
+    20;
+
+
+const labelHeight =
+    110;
+
+
+const photoWidth =
+
+    (
+
+        width -
+
+        (padding * 2) -
+
+        gap
+
+    ) / 2;
+
+
+const photoHeight =
+
+    (
+
+        height -
+
+        padding -
+
+        labelHeight -
+
+        gap
+
+    ) / 2;
+
+
+canvas.width =
+    width;
+
+
+canvas.height =
+    height;
+
+
+drawCustomizationBackground(
+
+    canvas
+
+);
+
+
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+const positions = [
+
+    [
+        padding,
+        padding
+    ],
+
+    [
+        padding +
+        photoWidth +
+        gap,
+
+        padding
+    ],
+
+    [
+        padding,
+
+        padding +
+        photoHeight +
+        gap
+    ],
+
+    [
+        padding +
+        photoWidth +
+        gap,
+
+        padding +
+        photoHeight +
+        gap
+    ]
+
+];
+
+
+for (
+    let i = 0;
+    i < 4;
+    i++
+) {
+
+    drawCoverImage(
+
+        ctx,
+
+        images[i],
+
+        positions[i][0],
+
+        positions[i][1],
+
+        photoWidth,
+
+        photoHeight
+
+    );
+
+}
+
+
+drawCustomizationDetails(
+
+    ctx,
+
+    canvas
+
+);
+```
+
+}
+
+/* ========================================
+BACKGROUND
+======================================== */
+
+function drawCustomizationBackground(
+
+```
+canvas
+```
+
+) {
+
+```
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+ctx.fillStyle =
+    customizationBackground;
+
+
+ctx.fillRect(
+
+    0,
+
+    0,
+
+    canvas.width,
+
+    canvas.height
+
+);
+```
+
+}
+
+/* ========================================
+CUSTOMIZATION DETAILS
+======================================== */
+
+function drawCustomizationDetails(
+
+```
+ctx,
+
+canvas
+```
+
+) {
+
+```
+const centerX =
+    canvas.width / 2;
+
+
+const bottomY =
+    canvas.height - 65;
+
+
+/*
+    FRAME
+*/
+
+if (
+    customizationFrame ===
+    "simple"
+) {
+
+    ctx.strokeStyle =
+        "#28657d";
+
+
+    ctx.lineWidth =
+        12;
+
+
+    ctx.strokeRect(
+
+        8,
+
+        8,
+
+        canvas.width - 16,
+
+        canvas.height - 16
+
+    );
+
+}
+
+
+else if (
+    customizationFrame ===
+    "rounded"
+) {
+
+    ctx.strokeStyle =
+        "#28657d";
+
+
+    ctx.lineWidth =
+        10;
+
+
+    drawRoundedRectangle(
+
+        ctx,
+
+        8,
+
+        8,
+
+        canvas.width - 16,
+
+        canvas.height - 16,
+
+        30
+
+    );
+
+}
+
+
+else if (
+    customizationFrame ===
+    "double"
+) {
+
+    ctx.strokeStyle =
+        "#28657d";
+
+
+    ctx.lineWidth =
+        6;
+
+
+    ctx.strokeRect(
+
+        10,
+
+        10,
+
+        canvas.width - 20,
+
+        canvas.height - 20
+
+    );
+
+
+    ctx.lineWidth =
+        3;
+
+
+    ctx.strokeRect(
+
+        20,
+
+        20,
+
+        canvas.width - 40,
+
+        canvas.height - 40
+
+    );
+
+}
+
+
+/*
+    CUSTOM TEXT
+*/
+
+if (
+    customizationText
+) {
+
+    ctx.fillStyle =
+        "#28657d";
+
+
+    ctx.font =
+        "bold 24px Arial";
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.fillText(
+
+        customizationText,
+
+        centerX,
+
+        bottomY
+
+    );
+
+}
+
+
+/*
+    DEFAULT LABEL
+*/
+
+else {
+
+    ctx.fillStyle =
+        "#28657d";
+
+
+    ctx.font =
+        "bold 24px Arial";
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.fillText(
+
+        "PHOTO BOOTH",
+
+        centerX,
+
+        bottomY
+
+    );
+
+}
+
+
+/*
+    DATE
+*/
+
+if (
+    customizationShowDate
+) {
+
+    const today =
+        new Date();
+
+
+    const dateText =
+        today.toLocaleDateString();
+
+
+    ctx.fillStyle =
+        "#28657d";
+
+
+    ctx.font =
+        "16px Arial";
+
+
+    ctx.fillText(
+
+        dateText,
+
+        centerX,
+
+        canvas.height - 30
+
+    );
+
+}
+```
+
+}
+
+/* ========================================
+ROUNDED RECTANGLE
+======================================== */
+
+function drawRoundedRectangle(
+
+```
+ctx,
+
+x,
+
+y,
+
+width,
+
+height,
+
+radius
+```
+
+) {
+
+```
+ctx.beginPath();
+
+
+ctx.roundRect(
+
+    x,
+
+    y,
+
+    width,
+
+    height,
+
+    radius
+
+);
+
+
+ctx.stroke();
+```
+
+}
+
+/* ========================================
+FINISH CUSTOMIZATION
+======================================== */
+
+function finishCustomization() {
+
+```
+localStorage.setItem(
+
+    "customizationBackground",
+
+    customizationBackground
+
+);
+
+
+localStorage.setItem(
+
+    "customizationFrame",
+
+    customizationFrame
+
+);
+
+
+localStorage.setItem(
+
+    "customizationText",
+
+    customizationText
+
+);
+
+
+localStorage.setItem(
+
+    "customizationShowDate",
+
+    customizationShowDate
+
+);
+
+
+window.location.href =
+    "result.html";
+```
+
+}
+
+/* ========================================
+STAGE 5 PAGE INITIALIZATION
+======================================== */
+
+document.addEventListener(
+
+```
+"DOMContentLoaded",
+
+() => {
+
+    if (
+
+        document.body.classList
+
+            .contains(
+
+                "customize-page"
+
+            )
+
+    ) {
+
+        createCustomizationPreview();
+
+    }
+
+}
+```
+
+);

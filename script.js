@@ -1,647 +1,464 @@
 /* ========================================
-   RESET
+   PHOTO BOOTH GLOBAL DATA
 ======================================== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+let selectedLayout =
+    localStorage.getItem("selectedLayout")
+    || "classic";
 
 
-body {
-    min-height: 100vh;
+let selectedPhotoCount =
+    parseInt(
+        localStorage.getItem("selectedPhotoCount")
+    )
+    || 3;
 
-    font-family:
-        "Trebuchet MS",
-        "Arial",
-        sans-serif;
 
-    color: #173b52;
+let capturedPhotos = [];
 
-    background:
-        linear-gradient(
-            180deg,
-            #8fd8f5 0%,
-            #c8edfa 45%,
-            #f5fbfc 100%
+let cameraStream = null;
+
+let currentCamera = "user";
+
+
+
+/* ========================================
+   LAYOUT SELECTION
+======================================== */
+
+function selectLayout(button) {
+
+    const options =
+        document.querySelectorAll(
+            ".layout-option"
         );
 
-    overflow-x: hidden;
-}
 
+    options.forEach(option => {
 
-
-/* ========================================
-   CLOUD EFFECT
-======================================== */
-
-body::before,
-body::after {
-    content: "";
-
-    position: fixed;
-
-    width: 320px;
-    height: 100px;
-
-    background: rgba(255,255,255,0.65);
-
-    border-radius: 100px;
-
-    filter: blur(8px);
-
-    z-index: -1;
-}
-
-
-body::before {
-    top: 12%;
-    left: -100px;
-}
-
-
-body::after {
-    bottom: 15%;
-    right: -100px;
-}
-
-
-
-/* ========================================
-   HOME PAGE
-======================================== */
-
-.home-page,
-.capture-page,
-.result-page {
-    display: flex;
-
-    justify-content: center;
-
-    min-height: 100vh;
-}
-
-
-.home-container {
-    width: 100%;
-
-    max-width: 1100px;
-
-    padding: 50px 25px 70px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-}
-
-
-
-/* ========================================
-   HEADER
-======================================== */
-
-.site-header {
-    text-align: center;
-
-    margin-bottom: 55px;
-}
-
-
-.site-header h1 {
-    font-size: clamp(3rem, 10vw, 7rem);
-
-    letter-spacing: 8px;
-
-    font-weight: 900;
-
-    color: white;
-
-    text-shadow:
-        4px 4px 0 #4f9bb8,
-        7px 7px 0 rgba(255,255,255,0.4);
-}
-
-
-.site-header p {
-    margin-top: 12px;
-
-    font-size: 1rem;
-
-    letter-spacing: 3px;
-
-    text-transform: uppercase;
-
-    color: #326d86;
-}
-
-
-
-/* ========================================
-   LAYOUT SECTION
-======================================== */
-
-.layout-section {
-    width: 100%;
-
-    text-align: center;
-}
-
-
-.layout-section h2 {
-    margin-bottom: 30px;
-
-    font-size: 2rem;
-
-    color: white;
-
-    text-shadow:
-        2px 2px 0 #4f9bb8;
-}
-
-
-.layout-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(190px, 1fr)
+        option.classList.remove(
+            "selected"
         );
 
-    gap: 25px;
+    });
 
-    width: 100%;
 
-    max-width: 850px;
+    button.classList.add(
+        "selected"
+    );
 
-    margin: auto;
+
+    selectedLayout =
+        button.dataset.layout;
+
+
+    selectedPhotoCount =
+        parseInt(
+            button.dataset.photos
+        );
+
+
+    localStorage.setItem(
+        "selectedLayout",
+        selectedLayout
+    );
+
+
+    localStorage.setItem(
+        "selectedPhotoCount",
+        selectedPhotoCount
+    );
+
 }
 
 
 
 /* ========================================
-   LAYOUT OPTIONS
+   START PHOTO BOOTH
 ======================================== */
 
-.layout-option {
-    border: 4px solid transparent;
+function startPhotoBooth() {
 
-    border-radius: 25px;
-
-    padding: 25px 20px;
-
-    background:
-        rgba(255,255,255,0.65);
-
-    backdrop-filter: blur(10px);
-
-    cursor: pointer;
-
-    transition:
-        transform 0.25s ease,
-        border 0.25s ease,
-        box-shadow 0.25s ease;
-}
+    localStorage.setItem(
+        "selectedLayout",
+        selectedLayout
+    );
 
 
-.layout-option:hover {
-    transform: translateY(-7px);
-
-    box-shadow:
-        0 15px 30px
-        rgba(40,100,130,0.2);
-}
+    localStorage.setItem(
+        "selectedPhotoCount",
+        selectedPhotoCount
+    );
 
 
-.layout-option.selected {
-    border-color: white;
+    window.location.href =
+        "capture.html";
 
-    box-shadow:
-        0 0 0 4px #58aeca,
-        0 15px 35px
-        rgba(40,100,130,0.3);
-
-    transform: translateY(-7px);
-}
-
-
-.layout-option span {
-    display: block;
-
-    margin-top: 20px;
-
-    font-weight: bold;
-
-    color: #28657d;
 }
 
 
 
 /* ========================================
-   MINI PHOTO STRIPS
+   GO BACK HOME
 ======================================== */
 
-.mini-strip {
-    width: 110px;
+function goBackHome() {
 
-    margin: auto;
+    stopCamera();
 
-    padding: 8px;
+    window.location.href =
+        "index.html";
 
-    background: white;
-
-    box-shadow:
-        0 7px 15px
-        rgba(0,0,0,0.15);
-}
-
-
-.mini-photo {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #b7dce9;
-
-    color: white;
-
-    font-size: 12px;
-
-    font-weight: bold;
-}
-
-
-.classic-strip .mini-photo {
-    height: 70px;
-
-    margin-bottom: 5px;
-}
-
-
-.four-strip .mini-photo {
-    height: 50px;
-
-    margin-bottom: 5px;
-}
-
-
-.mini-label {
-    padding: 8px 2px 4px;
-
-    font-size: 7px;
-
-    letter-spacing: 1px;
-
-    color: #28657d;
 }
 
 
 
 /* ========================================
-   GRID LAYOUT
+   CAMERA
 ======================================== */
 
-.mini-grid {
-    width: 140px;
+async function startCamera() {
 
-    margin: auto;
+    try {
 
-    padding: 8px;
+        if (cameraStream) {
 
-    display: grid;
+            stopCamera();
 
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 5px;
-
-    background: white;
-
-    box-shadow:
-        0 7px 15px
-        rgba(0,0,0,0.15);
-}
+        }
 
 
-.mini-grid .mini-photo {
-    height: 65px;
+        cameraStream =
+            await navigator.mediaDevices
+                .getUserMedia({
+
+                    video: {
+
+                        facingMode:
+                            currentCamera
+
+                    },
+
+                    audio: false
+
+                });
+
+
+        const video =
+            document.getElementById(
+                "cameraVideo"
+            );
+
+
+        const placeholder =
+            document.querySelector(
+                ".camera-placeholder"
+            );
+
+
+        video.srcObject =
+            cameraStream;
+
+
+        video.hidden =
+            false;
+
+
+        placeholder.style.display =
+            "none";
+
+
+        updateCounter();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Camera error:",
+            error
+        );
+
+
+        alert(
+            "Unable to access your camera. Please allow camera permissions and try again."
+        );
+
+    }
+
 }
 
 
 
 /* ========================================
-   BUTTONS
+   STOP CAMERA
 ======================================== */
 
-.main-button {
-    margin-top: 45px;
+function stopCamera() {
 
-    padding: 18px 50px;
+    if (!cameraStream) {
 
-    border: none;
+        return;
 
-    border-radius: 50px;
-
-    background: white;
-
-    color: #28708b;
-
-    font-size: 1rem;
-
-    font-weight: 900;
-
-    letter-spacing: 2px;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 8px 20px
-        rgba(30,100,130,0.2);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
+    }
 
 
-.main-button:hover {
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 12px 25px
-        rgba(30,100,130,0.3);
-}
-
-
-.main-button:disabled {
-    opacity: 0.5;
-
-    cursor: not-allowed;
-
-    transform: none;
-}
+    cameraStream
+        .getTracks()
+        .forEach(
+            track =>
+                track.stop()
+        );
 
 
-.secondary-button {
-    padding: 12px 20px;
+    cameraStream =
+        null;
 
-    border: 2px solid white;
-
-    border-radius: 30px;
-
-    background:
-        rgba(255,255,255,0.5);
-
-    color: #28657d;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-
-.secondary-button:hover {
-    background: white;
 }
 
 
 
 /* ========================================
-   CAPTURE PAGE
+   SWITCH CAMERA
 ======================================== */
 
-.capture-container {
-    width: 100%;
+async function switchCamera() {
 
-    max-width: 1200px;
-
-    padding: 30px 25px 60px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-}
+    currentCamera =
+        currentCamera === "user"
+            ? "environment"
+            : "user";
 
 
-.capture-header {
-    text-align: center;
+    await startCamera();
 
-    position: relative;
-
-    width: 100%;
-
-    margin-bottom: 30px;
-}
-
-
-.capture-header h1,
-.result-header h1 {
-    color: white;
-
-    font-size: 3rem;
-
-    letter-spacing: 5px;
-
-    text-shadow:
-        3px 3px 0 #4f9bb8;
-}
-
-
-.capture-header p {
-    margin-top: 8px;
-
-    color: #28657d;
-
-    font-weight: bold;
-}
-
-
-.back-button {
-    position: absolute;
-
-    left: 0;
-
-    top: 10px;
-
-    border: none;
-
-    background: white;
-
-    padding: 10px 18px;
-
-    border-radius: 25px;
-
-    color: #28657d;
-
-    cursor: pointer;
-
-    font-weight: bold;
 }
 
 
 
 /* ========================================
-   CAMERA LAYOUT
+   PHOTO COUNTER
 ======================================== */
 
-.camera-layout {
-    width: 100%;
+function updateCounter() {
 
-    display: grid;
+    const counter =
+        document.getElementById(
+            "photoCounter"
+        );
 
-    grid-template-columns:
-        1fr 300px;
 
-    gap: 35px;
+    if (!counter) {
 
-    align-items: start;
+        return;
+
+    }
+
+
+    if (
+        capturedPhotos.length
+        >= selectedPhotoCount
+    ) {
+
+        counter.textContent =
+            "All photos captured!";
+
+        return;
+
+    }
+
+
+    counter.textContent =
+        `Photo ${
+            capturedPhotos.length + 1
+        } of ${
+            selectedPhotoCount
+        }`;
+
 }
 
 
-.camera-section {
-    width: 100%;
+
+/* ========================================
+   CAPTURE PHOTO
+======================================== */
+
+async function capturePhoto() {
+
+    const video =
+        document.getElementById(
+            "cameraVideo"
+        );
+
+
+    if (
+        !video
+        || video.hidden
+    ) {
+
+        alert(
+            "Please open the camera first."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        capturedPhotos.length
+        >= selectedPhotoCount
+    ) {
+
+        return;
+
+    }
+
+
+    await runCountdown();
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width =
+        video.videoWidth;
+
+
+    canvas.height =
+        video.videoHeight;
+
+
+    const context =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    context.drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    const photo =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.9
+        );
+
+
+    capturedPhotos.push(
+        photo
+    );
+
+
+    localStorage.setItem(
+        "capturedPhotos",
+        JSON.stringify(
+            capturedPhotos
+        )
+    );
+
+
+    updatePreview();
+
+    updateCounter();
+
+
+    if (
+        capturedPhotos.length
+        >= selectedPhotoCount
+    ) {
+
+        document
+            .getElementById(
+                "finishButton"
+            )
+            .disabled = false;
+
+    }
+
 }
 
 
-.camera-frame {
-    width: 100%;
 
-    aspect-ratio: 4 / 3;
+/* ========================================
+   COUNTDOWN
+======================================== */
 
-    background:
-        rgba(255,255,255,0.55);
+function runCountdown() {
 
-    border:
-        8px solid white;
+    return new Promise(
+        resolve => {
 
-    border-radius: 30px;
-
-    overflow: hidden;
-
-    position: relative;
-
-    box-shadow:
-        0 15px 35px
-        rgba(30,100,130,0.2);
-}
+            const countdown =
+                document.getElementById(
+                    "countdown"
+                );
 
 
-.camera-placeholder {
-    height: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: #5793a9;
-}
+            let number = 3;
 
 
-.camera-icon {
-    font-size: 5rem;
-
-    margin-bottom: 15px;
-}
+            countdown.textContent =
+                number;
 
 
-#cameraVideo {
-    width: 100%;
+            const timer =
+                setInterval(
+                    () => {
 
-    height: 100%;
-
-    object-fit: cover;
-}
+                        number--;
 
 
-.countdown {
-    position: absolute;
+                        if (
+                            number <= 0
+                        ) {
 
-    inset: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 10rem;
-
-    font-weight: bold;
-
-    color: white;
-
-    text-shadow:
-        0 5px 20px
-        rgba(0,0,0,0.4);
-
-    pointer-events: none;
-}
+                            clearInterval(
+                                timer
+                            );
 
 
-.camera-controls {
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 20px;
-
-    margin-top: 25px;
-}
+                            countdown.textContent =
+                                "📸";
 
 
-.shutter-button {
-    width: 80px;
+                            setTimeout(
+                                () => {
 
-    height: 80px;
+                                    countdown.textContent =
+                                        "";
 
-    border-radius: 50%;
+                                    resolve();
 
-    border: 8px solid white;
-
-    background: #62b5d2;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 5px 15px
-        rgba(0,0,0,0.2);
-
-    transition: transform 0.2s;
-}
+                                },
+                                400
+                            );
 
 
-.shutter-button:hover {
-    transform: scale(1.1);
-}
+                            return;
+
+                        }
 
 
-.shutter-button span {
-    display: block;
+                        countdown.textContent =
+                            number;
 
-    width: 45px;
+                    },
+                    1000
+                );
 
-    height: 45px;
+        }
+    );
 
-    margin: auto;
-
-    background: white;
-
-    border-radius: 50%;
 }
 
 
@@ -650,45 +467,89 @@ body::after {
    PHOTO PREVIEW
 ======================================== */
 
-.preview-section {
-    text-align: center;
+function updatePreview() {
+
+    const preview =
+        document.getElementById(
+            "photoPreview"
+        );
+
+
+    if (!preview) {
+
+        return;
+
+    }
+
+
+    preview.innerHTML =
+        "";
+
+
+    capturedPhotos.forEach(
+        (photo, index) => {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                photo;
+
+
+            image.alt =
+                `Photo ${
+                    index + 1
+                }`;
+
+
+            image.style.width =
+                "100%";
+
+
+            image.style.display =
+                "block";
+
+
+            image.style.marginBottom =
+                "8px";
+
+
+            preview.appendChild(
+                image
+            );
+
+        }
+    );
+
 }
 
 
-.preview-section h2 {
-    color: white;
 
-    margin-bottom: 20px;
-}
+/* ========================================
+   FINISH PHOTOS
+======================================== */
 
+function finishPhotos() {
 
-.photo-preview {
-    min-height: 300px;
+    if (
+        capturedPhotos.length
+        < selectedPhotoCount
+    ) {
 
-    padding: 15px;
+        return;
 
-    background: white;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 15px 30px
-        rgba(0,0,0,0.15);
-}
+    }
 
 
-.preview-placeholder {
-    height: 270px;
+    stopCamera();
 
-    display: flex;
 
-    align-items: center;
+    window.location.href =
+        "result.html";
 
-    justify-content: center;
-
-    color: #8ab5c4;
-
-    font-size: 0.9rem;
 }
 
 
@@ -697,324 +558,495 @@ body::after {
    RESULT PAGE
 ======================================== */
 
-.result-container {
-    width: 100%;
+function createFinalPhoto() {
 
-    max-width: 900px;
+    const canvas =
+        document.getElementById(
+            "finalCanvas"
+        );
 
-    padding: 50px 25px;
 
-    text-align: center;
-}
+    if (!canvas) {
 
+        return;
 
-.result-header {
-    margin-bottom: 40px;
-}
-
-
-.result-header p {
-    margin-top: 10px;
-
-    color: #28657d;
-}
-
-
-.result-content {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-}
-
-
-.final-photo-container {
-    padding: 15px;
-
-    background: white;
-
-    box-shadow:
-        0 15px 35px
-        rgba(30,100,130,0.25);
-}
-
-
-#finalCanvas {
-    display: block;
-
-    max-width: 100%;
-
-    width: 300px;
-
-    height: auto;
-}
-
-
-.result-actions {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    justify-content: center;
-
-    gap: 15px;
-
-    margin-top: 35px;
-}
-
-
-.result-actions .main-button {
-    margin-top: 0;
-}
-
-
-
-/* ========================================
-   PRINT MODAL
-======================================== */
-
-.print-modal {
-    position: fixed;
-
-    inset: 0;
-
-    background:
-        rgba(20,60,80,0.7);
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    z-index: 100;
-}
-
-
-.print-modal.active {
-    display: flex;
-}
-
-
-.printer-container {
-    width: 100%;
-
-    max-width: 500px;
-
-    padding: 35px;
-
-    border-radius: 30px;
-
-    background:
-        #eaf7fa;
-
-    text-align: center;
-
-    position: relative;
-}
-
-
-.close-print {
-    position: absolute;
-
-    right: 20px;
-
-    top: 15px;
-
-    border: none;
-
-    background: none;
-
-    font-size: 2rem;
-
-    color: #28657d;
-
-    cursor: pointer;
-}
-
-
-.printer-container h2 {
-    margin-bottom: 20px;
-
-    color: #28657d;
-}
-
-
-.printer-screen {
-    padding: 12px;
-
-    margin-bottom: 20px;
-
-    background: #173b52;
-
-    color: #a9e8ff;
-
-    border-radius: 8px;
-
-    font-family: monospace;
-}
-
-
-.printer {
-    width: 280px;
-
-    margin: auto;
-}
-
-
-.printer-top {
-    height: 70px;
-
-    border-radius: 20px 20px 5px 5px;
-
-    background: #d2e8ed;
-
-    position: relative;
-}
-
-
-.printer-light {
-    width: 12px;
-
-    height: 12px;
-
-    border-radius: 50%;
-
-    background: #62b5d2;
-
-    position: absolute;
-
-    top: 20px;
-
-    right: 25px;
-}
-
-
-.printer-slot {
-    height: 40px;
-
-    background: #a8c7cf;
-
-    overflow: hidden;
-
-    position: relative;
-}
-
-
-.printed-photo {
-    position: absolute;
-
-    width: 150px;
-
-    left: 65px;
-
-    top: -400px;
-
-    background: white;
-
-    padding: 8px;
-
-}
-
-
-.printed-photo canvas {
-    width: 100%;
-
-    display: block;
-}
-
-
-.printing {
-    animation:
-        printOut 5s ease-in-out forwards;
-}
-
-
-@keyframes printOut {
-
-    0% {
-        top: -400px;
     }
 
-    100% {
-        top: 0;
+
+    const photos =
+        JSON.parse(
+            localStorage.getItem(
+                "capturedPhotos"
+            )
+        )
+        || [];
+
+
+    if (!photos.length) {
+
+        return;
+
     }
+
+
+    const images = [];
+
+
+    let loaded =
+        0;
+
+
+    photos.forEach(
+        (src, index) => {
+
+            const image =
+                new Image();
+
+
+            image.onload =
+                () => {
+
+                    loaded++;
+
+
+                    if (
+                        loaded
+                        === photos.length
+                    ) {
+
+                        drawFinalCanvas(
+                            canvas,
+                            images
+                        );
+
+                    }
+
+                };
+
+
+            image.src =
+                src;
+
+
+            images[index] =
+                image;
+
+        }
+    );
 
 }
 
 
 
 /* ========================================
-   MOBILE
+   DRAW PHOTO STRIP
 ======================================== */
 
-@media (max-width: 800px) {
+function drawFinalCanvas(
+    canvas,
+    images
+) {
 
-    .camera-layout {
-        grid-template-columns: 1fr;
-    }
-
-
-    .preview-section {
-        width: 100%;
-    }
+    const width =
+        600;
 
 
-    .photo-preview {
-        max-width: 300px;
-
-        margin: auto;
-    }
+    const photoHeight =
+        450;
 
 
-    .back-button {
-        position: static;
-
-        margin-bottom: 15px;
-    }
+    const padding =
+        30;
 
 
-    .capture-header {
-        display: flex;
+    const labelHeight =
+        80;
 
-        flex-direction: column;
 
-        align-items: center;
-    }
+    canvas.width =
+        width;
+
+
+    canvas.height =
+        (
+            photoHeight
+            * images.length
+        )
+        + padding * 2
+        + labelHeight;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    ctx.fillStyle =
+        "#ffffff";
+
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    images.forEach(
+        (image, index) => {
+
+            const y =
+                padding
+                + (
+                    index
+                    * photoHeight
+                );
+
+
+            ctx.drawImage(
+                image,
+                padding,
+                y,
+                width
+                - padding * 2,
+                photoHeight
+            );
+
+        }
+    );
+
+
+    ctx.fillStyle =
+        "#28657d";
+
+
+    ctx.font =
+        "bold 24px Arial";
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.fillText(
+        "PHOTO BOOTH",
+        width / 2,
+        canvas.height - 30
+    );
 
 }
 
 
-@media (max-width: 500px) {
 
-    .site-header h1 {
-        font-size: 2.8rem;
+/* ========================================
+   DOWNLOAD
+======================================== */
 
-        letter-spacing: 4px;
+function downloadPhoto() {
+
+    const canvas =
+        document.getElementById(
+            "finalCanvas"
+        );
+
+
+    if (!canvas) {
+
+        return;
+
     }
 
 
-    .capture-header h1,
-    .result-header h1 {
-        font-size: 2rem;
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.download =
+        "my-photo-booth.png";
+
+
+    link.href =
+        canvas.toDataURL(
+            "image/png"
+        );
+
+
+    link.click();
+
+}
+
+
+
+/* ========================================
+   RETAKE
+======================================== */
+
+function retakePhotos() {
+
+    localStorage.removeItem(
+        "capturedPhotos"
+    );
+
+
+    window.location.href =
+        "capture.html";
+
+}
+
+
+
+/* ========================================
+   PRINT PHOTO
+======================================== */
+
+function printPhoto() {
+
+    const modal =
+        document.getElementById(
+            "printModal"
+        );
+
+
+    if (!modal) {
+
+        return;
+
     }
 
 
-    .camera-controls {
-        flex-wrap: wrap;
+    modal.classList.add(
+        "active"
+    );
+
+
+    copyCanvasToPrinter();
+
+}
+
+
+
+/* ========================================
+   COPY PHOTO TO PRINTER
+======================================== */
+
+function copyCanvasToPrinter() {
+
+    const original =
+        document.getElementById(
+            "finalCanvas"
+        );
+
+
+    const printerCanvas =
+        document.getElementById(
+            "printCanvas"
+        );
+
+
+    if (
+        !original
+        || !printerCanvas
+    ) {
+
+        return;
+
     }
 
 
-    .secondary-button {
-        font-size: 0.75rem;
+    printerCanvas.width =
+        original.width;
+
+
+    printerCanvas.height =
+        original.height;
+
+
+    const context =
+        printerCanvas.getContext(
+            "2d"
+        );
+
+
+    context.drawImage(
+        original,
+        0,
+        0
+    );
+
+}
+
+
+
+/* ========================================
+   START PRINTING
+======================================== */
+
+function startPrinting() {
+
+    const status =
+        document.getElementById(
+            "printerStatus"
+        );
+
+
+    const photo =
+        document.getElementById(
+            "printedPhoto"
+        );
+
+
+    const button =
+        document.getElementById(
+            "startPrintButton"
+        );
+
+
+    status.textContent =
+        "Printing...";
+
+
+    button.disabled =
+        true;
+
+
+    photo.classList.remove(
+        "printing"
+    );
+
+
+    void photo.offsetWidth;
+
+
+    photo.classList.add(
+        "printing"
+    );
+
+
+    setTimeout(
+        () => {
+
+            status.textContent =
+                "Printing complete!";
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "PRINT AGAIN";
+
+        },
+        5000
+    );
+
+}
+
+
+
+/* ========================================
+   CLOSE PRINT
+======================================== */
+
+function closePrint() {
+
+    const modal =
+        document.getElementById(
+            "printModal"
+        );
+
+
+    modal.classList.remove(
+        "active"
+    );
+
+}
+
+
+
+/* ========================================
+   PAGE INITIALIZATION
+======================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+
+        /* Load selected layout */
+
+        const layoutOptions =
+            document.querySelectorAll(
+                ".layout-option"
+            );
+
+
+        layoutOptions.forEach(
+            option => {
+
+                if (
+                    option.dataset.layout
+                    === selectedLayout
+                ) {
+
+                    option.classList.add(
+                        "selected"
+                    );
+
+                }
+                else {
+
+                    option.classList.remove(
+                        "selected"
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* Capture page */
+
+        if (
+            document.body.classList.contains(
+                "capture-page"
+            )
+        ) {
+
+            capturedPhotos =
+                JSON.parse(
+                    localStorage.getItem(
+                        "capturedPhotos"
+                    )
+                )
+                || [];
+
+
+            updateCounter();
+
+            updatePreview();
+
+        }
+
+
+
+        /* Result page */
+
+        if (
+            document.body.classList.contains(
+                "result-page"
+            )
+        ) {
+
+            createFinalPhoto();
+
+        }
+
     }
-
-
-    .printer {
-        transform: scale(0.85);
-    }
-
-  }
+);

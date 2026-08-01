@@ -1,144 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta 
-        name="viewport" 
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Take Your Photos</title>
+    <title>Photo Booth</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
+<body class="home-page">
 
-<body class="capture-page">
+    <main class="home-container">
 
-
-    <main class="capture-container">
-
-
-        <header class="capture-header">
-
-            <button 
-                class="back-button"
-                onclick="goBackHome()"
-            >
-                ← Back
-            </button>
-
-            <h1>TAKE A PIC</h1>
-
-            <p id="photoCounter">
-                Ready?
-            </p>
-
+        <header class="site-header">
+            <h1>PHOTO BOOTH</h1>
+            <p>Capture your little memories</p>
         </header>
 
 
-        <section class="camera-layout">
+        <section class="layout-section">
 
+            <h2>Choose a layout</h2>
 
-            <!-- CAMERA -->
+            <div class="layout-grid">
 
-            <div class="camera-section">
-
-                <div class="camera-frame">
-
-                    <div class="camera-placeholder">
-
-                        <div class="camera-icon">
-                            📷
-                        </div>
-
-                        <p>
-                            Your camera will appear here
-                        </p>
-
-                    </div>
-
-                    <video 
-                        id="cameraVideo"
-                        autoplay
-                        playsinline
-                        hidden
-                    ></video>
-
-                    <div 
-                        id="countdown"
-                        class="countdown"
-                    ></div>
-
-                </div>
-
-
-                <div class="camera-controls">
-
-                    <button 
-                        class="secondary-button"
-                        onclick="startCamera()"
-                    >
-                        OPEN CAMERA
-                    </button>
-
-                    <button 
-                        id="captureButton"
-                        class="shutter-button"
-                        onclick="capturePhoto()"
-                    >
-                        <span></span>
-                    </button>
-
-                    <button 
-                        class="secondary-button"
-                        onclick="switchCamera()"
-                    >
-                        SWITCH CAMERA
-                    </button>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- PHOTO STRIP PREVIEW -->
-
-            <aside class="preview-section">
-
-                <h2>Your Photos</h2>
-
-                <div 
-                    id="photoPreview"
-                    class="photo-preview"
+                <!-- Layout 1 -->
+                <button 
+                    class="layout-option selected"
+                    data-layout="classic"
+                    data-photos="3"
+                    onclick="selectLayout(this)"
                 >
 
-                    <div class="preview-placeholder">
-                        Your photos<br>
-                        will appear here
+                    <div class="mini-strip classic-strip">
+
+                        <div class="mini-photo">1</div>
+                        <div class="mini-photo">2</div>
+                        <div class="mini-photo">3</div>
+
+                        <div class="mini-label">
+                            PHOTO BOOTH
+                        </div>
+
                     </div>
 
-                </div>
+                    <span>Classic Strip</span>
 
-            </aside>
+                </button>
 
+
+                <!-- Layout 2 -->
+                <button 
+                    class="layout-option"
+                    data-layout="four"
+                    data-photos="4"
+                    onclick="selectLayout(this)"
+                >
+
+                    <div class="mini-strip four-strip">
+
+                        <div class="mini-photo">1</div>
+                        <div class="mini-photo">2</div>
+                        <div class="mini-photo">3</div>
+                        <div class="mini-photo">4</div>
+
+                        <div class="mini-label">
+                            PHOTO BOOTH
+                        </div>
+
+                    </div>
+
+                    <span>Four Photos</span>
+
+                </button>
+
+
+                <!-- Layout 3 -->
+                <button 
+                    class="layout-option"
+                    data-layout="grid"
+                    data-photos="4"
+                    onclick="selectLayout(this)"
+                >
+
+                    <div class="mini-grid">
+
+                        <div class="mini-photo">1</div>
+                        <div class="mini-photo">2</div>
+                        <div class="mini-photo">3</div>
+                        <div class="mini-photo">4</div>
+
+                    </div>
+
+                    <span>Photo Grid</span>
+
+                </button>
+
+            </div>
 
         </section>
 
 
         <button 
-            id="finishButton"
             class="main-button"
-            onclick="finishPhotos()"
-            disabled
+            onclick="startPhotoBooth()"
         >
-            FINISH
+            TAKE A PIC
         </button>
-
 
     </main>
 

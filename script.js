@@ -1,3 +1,4 @@
+```javascript
 /* ========================================
    PHOTO BOOTH DATA
 ======================================== */
@@ -29,6 +30,23 @@ let isTakingPhoto = false;
 
 let selectedFilter =
     localStorage.getItem("selectedFilter") || "normal";
+
+
+/* ========================================
+   CUSTOMIZATION DATA
+======================================== */
+
+let selectedBackground =
+    localStorage.getItem("selectedBackground") || "#ffffff";
+
+let selectedFrame =
+    localStorage.getItem("selectedFrame") || "none";
+
+let customText =
+    localStorage.getItem("customText") || "";
+
+let showDate =
+    localStorage.getItem("showDate") === "true";
 
 
 /* ========================================
@@ -144,6 +162,17 @@ function startPhotoBooth() {
     selectedFilter = "normal";
 
 
+    /* Reset customization */
+
+    selectedBackground = "#ffffff";
+
+    selectedFrame = "none";
+
+    customText = "";
+
+    showDate = false;
+
+
     localStorage.setItem(
         "selectedLayout",
         selectedLayout
@@ -166,6 +195,23 @@ function startPhotoBooth() {
 
     localStorage.removeItem(
         "capturedFilters"
+    );
+
+
+    localStorage.removeItem(
+        "selectedBackground"
+    );
+
+    localStorage.removeItem(
+        "selectedFrame"
+    );
+
+    localStorage.removeItem(
+        "customText"
+    );
+
+    localStorage.removeItem(
+        "showDate"
     );
 
 
@@ -783,10 +829,6 @@ function applyFilterToCanvas(
     }
 
 
-    /*
-        Read original image pixels.
-    */
-
     const imageData =
         context.getImageData(
 
@@ -821,10 +863,6 @@ function applyFilterToCanvas(
             data[i + 2];
 
 
-        /* =================================
-           BLACK & WHITE
-        ================================= */
-
         if (
             filter === "bw"
         ) {
@@ -846,10 +884,6 @@ function applyFilterToCanvas(
 
         }
 
-
-        /* =================================
-           SEPIA
-        ================================= */
 
         else if (
             filter === "sepia"
@@ -884,10 +918,6 @@ function applyFilterToCanvas(
 
         }
 
-
-        /* =================================
-           VINTAGE
-        ================================= */
 
         else if (
             filter === "vintage"
@@ -924,10 +954,6 @@ function applyFilterToCanvas(
         }
 
 
-        /* =================================
-           COOL
-        ================================= */
-
         else if (
             filter === "cool"
         ) {
@@ -944,10 +970,6 @@ function applyFilterToCanvas(
         }
 
 
-        /* =================================
-           WARM
-        ================================= */
-
         else if (
             filter === "warm"
         ) {
@@ -963,10 +985,6 @@ function applyFilterToCanvas(
 
         }
 
-
-        /*
-            Clamp values.
-        */
 
         data[i] =
             Math.max(
@@ -999,10 +1017,6 @@ function applyFilterToCanvas(
 
     }
 
-
-    /*
-        Put modified pixels back.
-    */
 
     context.putImageData(
 
@@ -1291,10 +1305,6 @@ function updatePreview() {
         "";
 
 
-    /*
-        Create selected layout.
-    */
-
     const strip =
         document.createElement(
             "div"
@@ -1304,10 +1314,6 @@ function updatePreview() {
     strip.className =
         "preview-strip";
 
-
-    /*
-        Grid layout.
-    */
 
     if (
         selectedLayout ===
@@ -1320,10 +1326,6 @@ function updatePreview() {
 
     }
 
-
-    /* ====================================
-       CREATE PHOTO SLOTS
-    ==================================== */
 
     for (
         let i = 0;
@@ -1364,10 +1366,6 @@ function updatePreview() {
             );
 
 
-            /*
-                Show filter name.
-            */
-
             const filterBadge =
                 document.createElement(
                     "span"
@@ -1381,8 +1379,11 @@ function updatePreview() {
             filterBadge.textContent =
 
                 filterNames[
+
                     capturedFilters[i] ||
+
                     "normal"
+
                 ];
 
 
@@ -1390,10 +1391,6 @@ function updatePreview() {
                 filterBadge
             );
 
-
-            /*
-                Retake button.
-            */
 
             const retake =
                 document.createElement(
@@ -1442,10 +1439,6 @@ function updatePreview() {
     }
 
 
-    /* ====================================
-       LABEL
-    ==================================== */
-
     const label =
         document.createElement(
             "div"
@@ -1489,11 +1482,6 @@ function retakePhoto(index) {
         index;
 
 
-    /*
-        Restore the filter
-        previously used for this photo.
-    */
-
     selectedFilter =
         capturedFilters[index] ||
         "normal";
@@ -1507,10 +1495,6 @@ function retakePhoto(index) {
 
     );
 
-
-    /*
-        Update filter buttons.
-    */
 
     const buttons =
         document.querySelectorAll(
@@ -1562,7 +1546,7 @@ function retakePhoto(index) {
 
 
 /* ========================================
-   FINISH
+   FINISH CAPTURE
 ======================================== */
 
 function finishPhotos() {
@@ -1620,8 +1604,1236 @@ function finishPhotos() {
     stopCamera();
 
 
+    /*
+        GO TO CUSTOMIZATION
+    */
+
+    window.location.href =
+        "customize.html";
+
+}
+
+
+/* ========================================
+   CUSTOMIZATION
+======================================== */
+
+
+/* ========================================
+   BACK TO CAPTURE
+======================================== */
+
+function backToCapture() {
+
+    window.location.href =
+        "capture.html";
+
+}
+
+
+/* ========================================
+   SELECT BACKGROUND
+======================================== */
+
+function selectBackground(
+
+    background,
+
+    button
+
+) {
+
+    selectedBackground =
+        background;
+
+
+    localStorage.setItem(
+
+        "selectedBackground",
+
+        selectedBackground
+
+    );
+
+
+    const buttons =
+        document.querySelectorAll(
+
+            ".background-button"
+
+        );
+
+
+    buttons.forEach(
+
+        item => {
+
+            item.classList.remove(
+                "active"
+            );
+
+        }
+
+    );
+
+
+    if (button) {
+
+        button.classList.add(
+            "active"
+        );
+
+    }
+
+
+    drawCustomizeCanvas();
+
+}
+
+
+/* ========================================
+   SELECT FRAME
+======================================== */
+
+function selectFrame(
+
+    frame,
+
+    button
+
+) {
+
+    selectedFrame =
+        frame;
+
+
+    localStorage.setItem(
+
+        "selectedFrame",
+
+        selectedFrame
+
+    );
+
+
+    const buttons =
+        document.querySelectorAll(
+
+            ".frame-button"
+
+        );
+
+
+    buttons.forEach(
+
+        item => {
+
+            item.classList.remove(
+                "active"
+            );
+
+        }
+
+    );
+
+
+    if (button) {
+
+        button.classList.add(
+            "active"
+        );
+
+    }
+
+
+    drawCustomizeCanvas();
+
+}
+
+
+/* ========================================
+   CUSTOM TEXT
+======================================== */
+
+function updateCustomText(
+
+    text
+
+) {
+
+    customText =
+        text;
+
+
+    localStorage.setItem(
+
+        "customText",
+
+        customText
+
+    );
+
+
+    drawCustomizeCanvas();
+
+}
+
+
+/* ========================================
+   TOGGLE DATE
+======================================== */
+
+function toggleDate(
+
+    checked
+
+) {
+
+    showDate =
+        checked;
+
+
+    localStorage.setItem(
+
+        "showDate",
+
+        showDate
+
+    );
+
+
+    drawCustomizeCanvas();
+
+}
+
+
+/* ========================================
+   FINISH CUSTOMIZATION
+======================================== */
+
+function finishCustomization() {
+
+    localStorage.setItem(
+
+        "selectedBackground",
+
+        selectedBackground
+
+    );
+
+
+    localStorage.setItem(
+
+        "selectedFrame",
+
+        selectedFrame
+
+    );
+
+
+    localStorage.setItem(
+
+        "customText",
+
+        customText
+
+    );
+
+
+    localStorage.setItem(
+
+        "showDate",
+
+        showDate
+
+    );
+
+
     window.location.href =
         "result.html";
+
+}
+
+
+/* ========================================
+   CUSTOMIZATION CANVAS
+======================================== */
+
+function initializeCustomizePage() {
+
+    const canvas =
+        document.getElementById(
+            "customizeCanvas"
+        );
+
+
+    if (!canvas) {
+
+        return;
+
+    }
+
+
+    selectedBackground =
+        localStorage.getItem(
+            "selectedBackground"
+        ) || "#ffffff";
+
+
+    selectedFrame =
+        localStorage.getItem(
+            "selectedFrame"
+        ) || "none";
+
+
+    customText =
+        localStorage.getItem(
+            "customText"
+        ) || "";
+
+
+    showDate =
+        localStorage.getItem(
+            "showDate"
+        ) === "true";
+
+
+    const textInput =
+        document.getElementById(
+            "customText"
+        );
+
+
+    if (textInput) {
+
+        textInput.value =
+            customText;
+
+    }
+
+
+    const dateCheckbox =
+        document.getElementById(
+            "showDate"
+        );
+
+
+    if (dateCheckbox) {
+
+        dateCheckbox.checked =
+            showDate;
+
+    }
+
+
+    const backgroundButtons =
+        document.querySelectorAll(
+
+            ".background-button"
+
+        );
+
+
+    backgroundButtons.forEach(
+
+        button => {
+
+            button.classList.toggle(
+
+                "active",
+
+                button.dataset.background ===
+
+                selectedBackground
+
+            );
+
+        }
+
+    );
+
+
+    const frameButtons =
+        document.querySelectorAll(
+
+            ".frame-button"
+
+        );
+
+
+    frameButtons.forEach(
+
+        button => {
+
+            button.classList.toggle(
+
+                "active",
+
+                button.dataset.frame ===
+
+                selectedFrame
+
+            );
+
+        }
+
+    );
+
+
+    drawCustomizeCanvas();
+
+}
+
+
+/* ========================================
+   DRAW CUSTOMIZATION PREVIEW
+======================================== */
+
+function drawCustomizeCanvas() {
+
+    const canvas =
+        document.getElementById(
+            "customizeCanvas"
+        );
+
+
+    if (!canvas) {
+
+        return;
+
+    }
+
+
+    const photos =
+        JSON.parse(
+
+            localStorage.getItem(
+                "capturedPhotos"
+            )
+
+        ) || [];
+
+
+    const layout =
+        localStorage.getItem(
+            "selectedLayout"
+        ) || "classic";
+
+
+    const photoCount =
+        parseInt(
+
+            localStorage.getItem(
+                "selectedPhotoCount"
+            )
+
+        ) || 3;
+
+
+    if (
+        photos.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    const images = [];
+
+
+    let loaded =
+        0;
+
+
+    photos
+
+        .slice(
+            0,
+            photoCount
+        )
+
+        .forEach(
+
+            (src, index) => {
+
+                const image =
+                    new Image();
+
+
+                image.onload =
+                    () => {
+
+                        loaded++;
+
+
+                        if (
+                            loaded ===
+                            Math.min(
+                                photos.length,
+                                photoCount
+                            )
+                        ) {
+
+                            drawCustomizeLayout(
+
+                                canvas,
+
+                                images,
+
+                                layout
+
+                            );
+
+                        }
+
+                    };
+
+
+                image.src =
+                    src;
+
+
+                images[index] =
+                    image;
+
+            }
+
+        );
+
+}
+
+
+/* ========================================
+   DRAW CUSTOMIZE LAYOUT
+======================================== */
+
+function drawCustomizeLayout(
+
+    canvas,
+
+    images,
+
+    layout
+
+) {
+
+    let width;
+
+    let height;
+
+
+    if (
+        layout === "grid"
+    ) {
+
+        width =
+            700;
+
+        height =
+            700;
+
+    }
+
+    else if (
+        layout === "four"
+    ) {
+
+        width =
+            600;
+
+        height =
+            30 +
+            (360 * 4) +
+            (18 * 3) +
+            90;
+
+    }
+
+    else {
+
+        width =
+            600;
+
+        height =
+            30 +
+            (405 * 3) +
+            (20 * 2) +
+            90;
+
+    }
+
+
+    canvas.width =
+        width;
+
+
+    canvas.height =
+        height;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    /*
+        Background
+    */
+
+    ctx.fillStyle =
+        selectedBackground;
+
+
+    ctx.fillRect(
+
+        0,
+
+        0,
+
+        width,
+
+        height
+
+    );
+
+
+    /*
+        Draw photos
+    */
+
+    if (
+        layout === "classic"
+    ) {
+
+        drawCustomizeClassic(
+
+            ctx,
+
+            images,
+
+            width,
+
+            height
+
+        );
+
+    }
+
+
+    else if (
+        layout === "four"
+    ) {
+
+        drawCustomizeFour(
+
+            ctx,
+
+            images,
+
+            width,
+
+            height
+
+        );
+
+    }
+
+
+    else if (
+        layout === "grid"
+    ) {
+
+        drawCustomizeGrid(
+
+            ctx,
+
+            images,
+
+            width,
+
+            height
+
+        );
+
+    }
+
+
+    /*
+        Draw frame
+    */
+
+    drawCustomizeFrame(
+
+        ctx,
+
+        width,
+
+        height
+
+    );
+
+
+    /*
+        Draw text
+    */
+
+    drawCustomizeText(
+
+        ctx,
+
+        width,
+
+        height
+
+    );
+
+}
+
+
+/* ========================================
+   CUSTOM CLASSIC
+======================================== */
+
+function drawCustomizeClassic(
+
+    ctx,
+
+    images,
+
+    width,
+
+    height
+
+) {
+
+    const photoWidth =
+        540;
+
+
+    const photoHeight =
+        405;
+
+
+    const sidePadding =
+        30;
+
+
+    const gap =
+        20;
+
+
+    const topPadding =
+        30;
+
+
+    for (
+        let i = 0;
+        i < 3;
+        i++
+    ) {
+
+        drawCoverImage(
+
+            ctx,
+
+            images[i],
+
+            sidePadding,
+
+            topPadding +
+
+            (
+
+                i *
+
+                (
+
+                    photoHeight +
+
+                    gap
+
+                )
+
+            ),
+
+            photoWidth,
+
+            photoHeight
+
+        );
+
+    }
+
+}
+
+
+/* ========================================
+   CUSTOM FOUR
+======================================== */
+
+function drawCustomizeFour(
+
+    ctx,
+
+    images,
+
+    width,
+
+    height
+
+) {
+
+    const photoWidth =
+        540;
+
+
+    const photoHeight =
+        360;
+
+
+    const sidePadding =
+        30;
+
+
+    const gap =
+        18;
+
+
+    const topPadding =
+        30;
+
+
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
+
+        drawCoverImage(
+
+            ctx,
+
+            images[i],
+
+            sidePadding,
+
+            topPadding +
+
+            (
+
+                i *
+
+                (
+
+                    photoHeight +
+
+                    gap
+
+                )
+
+            ),
+
+            photoWidth,
+
+            photoHeight
+
+        );
+
+    }
+
+}
+
+
+/* ========================================
+   CUSTOM GRID
+======================================== */
+
+function drawCustomizeGrid(
+
+    ctx,
+
+    images,
+
+    width,
+
+    height
+
+) {
+
+    const padding =
+        30;
+
+
+    const gap =
+        20;
+
+
+    const labelHeight =
+        80;
+
+
+    const photoWidth =
+
+        (
+
+            width -
+
+            (padding * 2) -
+
+            gap
+
+        ) / 2;
+
+
+    const photoHeight =
+
+        (
+
+            height -
+
+            padding -
+
+            labelHeight -
+
+            gap
+
+        ) / 2;
+
+
+    const positions = [
+
+        [
+            padding,
+            padding
+        ],
+
+        [
+            padding +
+
+            photoWidth +
+
+            gap,
+
+            padding
+        ],
+
+        [
+            padding,
+
+            padding +
+
+            photoHeight +
+
+            gap
+        ],
+
+        [
+            padding +
+
+            photoWidth +
+
+            gap,
+
+            padding +
+
+            photoHeight +
+
+            gap
+        ]
+
+    ];
+
+
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
+
+        drawCoverImage(
+
+            ctx,
+
+            images[i],
+
+            positions[i][0],
+
+            positions[i][1],
+
+            photoWidth,
+
+            photoHeight
+
+        );
+
+    }
+
+}
+
+
+/* ========================================
+   CUSTOM FRAME
+======================================== */
+
+function drawCustomizeFrame(
+
+    ctx,
+
+    width,
+
+    height
+
+) {
+
+    if (
+        selectedFrame ===
+        "none"
+    ) {
+
+        return;
+
+    }
+
+
+    ctx.save();
+
+
+    if (
+        selectedFrame ===
+        "simple"
+    ) {
+
+        ctx.strokeStyle =
+            "#28657d";
+
+
+        ctx.lineWidth =
+            12;
+
+
+        ctx.strokeRect(
+
+            10,
+
+            10,
+
+            width - 20,
+
+            height - 20
+
+        );
+
+    }
+
+
+    else if (
+        selectedFrame ===
+        "rounded"
+    ) {
+
+        ctx.strokeStyle =
+            "#28657d";
+
+
+        ctx.lineWidth =
+            12;
+
+
+        ctx.beginPath();
+
+
+        ctx.roundRect(
+
+            10,
+
+            10,
+
+            width - 20,
+
+            height - 20,
+
+            35
+
+        );
+
+
+        ctx.stroke();
+
+    }
+
+
+    else if (
+        selectedFrame ===
+        "double"
+    ) {
+
+        ctx.strokeStyle =
+            "#28657d";
+
+
+        ctx.lineWidth =
+            8;
+
+
+        ctx.strokeRect(
+
+            12,
+
+            12,
+
+            width - 24,
+
+            height - 24
+
+        );
+
+
+        ctx.lineWidth =
+            3;
+
+
+        ctx.strokeRect(
+
+            25,
+
+            25,
+
+            width - 50,
+
+            height - 50
+
+        );
+
+    }
+
+
+    ctx.restore();
+
+}
+
+
+/* ========================================
+   CUSTOM TEXT + DATE
+======================================== */
+
+function drawCustomizeText(
+
+    ctx,
+
+    width,
+
+    height
+
+) {
+
+    const textY =
+        height - 48;
+
+
+    ctx.save();
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.fillStyle =
+        "#28657d";
+
+
+    if (
+        customText
+    ) {
+
+        ctx.font =
+            "bold 24px Arial";
+
+
+        ctx.fillText(
+
+            customText,
+
+            width / 2,
+
+            textY
+
+        );
+
+    }
+
+
+    if (
+        showDate
+    ) {
+
+        const today =
+            new Date();
+
+
+        const dateText =
+
+            today.toLocaleDateString(
+
+                "en-US",
+
+                {
+
+                    year:
+                        "numeric",
+
+                    month:
+                        "long",
+
+                    day:
+                        "numeric"
+
+                }
+
+            );
+
+
+        ctx.font =
+            "16px Arial";
+
+
+        ctx.fillText(
+
+            dateText,
+
+            width / 2,
+
+            height - 20
+
+        );
+
+    }
+
+
+    if (
+        !customText &&
+        !showDate
+    ) {
+
+        ctx.font =
+            "bold 28px Arial";
+
+
+        ctx.fillText(
+
+            "PHOTO BOOTH",
+
+            width / 2,
+
+            height - 35
+
+        );
+
+    }
+
+
+    ctx.restore();
 
 }
 
@@ -1682,8 +2894,32 @@ function createFinalPhoto() {
 
 
     /*
-        Update layout name.
+        Load customization.
     */
+
+    selectedBackground =
+        localStorage.getItem(
+            "selectedBackground"
+        ) || "#ffffff";
+
+
+    selectedFrame =
+        localStorage.getItem(
+            "selectedFrame"
+        ) || "none";
+
+
+    customText =
+        localStorage.getItem(
+            "customText"
+        ) || "";
+
+
+    showDate =
+        localStorage.getItem(
+            "showDate"
+        ) === "true";
+
 
     const layoutName =
         document.getElementById(
@@ -1696,17 +2932,15 @@ function createFinalPhoto() {
         layoutName.textContent =
 
             layoutNames[
+
                 selectedLayout
+
             ] ||
 
             "Photo Booth";
 
     }
 
-
-    /*
-        Load images.
-    */
 
     const images =
         [];
@@ -1891,6 +3125,7 @@ function drawClassicStrip(
 
 
     ctx.fillStyle =
+        selectedBackground ||
         "#ffffff";
 
 
@@ -1946,13 +3181,13 @@ function drawClassicStrip(
     }
 
 
-    drawLabel(
+    drawResultCustomization(
 
         ctx,
 
-        width / 2,
+        width,
 
-        canvas.height - 35
+        canvas.height
 
     );
 
@@ -2021,6 +3256,7 @@ function drawFourStrip(
 
 
     ctx.fillStyle =
+        selectedBackground ||
         "#ffffff";
 
 
@@ -2076,13 +3312,13 @@ function drawFourStrip(
     }
 
 
-    drawLabel(
+    drawResultCustomization(
 
         ctx,
 
-        width / 2,
+        width,
 
-        canvas.height - 35
+        canvas.height
 
     );
 
@@ -2164,6 +3400,7 @@ function drawGrid(
 
 
     ctx.fillStyle =
+        selectedBackground ||
         "#ffffff";
 
 
@@ -2249,15 +3486,261 @@ function drawGrid(
     }
 
 
-    drawLabel(
+    drawResultCustomization(
 
         ctx,
 
-        width / 2,
+        width,
 
-        height - 35
+        height
 
     );
+
+}
+
+
+/* ========================================
+   RESULT CUSTOMIZATION
+======================================== */
+
+function drawResultCustomization(
+
+    ctx,
+
+    width,
+
+    height
+
+) {
+
+    /*
+        Frame
+    */
+
+    if (
+        selectedFrame !==
+        "none"
+    ) {
+
+        ctx.save();
+
+
+        if (
+            selectedFrame ===
+            "simple"
+        ) {
+
+            ctx.strokeStyle =
+                "#28657d";
+
+
+            ctx.lineWidth =
+                12;
+
+
+            ctx.strokeRect(
+
+                10,
+
+                10,
+
+                width - 20,
+
+                height - 20
+
+            );
+
+        }
+
+
+        else if (
+            selectedFrame ===
+            "rounded"
+        ) {
+
+            ctx.strokeStyle =
+                "#28657d";
+
+
+            ctx.lineWidth =
+                12;
+
+
+            ctx.beginPath();
+
+
+            ctx.roundRect(
+
+                10,
+
+                10,
+
+                width - 20,
+
+                height - 20,
+
+                35
+
+            );
+
+
+            ctx.stroke();
+
+        }
+
+
+        else if (
+            selectedFrame ===
+            "double"
+        ) {
+
+            ctx.strokeStyle =
+                "#28657d";
+
+
+            ctx.lineWidth =
+                8;
+
+
+            ctx.strokeRect(
+
+                12,
+
+                12,
+
+                width - 24,
+
+                height - 24
+
+            );
+
+
+            ctx.lineWidth =
+                3;
+
+
+            ctx.strokeRect(
+
+                25,
+
+                25,
+
+                width - 50,
+
+                height - 50
+
+            );
+
+        }
+
+
+        ctx.restore();
+
+    }
+
+
+    /*
+        Text
+    */
+
+    ctx.save();
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.fillStyle =
+        "#28657d";
+
+
+    if (
+        customText
+    ) {
+
+        ctx.font =
+            "bold 24px Arial";
+
+
+        ctx.fillText(
+
+            customText,
+
+            width / 2,
+
+            height - 48
+
+        );
+
+    }
+
+
+    if (
+        showDate
+    ) {
+
+        const today =
+            new Date();
+
+
+        const dateText =
+
+            today.toLocaleDateString(
+
+                "en-US",
+
+                {
+
+                    year:
+                        "numeric",
+
+                    month:
+                        "long",
+
+                    day:
+                        "numeric"
+
+                }
+
+            );
+
+
+        ctx.font =
+            "16px Arial";
+
+
+        ctx.fillText(
+
+            dateText,
+
+            width / 2,
+
+            height - 20
+
+        );
+
+    }
+
+
+    if (
+        !customText &&
+        !showDate
+    ) {
+
+        drawLabel(
+
+            ctx,
+
+            width / 2,
+
+            height - 35
+
+        );
+
+    }
+
+
+    ctx.restore();
 
 }
 
@@ -2495,6 +3978,34 @@ function retakePhotos() {
     localStorage.removeItem(
 
         "capturedFilters"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "selectedBackground"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "selectedFrame"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "customText"
+
+    );
+
+
+    localStorage.removeItem(
+
+        "showDate"
 
     );
 
@@ -2761,10 +4272,6 @@ document.addEventListener(
         ) {
 
 
-            /*
-                Restore selected filter.
-            */
-
             selectedFilter =
 
                 localStorage.getItem(
@@ -2773,10 +4280,6 @@ document.addEventListener(
 
                 ) || "normal";
 
-
-            /*
-                Update active button.
-            */
 
             const activeButton =
 
@@ -2810,6 +4313,27 @@ document.addEventListener(
 
 
         /* ================================
+           CUSTOMIZE PAGE
+        ================================= */
+
+        if (
+
+            document.body.classList
+
+                .contains(
+
+                    "customize-page"
+
+                )
+
+        ) {
+
+            initializeCustomizePage();
+
+        }
+
+
+        /* ================================
            RESULT PAGE
         ================================= */
 
@@ -2832,3 +4356,5 @@ document.addEventListener(
     }
 
 );
+```
+

@@ -5559,6 +5559,61 @@ function roundRectStroke(
 
 }
 
+/* ========================================
+   FINISH CUSTOMIZATION
+======================================== */
+
+function finishCustomization() {
+
+    /*
+        Save customization.
+    */
+
+    localStorage.setItem(
+
+        "customizeBackground",
+
+        customizeBackground
+
+    );
+
+
+    localStorage.setItem(
+
+        "customizeFrame",
+
+        customizeFrame
+
+    );
+
+
+    localStorage.setItem(
+
+        "customizeText",
+
+        customizeText
+
+    );
+
+
+    localStorage.setItem(
+
+        "customizeShowDate",
+
+        customizeShowDate
+
+    );
+
+
+    /*
+        Go to result page.
+    */
+
+   window.location.href =
+    "customize.html";
+
+}
+
 
 /* ========================================
    INITIALIZE CUSTOMIZE PAGE

@@ -1,1 +1,0 @@
-# Photobooth-2.0

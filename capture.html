@@ -1,1 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+    <meta charset="UTF-8">
+
+    <meta 
+        name="viewport" 
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Take Your Photos</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body class="capture-page">
+
+
+    <main class="capture-container">
+
+
+        <header class="capture-header">
+
+            <button 
+                class="back-button"
+                onclick="goBackHome()"
+            >
+                ← Back
+            </button>
+
+            <h1>TAKE A PIC</h1>
+
+            <p id="photoCounter">
+                Ready?
+            </p>
+
+        </header>
+
+
+        <section class="camera-layout">
+
+
+            <!-- CAMERA -->
+
+            <div class="camera-section">
+
+                <div class="camera-frame">
+
+                    <div class="camera-placeholder">
+
+                        <div class="camera-icon">
+                            📷
+                        </div>
+
+                        <p>
+                            Your camera will appear here
+                        </p>
+
+                    </div>
+
+                    <video 
+                        id="cameraVideo"
+                        autoplay
+                        playsinline
+                        hidden
+                    ></video>
+
+                    <div 
+                        id="countdown"
+                        class="countdown"
+                    ></div>
+
+                </div>
+
+
+                <div class="camera-controls">
+
+                    <button 
+                        class="secondary-button"
+                        onclick="startCamera()"
+                    >
+                        OPEN CAMERA
+                    </button>
+
+                    <button 
+                        id="captureButton"
+                        class="shutter-button"
+                        onclick="capturePhoto()"
+                    >
+                        <span></span>
+                    </button>
+
+                    <button 
+                        class="secondary-button"
+                        onclick="switchCamera()"
+                    >
+                        SWITCH CAMERA
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PHOTO STRIP PREVIEW -->
+
+            <aside class="preview-section">
+
+                <h2>Your Photos</h2>
+
+                <div 
+                    id="photoPreview"
+                    class="photo-preview"
+                >
+
+                    <div class="preview-placeholder">
+                        Your photos<br>
+                        will appear here
+                    </div>
+
+                </div>
+
+            </aside>
+
+
+        </section>
+
+
+        <button 
+            id="finishButton"
+            class="main-button"
+            onclick="finishPhotos()"
+            disabled
+        >
+            FINISH
+        </button>
+
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -5610,8 +5610,8 @@ function finishCustomization() {
         Go to result page.
     */
 
-    window.location.href =
-        "result.html";
+   window.location.href =
+    "customize.html";
 
 }
 

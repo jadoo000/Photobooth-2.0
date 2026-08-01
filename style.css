@@ -1641,3 +1641,223 @@ max-width: 600px
 ```
 
 }
+/* ========================================
+STAGE 5 - CUSTOMIZE PAGE
+======================================== */
+
+.customize-page {
+min-height: 100vh;
+background: #f5f1e8;
+}
+
+.customize-container {
+width: min(1100px, 92%);
+margin: 0 auto;
+padding: 40px 0 60px;
+}
+
+.customize-header {
+display: flex;
+align-items: center;
+gap: 30px;
+margin-bottom: 35px;
+}
+
+.customize-header h1 {
+margin: 0;
+}
+
+.customize-header p {
+margin-top: 8px;
+color: #666;
+}
+
+/* ========================================
+MAIN CUSTOMIZATION LAYOUT
+======================================== */
+
+.customize-layout {
+display: grid;
+grid-template-columns: 1.2fr 0.8fr;
+gap: 40px;
+align-items: start;
+}
+
+/* ========================================
+PREVIEW
+======================================== */
+
+.customize-preview-section h2 {
+margin-bottom: 20px;
+}
+
+.customize-canvas-wrapper {
+background: #ffffff;
+padding: 25px;
+border-radius: 20px;
+box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 500px;
+}
+
+#customizeCanvas {
+max-width: 100%;
+max-height: 650px;
+width: auto;
+height: auto;
+display: block;
+}
+
+/* ========================================
+CONTROLS
+======================================== */
+
+.customize-controls {
+background: #ffffff;
+padding: 30px;
+border-radius: 20px;
+box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.customize-group {
+margin-bottom: 30px;
+}
+
+.customize-group h3 {
+margin-bottom: 15px;
+font-size: 0.85rem;
+letter-spacing: 1.5px;
+color: #28657d;
+}
+
+/* ========================================
+BACKGROUND OPTIONS
+======================================== */
+
+.background-options {
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.background-button {
+width: 42px;
+height: 42px;
+border-radius: 50%;
+border: 3px solid #ffffff;
+box-shadow: 0 0 0 1px #cccccc;
+cursor: pointer;
+transition: transform 0.2s ease;
+}
+
+.background-button:hover {
+transform: scale(1.1);
+}
+
+.background-button.active {
+box-shadow:
+0 0 0 2px #28657d,
+0 0 0 4px #ffffff;
+}
+
+/* ========================================
+FRAME OPTIONS
+======================================== */
+
+.frame-options {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+}
+
+.frame-button {
+padding: 10px 14px;
+border: 1px solid #cccccc;
+border-radius: 20px;
+background: #ffffff;
+color: #28657d;
+font-size: 0.75rem;
+font-weight: bold;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+
+.frame-button:hover {
+transform: translateY(-2px);
+}
+
+.frame-button.active {
+background: #28657d;
+color: #ffffff;
+border-color: #28657d;
+}
+
+/* ========================================
+CUSTOM TEXT
+======================================== */
+
+#customText {
+width: 100%;
+box-sizing: border-box;
+padding: 13px 15px;
+border: 1px solid #cccccc;
+border-radius: 10px;
+font-family: inherit;
+font-size: 0.9rem;
+outline: none;
+}
+
+#customText:focus {
+border-color: #28657d;
+}
+
+/* ========================================
+DATE CHECKBOX
+======================================== */
+
+.checkbox-option {
+display: flex;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+font-size: 0.9rem;
+}
+
+.checkbox-option input {
+width: 18px;
+height: 18px;
+cursor: pointer;
+}
+
+/* ========================================
+CONTINUE BUTTON
+======================================== */
+
+.customize-finish-button {
+width: 100%;
+margin-top: 10px;
+}
+
+/* ========================================
+MOBILE
+======================================== */
+
+@media (max-width: 800px) {
+
+```
+.customize-layout {
+    grid-template-columns: 1fr;
+}
+
+.customize-controls {
+    padding: 22px;
+}
+
+.customize-canvas-wrapper {
+    min-height: 300px;
+}
+```
+
+}

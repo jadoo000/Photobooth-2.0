@@ -6047,9 +6047,6 @@ document.addEventListener(
 );
 
 
-/* ========================================
-   GLOBAL EXPOSURE
-======================================== */
 window.backToCapture = backToCapture;
 window.finishCustomization = finishCustomization;
 window.goBackHome = goBackHome;
@@ -6059,3 +6056,4 @@ window.selectFrame = selectFrame;
 window.updateCustomText = updateCustomText;
 window.toggleDate = toggleDate;
 window.initializeCustomizePage = initializeCustomizePage;
+

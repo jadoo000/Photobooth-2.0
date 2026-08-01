@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Customize Your Photo</title>
+
+<link
+    rel="stylesheet"
+    href="style.css"
+>
+```
+
+</head>
+
+<body class="customize-page">
+
+```
+<main class="customize-container">
+
+
+    <!-- ========================================
+         HEADER
+    ======================================== -->
+
+    <header class="customize-header">
+
+        <button
+            class="back-button"
+            onclick="backToCapture()"
+        >
+            ← Back
+        </button>
+
+
+        <div>
+
+            <h1>
+                MAKE IT YOURS
+            </h1>
+
+            <p>
+                Customize your photo booth memory
+            </p>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================================
+         CUSTOMIZATION AREA
+    ======================================== -->
+
+    <section class="customize-layout">
+
+
+        <!-- ====================================
+             PREVIEW
+        ==================================== -->
+
+        <div class="customize-preview-section">
+
+            <h2>
+                YOUR PREVIEW
+            </h2>
+
+
+            <div class="customize-canvas-wrapper">
+
+                <canvas
+                    id="customizeCanvas"
+                ></canvas>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ====================================
+             CONTROLS
+        ==================================== -->
+
+        <aside class="customize-controls">
+
+
+            <!-- ==================================
+                 BACKGROUND
+            ================================== -->
+
+            <div class="customize-group">
+
+                <h3>
+                    BACKGROUND
+                </h3>
+
+
+                <div class="background-options">
+
+
+                    <button
+                        class="background-button active"
+                        data-background="#ffffff"
+                        style="background: #ffffff;"
+                        onclick="selectBackground('#ffffff', this)"
+                    ></button>
+
+
+                    <button
+                        class="background-button"
+                        data-background="#f7e8e8"
+                        style="background: #f7e8e8;"
+                        onclick="selectBackground('#f7e8e8', this)"
+                    ></button>
+
+
+                    <button
+                        class="background-button"
+                        data-background="#e8f2f7"
+                        style="background: #e8f2f7;"
+                        onclick="selectBackground('#e8f2f7', this)"
+                    ></button>
+
+
+                    <button
+                        class="background-button"
+                        data-background="#f5f0dc"
+                        style="background: #f5f0dc;"
+                        onclick="selectBackground('#f5f0dc', this)"
+                    ></button>
+
+
+                    <button
+                        class="background-button"
+                        data-background="#e8f0e5"
+                        style="background: #e8f0e5;"
+                        onclick="selectBackground('#e8f0e5', this)"
+                    ></button>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================
+                 FRAME
+            ================================== -->
+
+            <div class="customize-group">
+
+                <h3>
+                    FRAME
+                </h3>
+
+
+                <div class="frame-options">
+
+
+                    <button
+                        class="frame-button active"
+                        data-frame="none"
+                        onclick="selectFrame('none', this)"
+                    >
+                        NO FRAME
+                    </button>
+
+
+                    <button
+                        class="frame-button"
+                        data-frame="simple"
+                        onclick="selectFrame('simple', this)"
+                    >
+                        SIMPLE
+                    </button>
+
+
+                    <button
+                        class="frame-button"
+                        data-frame="rounded"
+                        onclick="selectFrame('rounded', this)"
+                    >
+                        ROUNDED
+                    </button>
+
+
+                    <button
+                        class="frame-button"
+                        data-frame="double"
+                        onclick="selectFrame('double', this)"
+                    >
+                        DOUBLE
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================
+                 CUSTOM TEXT
+            ================================== -->
+
+            <div class="customize-group">
+
+                <h3>
+                    YOUR MESSAGE
+                </h3>
+
+
+                <input
+                    type="text"
+                    id="customText"
+                    maxlength="30"
+                    placeholder="Write something..."
+                    oninput="updateCustomText(this.value)"
+                >
+
+            </div>
+
+
+
+            <!-- ==================================
+                 DATE
+            ================================== -->
+
+            <div class="customize-group">
+
+                <h3>
+                    DATE
+                </h3>
+
+
+                <label class="checkbox-option">
+
+                    <input
+                        type="checkbox"
+                        id="showDate"
+                        onchange="toggleDate(this.checked)"
+                    >
+
+                    <span>
+                        Add today's date
+                    </span>
+
+                </label>
+
+            </div>
+
+
+
+            <!-- ==================================
+                 CONTINUE
+            ================================== -->
+
+            <button
+                class="main-button customize-finish-button"
+                onclick="finishCustomization()"
+            >
+                CONTINUE
+            </button>
+
+
+        </aside>
+
+
+    </section>
+
+
+</main>
+
+
+<script src="script.js"></script>
+```
+
+</body>
+
+</html>

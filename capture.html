@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
 
-    <meta 
-        name="viewport" 
+    <meta
+        name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
     <title>Take Your Photos</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
@@ -19,26 +23,45 @@
 <body class="capture-page">
 
 
+    <!-- FLASH EFFECT -->
+
+    <div
+        id="cameraFlash"
+        class="camera-flash"
+    ></div>
+
+
+
     <main class="capture-container">
 
 
+        <!-- HEADER -->
+
         <header class="capture-header">
 
-            <button 
+            <button
                 class="back-button"
                 onclick="goBackHome()"
             >
                 ← Back
             </button>
 
-            <h1>TAKE A PIC</h1>
 
-            <p id="photoCounter">
-                Ready?
-            </p>
+            <div>
+
+                <h1>TAKE A PIC</h1>
+
+                <p id="photoCounter">
+                    Ready?
+                </p>
+
+            </div>
 
         </header>
 
+
+
+        <!-- MAIN CAMERA AREA -->
 
         <section class="camera-layout">
 
@@ -47,82 +70,114 @@
 
             <div class="camera-section">
 
+
                 <div class="camera-frame">
 
-                    <div class="camera-placeholder">
+
+                    <!-- CAMERA VIDEO -->
+
+                    <video
+                        id="cameraVideo"
+                        autoplay
+                        playsinline
+                        muted
+                    ></video>
+
+
+
+                    <!-- CAMERA PLACEHOLDER -->
+
+                    <div
+                        id="cameraPlaceholder"
+                        class="camera-placeholder"
+                    >
 
                         <div class="camera-icon">
                             📷
                         </div>
 
                         <p>
-                            Your camera will appear here
+                            Open your camera to begin
                         </p>
 
                     </div>
 
-                    <video 
-                        id="cameraVideo"
-                        autoplay
-                        playsinline
-                        hidden
-                    ></video>
 
-                    <div 
+
+                    <!-- COUNTDOWN -->
+
+                    <div
                         id="countdown"
                         class="countdown"
                     ></div>
 
+
                 </div>
 
 
+
+                <!-- CAMERA CONTROLS -->
+
                 <div class="camera-controls">
 
-                    <button 
+
+                    <button
                         class="secondary-button"
                         onclick="startCamera()"
                     >
                         OPEN CAMERA
                     </button>
 
-                    <button 
+
+
+                    <button
                         id="captureButton"
                         class="shutter-button"
                         onclick="capturePhoto()"
+                        disabled
                     >
+
                         <span></span>
+
                     </button>
 
-                    <button 
+
+
+                    <button
                         class="secondary-button"
                         onclick="switchCamera()"
                     >
-                        SWITCH CAMERA
+                        🔄 SWITCH
                     </button>
 
+
                 </div>
+
 
             </div>
 
 
 
-            <!-- PHOTO STRIP PREVIEW -->
+            <!-- PHOTO STRIP -->
 
             <aside class="preview-section">
 
-                <h2>Your Photos</h2>
 
-                <div 
+                <h2>
+                    YOUR PHOTO STRIP
+                </h2>
+
+
+
+                <div
                     id="photoPreview"
                     class="photo-preview"
                 >
 
-                    <div class="preview-placeholder">
-                        Your photos<br>
-                        will appear here
-                    </div>
+                    <!-- JavaScript creates preview -->
 
                 </div>
+
 
             </aside>
 
@@ -130,20 +185,25 @@
         </section>
 
 
-        <button 
+
+        <!-- FINISH -->
+
+        <button
             id="finishButton"
             class="main-button"
             onclick="finishPhotos()"
             disabled
         >
-            FINISH
+            FINISH PHOTO
         </button>
 
 
     </main>
 
 
+
     <script src="script.js"></script>
 
 </body>
+
 </html>

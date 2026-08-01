@@ -1619,9 +1619,8 @@ function finishPhotos() {
 
     stopCamera();
 
-
-    window.location.href =
-        "result.html";
+window.location.href =
+    "customize.html";
 
 }
 

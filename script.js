@@ -1,3 +1,4 @@
+```javascript
 /* ========================================
    PHOTO BOOTH DATA
 ======================================== */
@@ -36,13 +37,9 @@ let selectedFilter =
 ======================================== */
 
 const layoutNames = {
-
     classic: "Classic 3-Photo Strip",
-
     four: "Four-Photo Strip",
-
     grid: "2 × 2 Photo Grid"
-
 };
 
 
@@ -51,19 +48,12 @@ const layoutNames = {
 ======================================== */
 
 const filterNames = {
-
     normal: "Normal",
-
     vintage: "Vintage",
-
     bw: "Black & White",
-
     sepia: "Sepia",
-
     cool: "Cool",
-
     warm: "Warm"
-
 };
 
 
@@ -72,24 +62,12 @@ const filterNames = {
 ======================================== */
 
 const filterCSS = {
-
     normal: "none",
-
-    vintage:
-        "sepia(0.25) contrast(1.05) saturate(0.85)",
-
-    bw:
-        "grayscale(1)",
-
-    sepia:
-        "sepia(0.75) contrast(1.05)",
-
-    cool:
-        "saturate(0.85) hue-rotate(15deg) brightness(1.05)",
-
-    warm:
-        "saturate(1.3) sepia(0.15) brightness(1.05)"
-
+    vintage: "sepia(0.25) contrast(1.05) saturate(0.85)",
+    bw: "grayscale(1)",
+    sepia: "sepia(0.75) contrast(1.05)",
+    cool: "saturate(0.85) hue-rotate(15deg) brightness(1.05)",
+    warm: "saturate(1.3) sepia(0.15) brightness(1.05)"
 };
 
 
@@ -103,9 +81,7 @@ function selectLayout(button) {
         document.querySelectorAll(".layout-option");
 
     options.forEach(option => {
-
         option.classList.remove("selected");
-
     });
 
     button.classList.add("selected");
@@ -125,7 +101,6 @@ function selectLayout(button) {
         "selectedPhotoCount",
         selectedPhotoCount
     );
-
 }
 
 
@@ -143,7 +118,6 @@ function startPhotoBooth() {
 
     selectedFilter = "normal";
 
-
     localStorage.setItem(
         "selectedLayout",
         selectedLayout
@@ -159,7 +133,6 @@ function startPhotoBooth() {
         selectedFilter
     );
 
-
     localStorage.removeItem(
         "capturedPhotos"
     );
@@ -168,10 +141,8 @@ function startPhotoBooth() {
         "capturedFilters"
     );
 
-
     window.location.href =
         "capture.html";
-
 }
 
 
@@ -185,7 +156,6 @@ function goBackHome() {
 
     window.location.href =
         "index.html";
-
 }
 
 
@@ -198,45 +168,30 @@ function selectFilter(filter) {
     selectedFilter =
         filter;
 
-
     localStorage.setItem(
         "selectedFilter",
         selectedFilter
     );
-
 
     const buttons =
         document.querySelectorAll(
             ".filter-button"
         );
 
-
     buttons.forEach(button => {
-
-        button.classList.remove(
-            "active"
-        );
-
+        button.classList.remove("active");
     });
-
 
     const selectedButton =
         document.querySelector(
             `[data-filter="${filter}"]`
         );
 
-
     if (selectedButton) {
-
-        selectedButton.classList.add(
-            "active"
-        );
-
+        selectedButton.classList.add("active");
     }
 
-
     applyCameraFilter();
-
 }
 
 
@@ -251,18 +206,12 @@ function applyCameraFilter() {
             "cameraVideo"
         );
 
-
     if (!video) {
-
         return;
-
     }
 
-
     video.style.filter =
-        filterCSS[selectedFilter] ||
-        "none";
-
+        filterCSS[selectedFilter] || "none";
 }
 
 
@@ -276,87 +225,58 @@ async function startCamera() {
 
         stopCamera();
 
-
         cameraStream =
             await navigator.mediaDevices.getUserMedia({
 
                 video: {
-
-                    facingMode:
-                        currentCamera,
+                    facingMode: currentCamera,
 
                     width: {
-
                         ideal: 1280
-
                     },
 
                     height: {
-
                         ideal: 720
-
                     }
-
                 },
 
                 audio: false
-
             });
-
 
         const video =
             document.getElementById(
                 "cameraVideo"
             );
 
-
         const placeholder =
             document.getElementById(
                 "cameraPlaceholder"
             );
-
 
         const captureButton =
             document.getElementById(
                 "captureButton"
             );
 
-
         if (!video) {
-
             return;
-
         }
-
 
         video.srcObject =
             cameraStream;
 
-
         video.style.display =
             "block";
 
-
         if (placeholder) {
-
             placeholder.style.display =
                 "none";
-
         }
-
 
         if (captureButton) {
-
             captureButton.disabled =
                 false;
-
         }
-
-
-        /*
-            Keep selfie preview mirrored.
-            Back camera is not mirrored.
-        */
 
         if (
             currentCamera ===
@@ -375,16 +295,9 @@ async function startCamera() {
 
         }
 
-
-        /*
-            Re-apply selected filter.
-        */
-
         applyCameraFilter();
 
-
         updateCounter();
-
 
     } catch (error) {
 
@@ -393,13 +306,10 @@ async function startCamera() {
             error
         );
 
-
         alert(
             "Camera access was blocked. Please allow camera permissions and try again."
         );
-
     }
-
 }
 
 
@@ -410,24 +320,17 @@ async function startCamera() {
 function stopCamera() {
 
     if (!cameraStream) {
-
         return;
-
     }
-
 
     cameraStream
         .getTracks()
         .forEach(track => {
-
             track.stop();
-
         });
-
 
     cameraStream =
         null;
-
 }
 
 
@@ -438,20 +341,15 @@ function stopCamera() {
 async function switchCamera() {
 
     if (isTakingPhoto) {
-
         return;
-
     }
-
 
     currentCamera =
         currentCamera === "user"
             ? "environment"
             : "user";
 
-
     await startCamera();
-
 }
 
 
@@ -466,13 +364,9 @@ function updateCounter() {
             "photoCounter"
         );
 
-
     if (!counter) {
-
         return;
-
     }
-
 
     if (retakeIndex !== null) {
 
@@ -480,9 +374,7 @@ function updateCounter() {
             `Retaking photo ${retakeIndex + 1}`;
 
         return;
-
     }
-
 
     if (
         capturedPhotos.length >=
@@ -493,13 +385,10 @@ function updateCounter() {
             "All photos captured!";
 
         return;
-
     }
-
 
     counter.textContent =
         `Photo ${capturedPhotos.length + 1} of ${selectedPhotoCount}`;
-
 }
 
 
@@ -510,17 +399,13 @@ function updateCounter() {
 async function capturePhoto() {
 
     if (isTakingPhoto) {
-
         return;
-
     }
-
 
     const video =
         document.getElementById(
             "cameraVideo"
         );
-
 
     if (
         !cameraStream ||
@@ -533,9 +418,7 @@ async function capturePhoto() {
         );
 
         return;
-
     }
-
 
     if (
         retakeIndex === null &&
@@ -544,45 +427,24 @@ async function capturePhoto() {
     ) {
 
         return;
-
     }
-
 
     isTakingPhoto =
         true;
 
-
     const targetIndex =
         retakeIndex;
-
 
     retakeIndex =
         null;
 
-
     updateCounter();
-
-
-    /*
-        Countdown.
-    */
 
     await runCountdown();
 
-
-    /*
-        Flash.
-    */
-
     triggerFlash();
 
-
-    /*
-        Shutter sound.
-    */
-
     playShutterSound();
-
 
     await wait(150);
 
@@ -596,14 +458,11 @@ async function capturePhoto() {
             "canvas"
         );
 
-
     canvas.width =
         video.videoWidth;
 
-
     canvas.height =
         video.videoHeight;
-
 
     const context =
         canvas.getContext(
@@ -612,47 +471,30 @@ async function capturePhoto() {
 
 
     /*
-        The preview may be mirrored
-        using CSS.
-
-        The saved photo is not mirrored.
+       Save the image normally.
+       CSS mirroring is only for the preview.
     */
 
     context.drawImage(
-
         video,
-
         0,
-
         0,
-
         canvas.width,
-
         canvas.height
-
     );
 
 
     /*
-        APPLY FILTER TO PHOTO
+       APPLY FILTER TO PHOTO
     */
 
     applyFilterToCanvas(
-
         context,
-
         canvas.width,
-
         canvas.height,
-
         selectedFilter
-
     );
 
-
-    /*
-        Convert to image.
-    */
 
     const photo =
         canvas.toDataURL(
@@ -673,7 +515,6 @@ async function capturePhoto() {
             targetIndex
         ] = photo;
 
-
         capturedFilters[
             targetIndex
         ] = selectedFilter;
@@ -684,57 +525,30 @@ async function capturePhoto() {
             photo
         );
 
-
         capturedFilters.push(
             selectedFilter
         );
-
     }
 
 
-    /*
-        Save to localStorage.
-    */
-
     localStorage.setItem(
-
         "capturedPhotos",
-
-        JSON.stringify(
-            capturedPhotos
-        )
-
+        JSON.stringify(capturedPhotos)
     );
-
 
     localStorage.setItem(
-
         "capturedFilters",
-
-        JSON.stringify(
-            capturedFilters
-        )
-
+        JSON.stringify(capturedFilters)
     );
 
-
-    /*
-        Update preview.
-    */
 
     updatePreview();
 
-
     updateCounter();
-
 
     isTakingPhoto =
         false;
 
-
-    /*
-        Enable finish button.
-    */
 
     if (
         capturedPhotos.length >=
@@ -746,16 +560,13 @@ async function capturePhoto() {
                 "finishButton"
             );
 
-
         if (finishButton) {
 
             finishButton.disabled =
                 false;
 
         }
-
     }
-
 }
 
 
@@ -764,43 +575,28 @@ async function capturePhoto() {
 ======================================== */
 
 function applyFilterToCanvas(
-
     context,
-
     width,
-
     height,
-
     filter
-
 ) {
 
     if (
         filter === "normal"
     ) {
-
         return;
-
     }
-
 
     const imageData =
         context.getImageData(
-
             0,
-
             0,
-
             width,
-
             height
-
         );
-
 
     const data =
         imageData.data;
-
 
     for (
         let i = 0;
@@ -818,10 +614,6 @@ function applyFilterToCanvas(
             data[i + 2];
 
 
-        /* =================================
-           BLACK & WHITE
-        ================================= */
-
         if (
             filter === "bw"
         ) {
@@ -831,22 +623,11 @@ function applyFilterToCanvas(
                 0.587 * g +
                 0.114 * b;
 
-
-            r =
-                gray;
-
-            g =
-                gray;
-
-            b =
-                gray;
+            r = gray;
+            g = gray;
+            b = gray;
 
         }
-
-
-        /* =================================
-           SEPIA
-        ================================= */
 
         else if (
             filter === "sepia"
@@ -857,34 +638,21 @@ function applyFilterToCanvas(
                 0.769 * g +
                 0.189 * b;
 
-
             const newG =
                 0.349 * r +
                 0.686 * g +
                 0.168 * b;
-
 
             const newB =
                 0.272 * r +
                 0.534 * g +
                 0.131 * b;
 
-
-            r =
-                newR;
-
-            g =
-                newG;
-
-            b =
-                newB;
+            r = newR;
+            g = newG;
+            b = newB;
 
         }
-
-
-        /* =================================
-           VINTAGE
-        ================================= */
 
         else if (
             filter === "vintage"
@@ -899,31 +667,7 @@ function applyFilterToCanvas(
             b =
                 b * 0.82;
 
-
-            r =
-                Math.min(
-                    255,
-                    r
-                );
-
-            g =
-                Math.min(
-                    255,
-                    g
-                );
-
-            b =
-                Math.min(
-                    255,
-                    b
-                );
-
         }
-
-
-        /* =================================
-           COOL
-        ================================= */
 
         else if (
             filter === "cool"
@@ -940,11 +684,6 @@ function applyFilterToCanvas(
 
         }
 
-
-        /* =================================
-           WARM
-        ================================= */
-
         else if (
             filter === "warm"
         ) {
@@ -960,53 +699,30 @@ function applyFilterToCanvas(
 
         }
 
-
-        /*
-            Clamp values.
-        */
-
         data[i] =
             Math.max(
                 0,
-                Math.min(
-                    255,
-                    r
-                )
+                Math.min(255, r)
             );
-
 
         data[i + 1] =
             Math.max(
                 0,
-                Math.min(
-                    255,
-                    g
-                )
+                Math.min(255, g)
             );
-
 
         data[i + 2] =
             Math.max(
                 0,
-                Math.min(
-                    255,
-                    b
-                )
+                Math.min(255, b)
             );
-
     }
 
-
     context.putImageData(
-
         imageData,
-
         0,
-
         0
-
     );
-
 }
 
 
@@ -1024,30 +740,24 @@ function runCountdown() {
                     "countdown"
                 );
 
-
             if (!countdown) {
 
                 resolve();
 
                 return;
-
             }
-
 
             let number =
                 3;
 
-
             countdown.textContent =
                 number;
-
 
             const timer =
                 setInterval(
                     () => {
 
                         number--;
-
 
                         if (
                             number <= 0
@@ -1057,10 +767,8 @@ function runCountdown() {
                                 timer
                             );
 
-
                             countdown.textContent =
                                 "📸";
-
 
                             setTimeout(
                                 () => {
@@ -1068,34 +776,23 @@ function runCountdown() {
                                     countdown.textContent =
                                         "";
 
-
                                     resolve();
 
                                 },
-
                                 350
-
                             );
 
-
                             return;
-
                         }
-
 
                         countdown.textContent =
                             number;
 
                     },
-
                     1000
-
                 );
-
         }
-
     );
-
 }
 
 
@@ -1110,26 +807,19 @@ function triggerFlash() {
             "cameraFlash"
         );
 
-
     if (!flash) {
-
         return;
-
     }
-
 
     flash.classList.remove(
         "active"
     );
 
-
     void flash.offsetWidth;
-
 
     flash.classList.add(
         "active"
     );
-
 }
 
 
@@ -1145,96 +835,58 @@ function playShutterSound() {
             window.AudioContext ||
             window.webkitAudioContext;
 
-
         const audioContext =
             new AudioContext();
 
-
         const oscillator =
-            audioContext
-                .createOscillator();
-
+            audioContext.createOscillator();
 
         const gain =
-            audioContext
-                .createGain();
-
+            audioContext.createGain();
 
         oscillator.type =
             "square";
 
+        oscillator.frequency.setValueAtTime(
+            900,
+            audioContext.currentTime
+        );
 
-        oscillator.frequency
-            .setValueAtTime(
+        oscillator.frequency.exponentialRampToValueAtTime(
+            150,
+            audioContext.currentTime + 0.12
+        );
 
-                900,
+        gain.gain.setValueAtTime(
+            0.3,
+            audioContext.currentTime
+        );
 
-                audioContext.currentTime
-
-            );
-
-
-        oscillator.frequency
-            .exponentialRampToValueAtTime(
-
-                150,
-
-                audioContext.currentTime +
-                0.12
-
-            );
-
-
-        gain.gain
-            .setValueAtTime(
-
-                0.3,
-
-                audioContext.currentTime
-
-            );
-
-
-        gain.gain
-            .exponentialRampToValueAtTime(
-
-                0.01,
-
-                audioContext.currentTime +
-                0.12
-
-            );
-
+        gain.gain.exponentialRampToValueAtTime(
+            0.01,
+            audioContext.currentTime + 0.12
+        );
 
         oscillator.connect(
             gain
         );
 
-
         gain.connect(
             audioContext.destination
         );
 
-
         oscillator.start();
 
-
         oscillator.stop(
-
-            audioContext.currentTime +
-            0.12
-
+            audioContext.currentTime + 0.12
         );
-
 
     } catch (error) {
 
         console.log(
             "Shutter sound unavailable."
         );
-
     }
-
 }
 
 
@@ -1245,19 +897,12 @@ function playShutterSound() {
 function wait(milliseconds) {
 
     return new Promise(
-
         resolve =>
-
             setTimeout(
-
                 resolve,
-
                 milliseconds
-
             )
-
     );
-
 }
 
 
@@ -1272,27 +917,20 @@ function updatePreview() {
             "photoPreview"
         );
 
-
     if (!preview) {
-
         return;
-
     }
-
 
     preview.innerHTML =
         "";
-
 
     const strip =
         document.createElement(
             "div"
         );
 
-
     strip.className =
         "preview-strip";
-
 
     if (
         selectedLayout ===
@@ -1302,7 +940,6 @@ function updatePreview() {
         strip.classList.add(
             "preview-grid"
         );
-
     }
 
 
@@ -1317,10 +954,8 @@ function updatePreview() {
                 "div"
             );
 
-
         slot.className =
             "preview-slot";
-
 
         if (
             capturedPhotos[i]
@@ -1331,14 +966,11 @@ function updatePreview() {
                     "img"
                 );
 
-
             image.src =
                 capturedPhotos[i];
 
-
             image.alt =
                 `Photo ${i + 1}`;
-
 
             slot.appendChild(
                 image
@@ -1350,18 +982,14 @@ function updatePreview() {
                     "span"
                 );
 
-
             filterBadge.className =
                 "filter-badge";
 
-
             filterBadge.textContent =
-
                 filterNames[
                     capturedFilters[i] ||
                     "normal"
                 ];
-
 
             slot.appendChild(
                 filterBadge
@@ -1373,27 +1001,20 @@ function updatePreview() {
                     "button"
                 );
 
-
             retake.className =
                 "retake-button";
-
 
             retake.textContent =
                 "RETAKE";
 
-
             retake.onclick =
                 () => {
-
                     retakePhoto(i);
-
                 };
-
 
             slot.appendChild(
                 retake
             );
-
 
         } else {
 
@@ -1401,17 +1022,13 @@ function updatePreview() {
                 "empty"
             );
 
-
             slot.textContent =
                 `PHOTO ${i + 1}`;
-
         }
-
 
         strip.appendChild(
             slot
         );
-
     }
 
 
@@ -1420,24 +1037,19 @@ function updatePreview() {
             "div"
         );
 
-
     label.className =
         "preview-label";
 
-
     label.textContent =
         "PHOTO BOOTH";
-
 
     strip.appendChild(
         label
     );
 
-
     preview.appendChild(
         strip
     );
-
 }
 
 
@@ -1448,76 +1060,52 @@ function updatePreview() {
 function retakePhoto(index) {
 
     if (isTakingPhoto) {
-
         return;
-
     }
-
 
     retakeIndex =
         index;
-
 
     selectedFilter =
         capturedFilters[index] ||
         "normal";
 
-
     localStorage.setItem(
-
         "selectedFilter",
-
         selectedFilter
-
     );
-
 
     const buttons =
         document.querySelectorAll(
             ".filter-button"
         );
 
-
     buttons.forEach(button => {
-
         button.classList.remove(
             "active"
         );
-
     });
-
 
     const activeButton =
         document.querySelector(
-
             `[data-filter="${selectedFilter}"]`
-
         );
-
 
     if (activeButton) {
 
         activeButton.classList.add(
             "active"
         );
-
     }
-
 
     applyCameraFilter();
 
-
     updateCounter();
 
-
     window.scrollTo({
-
         top: 0,
-
         behavior: "smooth"
-
     });
-
 }
 
 
@@ -1531,82 +1119,809 @@ function finishPhotos() {
         capturedPhotos.length <
         selectedPhotoCount
     ) {
-
         return;
-
     }
 
-
     localStorage.setItem(
-
         "capturedPhotos",
-
-        JSON.stringify(
-            capturedPhotos
-        )
-
+        JSON.stringify(capturedPhotos)
     );
 
-
     localStorage.setItem(
-
         "capturedFilters",
-
-        JSON.stringify(
-            capturedFilters
-        )
-
+        JSON.stringify(capturedFilters)
     );
 
-
     localStorage.setItem(
-
         "selectedLayout",
-
         selectedLayout
-
     );
-
 
     localStorage.setItem(
-
         "selectedPhotoCount",
-
         selectedPhotoCount
-
     );
-
 
     stopCamera();
 
-
     window.location.href =
         "customize.html";
-
 }
 
 
 /* ========================================
-   STAGE 5 - CUSTOMIZATION DATA
+   RESULT LAYOUT ENGINE
 ======================================== */
+
+function createFinalPhoto() {
+
+    const canvas =
+        document.getElementById(
+            "finalCanvas"
+        );
+
+    if (!canvas) {
+        return;
+    }
+
+    capturedPhotos =
+        JSON.parse(
+            localStorage.getItem(
+                "capturedPhotos"
+            )
+        ) || [];
+
+    capturedFilters =
+        JSON.parse(
+            localStorage.getItem(
+                "capturedFilters"
+            )
+        ) || [];
+
+    selectedLayout =
+        localStorage.getItem(
+            "selectedLayout"
+        ) || "classic";
+
+    selectedPhotoCount =
+        parseInt(
+            localStorage.getItem(
+                "selectedPhotoCount"
+            )
+        ) || 3;
+
+
+    const layoutName =
+        document.getElementById(
+            "resultLayoutName"
+        );
+
+    if (layoutName) {
+
+        layoutName.textContent =
+            layoutNames[
+                selectedLayout
+            ] ||
+            "Photo Booth";
+    }
+
+
+    const images =
+        [];
+
+    let loaded =
+        0;
+
+    const photosToLoad =
+        capturedPhotos.slice(
+            0,
+            selectedPhotoCount
+        );
+
+
+    if (!photosToLoad.length) {
+        return;
+    }
+
+
+    photosToLoad.forEach(
+        (src, index) => {
+
+            const image =
+                new Image();
+
+            image.onload =
+                () => {
+
+                    loaded++;
+
+                    if (
+                        loaded ===
+                        photosToLoad.length
+                    ) {
+
+                        drawFinalCanvas(
+                            canvas,
+                            images
+                        );
+                    }
+                };
+
+            image.src =
+                src;
+
+            images[index] =
+                image;
+        }
+    );
+}
+
+
+/* ========================================
+   DRAW FINAL CANVAS
+======================================== */
+
+function drawFinalCanvas(
+    canvas,
+    images
+) {
+
+    if (
+        selectedLayout ===
+        "classic"
+    ) {
+
+        drawClassicStrip(
+            canvas,
+            images
+        );
+
+    }
+
+    else if (
+        selectedLayout ===
+        "four"
+    ) {
+
+        drawFourStrip(
+            canvas,
+            images
+        );
+
+    }
+
+    else if (
+        selectedLayout ===
+        "grid"
+    ) {
+
+        drawGrid(
+            canvas,
+            images
+        );
+    }
+}
+
+
+/* ========================================
+   CLASSIC 3 PHOTO STRIP
+======================================== */
+
+function drawClassicStrip(
+    canvas,
+    images
+) {
+
+    const width =
+        600;
+
+    const photoWidth =
+        540;
+
+    const photoHeight =
+        405;
+
+    const sidePadding =
+        30;
+
+    const gap =
+        20;
+
+    const topPadding =
+        30;
+
+    const bottomArea =
+        90;
+
+    canvas.width =
+        width;
+
+    canvas.height =
+        topPadding +
+        (photoHeight * 3) +
+        (gap * 2) +
+        bottomArea;
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+    ctx.fillStyle =
+        "#ffffff";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    for (
+        let i = 0;
+        i < 3;
+        i++
+    ) {
+
+        drawCoverImage(
+            ctx,
+            images[i],
+            sidePadding,
+            topPadding +
+            (
+                i *
+                (
+                    photoHeight +
+                    gap
+                )
+            ),
+            photoWidth,
+            photoHeight
+        );
+    }
+
+    drawLabel(
+        ctx,
+        width / 2,
+        canvas.height - 35
+    );
+}
+
+
+/* ========================================
+   FOUR PHOTO STRIP
+======================================== */
+
+function drawFourStrip(
+    canvas,
+    images
+) {
+
+    const width =
+        600;
+
+    const photoWidth =
+        540;
+
+    const photoHeight =
+        360;
+
+    const sidePadding =
+        30;
+
+    const gap =
+        18;
+
+    const topPadding =
+        30;
+
+    const bottomArea =
+        90;
+
+    canvas.width =
+        width;
+
+    canvas.height =
+        topPadding +
+        (photoHeight * 4) +
+        (gap * 3) +
+        bottomArea;
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+    ctx.fillStyle =
+        "#ffffff";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
+
+        drawCoverImage(
+            ctx,
+            images[i],
+            sidePadding,
+            topPadding +
+            (
+                i *
+                (
+                    photoHeight +
+                    gap
+                )
+            ),
+            photoWidth,
+            photoHeight
+        );
+    }
+
+    drawLabel(
+        ctx,
+        width / 2,
+        canvas.height - 35
+    );
+}
+
+
+/* ========================================
+   2 × 2 GRID
+======================================== */
+
+function drawGrid(
+    canvas,
+    images
+) {
+
+    const width =
+        700;
+
+    const height =
+        700;
+
+    const padding =
+        30;
+
+    const gap =
+        20;
+
+    const labelHeight =
+        80;
+
+    const photoWidth =
+        (
+            width -
+            (padding * 2) -
+            gap
+        ) / 2;
+
+    const photoHeight =
+        (
+            height -
+            padding -
+            labelHeight -
+            gap
+        ) / 2;
+
+    canvas.width =
+        width;
+
+    canvas.height =
+        height;
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+    ctx.fillStyle =
+        "#ffffff";
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+    const positions = [
+
+        [
+            padding,
+            padding
+        ],
+
+        [
+            padding +
+            photoWidth +
+            gap,
+            padding
+        ],
+
+        [
+            padding,
+            padding +
+            photoHeight +
+            gap
+        ],
+
+        [
+            padding +
+            photoWidth +
+            gap,
+            padding +
+            photoHeight +
+            gap
+        ]
+
+    ];
+
+
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
+
+        drawCoverImage(
+            ctx,
+            images[i],
+            positions[i][0],
+            positions[i][1],
+            photoWidth,
+            photoHeight
+        );
+    }
+
+    drawLabel(
+        ctx,
+        width / 2,
+        height - 35
+    );
+}
+
+
+/* ========================================
+   COVER IMAGE
+======================================== */
+
+function drawCoverImage(
+    ctx,
+    image,
+    x,
+    y,
+    width,
+    height
+) {
+
+    if (!image) {
+        return;
+    }
+
+    const imageRatio =
+        image.width /
+        image.height;
+
+    const boxRatio =
+        width /
+        height;
+
+    let sourceWidth =
+        image.width;
+
+    let sourceHeight =
+        image.height;
+
+    let sourceX =
+        0;
+
+    let sourceY =
+        0;
+
+
+    if (
+        imageRatio >
+        boxRatio
+    ) {
+
+        sourceWidth =
+            image.height *
+            boxRatio;
+
+        sourceX =
+            (
+                image.width -
+                sourceWidth
+            ) / 2;
+
+    } else {
+
+        sourceHeight =
+            image.width /
+            boxRatio;
+
+        sourceY =
+            (
+                image.height -
+                sourceHeight
+            ) / 2;
+    }
+
+
+    ctx.drawImage(
+        image,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        x,
+        y,
+        width,
+        height
+    );
+}
+
+
+/* ========================================
+   PHOTO BOOTH LABEL
+======================================== */
+
+function drawLabel(
+    ctx,
+    x,
+    y
+) {
+
+    ctx.fillStyle =
+        "#28657d";
+
+    ctx.font =
+        "bold 28px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillText(
+        "PHOTO BOOTH",
+        x,
+        y
+    );
+}
+
+
+/* ========================================
+   DOWNLOAD
+======================================== */
+
+function downloadPhoto() {
+
+    const canvas =
+        document.getElementById(
+            "finalCanvas"
+        );
+
+    if (!canvas) {
+        return;
+    }
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+    link.download =
+        `photo-booth-${selectedLayout}.png`;
+
+    link.href =
+        canvas.toDataURL(
+            "image/png"
+        );
+
+    link.click();
+}
+
+
+/* ========================================
+   RETAKE ALL
+======================================== */
+
+function retakePhotos() {
+
+    capturedPhotos =
+        [];
+
+    capturedFilters =
+        [];
+
+    localStorage.removeItem(
+        "capturedPhotos"
+    );
+
+    localStorage.removeItem(
+        "capturedFilters"
+    );
+
+    window.location.href =
+        "capture.html";
+}
+
+
+/* ========================================
+   PRINT PHOTO
+======================================== */
+
+function printPhoto() {
+
+    const modal =
+        document.getElementById(
+            "printModal"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.add(
+        "active"
+    );
+
+    copyCanvasToPrinter();
+}
+
+
+/* ========================================
+   COPY FINAL CANVAS TO PRINTER
+======================================== */
+
+function copyCanvasToPrinter() {
+
+    const original =
+        document.getElementById(
+            "finalCanvas"
+        );
+
+    const printerCanvas =
+        document.getElementById(
+            "printCanvas"
+        );
+
+    if (
+        !original ||
+        !printerCanvas
+    ) {
+        return;
+    }
+
+    printerCanvas.width =
+        original.width;
+
+    printerCanvas.height =
+        original.height;
+
+    const context =
+        printerCanvas.getContext(
+            "2d"
+        );
+
+    context.drawImage(
+        original,
+        0,
+        0
+    );
+}
+
+
+/* ========================================
+   START PRINTING
+======================================== */
+
+function startPrinting() {
+
+    const status =
+        document.getElementById(
+            "printerStatus"
+        );
+
+    const photo =
+        document.getElementById(
+            "printedPhoto"
+        );
+
+    const button =
+        document.getElementById(
+            "startPrintButton"
+        );
+
+    if (
+        !status ||
+        !photo ||
+        !button
+    ) {
+        return;
+    }
+
+    status.textContent =
+        "Printing...";
+
+    button.disabled =
+        true;
+
+    photo.classList.remove(
+        "printing"
+    );
+
+    void photo.offsetWidth;
+
+    photo.classList.add(
+        "printing"
+    );
+
+    setTimeout(
+        () => {
+
+            status.textContent =
+                "Printing complete!";
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "PRINT AGAIN";
+
+        },
+        5000
+    );
+}
+
+
+/* ========================================
+   CLOSE PRINT
+======================================== */
+
+function closePrint() {
+
+    const modal =
+        document.getElementById(
+            "printModal"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.remove(
+        "active"
+    );
+}
+
+
+/* =====================================================
+   STAGE 5 - CUSTOMIZATION DATA
+===================================================== */
 
 let customizationBackground =
     localStorage.getItem(
         "customizationBackground"
     ) || "#ffffff";
 
-
 let customizationFrame =
     localStorage.getItem(
         "customizationFrame"
     ) || "none";
 
-
 let customizationText =
     localStorage.getItem(
         "customizationText"
     ) || "";
-
 
 let customizationShowDate =
     localStorage.getItem(
@@ -1618,26 +1933,23 @@ let customizationShowDate =
    SELECT BACKGROUND
 ======================================== */
 
-function selectBackground(color, button) {
+function selectBackground(
+    color,
+    button
+) {
 
     customizationBackground =
         color;
 
-
     localStorage.setItem(
-
         "customizationBackground",
-
         color
-
     );
-
 
     const buttons =
         document.querySelectorAll(
             ".background-button"
         );
-
 
     buttons.forEach(button => {
 
@@ -1647,7 +1959,6 @@ function selectBackground(color, button) {
 
     });
 
-
     if (button) {
 
         button.classList.add(
@@ -1656,9 +1967,7 @@ function selectBackground(color, button) {
 
     }
 
-
     updateCustomizationPreview();
-
 }
 
 
@@ -1666,26 +1975,23 @@ function selectBackground(color, button) {
    SELECT FRAME
 ======================================== */
 
-function selectFrame(frame, button) {
+function selectFrame(
+    frame,
+    button
+) {
 
     customizationFrame =
         frame;
 
-
     localStorage.setItem(
-
         "customizationFrame",
-
         frame
-
     );
-
 
     const buttons =
         document.querySelectorAll(
             ".frame-button"
         );
-
 
     buttons.forEach(button => {
 
@@ -1695,7 +2001,6 @@ function selectFrame(frame, button) {
 
     });
 
-
     if (button) {
 
         button.classList.add(
@@ -1704,9 +2009,7 @@ function selectFrame(frame, button) {
 
     }
 
-
     updateCustomizationPreview();
-
 }
 
 
@@ -1714,23 +2017,19 @@ function selectFrame(frame, button) {
    UPDATE CUSTOM TEXT
 ======================================== */
 
-function updateCustomText(text) {
+function updateCustomText(
+    text
+) {
 
     customizationText =
         text;
 
-
     localStorage.setItem(
-
         "customizationText",
-
         text
-
     );
 
-
     updateCustomizationPreview();
-
 }
 
 
@@ -1738,23 +2037,19 @@ function updateCustomText(text) {
    TOGGLE DATE
 ======================================== */
 
-function toggleDate(enabled) {
+function toggleDate(
+    enabled
+) {
 
     customizationShowDate =
         enabled;
 
-
     localStorage.setItem(
-
         "customizationShowDate",
-
         enabled
-
     );
 
-
     updateCustomizationPreview();
-
 }
 
 
@@ -1766,7 +2061,6 @@ function backToCapture() {
 
     window.location.href =
         "capture.html";
-
 }
 
 
@@ -1781,21 +2075,16 @@ function createCustomizationPreview() {
             "customizeCanvas"
         );
 
-
     if (!canvas) {
-
         return;
-
     }
 
 
     capturedPhotos =
         JSON.parse(
-
             localStorage.getItem(
                 "capturedPhotos"
             )
-
         ) || [];
 
 
@@ -1807,11 +2096,9 @@ function createCustomizationPreview() {
 
     selectedPhotoCount =
         parseInt(
-
             localStorage.getItem(
                 "selectedPhotoCount"
             )
-
         ) || 3;
 
 
@@ -1844,7 +2131,6 @@ function createCustomizationPreview() {
             "customText"
         );
 
-
     if (textInput) {
 
         textInput.value =
@@ -1858,7 +2144,6 @@ function createCustomizationPreview() {
             "showDate"
         );
 
-
     if (dateCheckbox) {
 
         dateCheckbox.checked =
@@ -1869,20 +2154,14 @@ function createCustomizationPreview() {
 
     const backgroundButton =
         document.querySelector(
-
             `[data-background="${customizationBackground}"]`
-
         );
-
 
     if (backgroundButton) {
 
         selectBackground(
-
             customizationBackground,
-
             backgroundButton
-
         );
 
     }
@@ -1890,27 +2169,20 @@ function createCustomizationPreview() {
 
     const frameButton =
         document.querySelector(
-
             `[data-frame="${customizationFrame}"]`
-
         );
-
 
     if (frameButton) {
 
         selectFrame(
-
             customizationFrame,
-
             frameButton
-
         );
 
     }
 
 
     drawCustomizationCanvas();
-
 }
 
 
@@ -1936,17 +2208,13 @@ async function drawCustomizationCanvas() {
             "customizeCanvas"
         );
 
-
     if (!canvas) {
-
         return;
-
     }
 
 
     const images =
         [];
-
 
     let loaded =
         0;
@@ -1954,88 +2222,49 @@ async function drawCustomizationCanvas() {
 
     const photos =
         capturedPhotos.slice(
-
             0,
-
             selectedPhotoCount
-
         );
 
 
     if (!photos.length) {
-
         return;
-
     }
 
 
     photos.forEach(
-
         (src, index) => {
 
             const image =
                 new Image();
-
 
             image.onload =
                 () => {
 
                     loaded++;
 
-
                     if (
                         loaded ===
                         photos.length
                     ) {
 
                         drawCustomizationLayout(
-
                             canvas,
-
                             images
-
                         );
 
                     }
 
                 };
-
-
-            image.onerror =
-                () => {
-
-                    loaded++;
-
-
-                    if (
-                        loaded ===
-                        photos.length
-                    ) {
-
-                        drawCustomizationLayout(
-
-                            canvas,
-
-                            images
-
-                        );
-
-                    }
-
-                };
-
 
             image.src =
                 src;
-
 
             images[index] =
                 image;
 
         }
-
     );
-
 }
 
 
@@ -2044,11 +2273,8 @@ async function drawCustomizationCanvas() {
 ======================================== */
 
 function drawCustomizationLayout(
-
     canvas,
-
     images
-
 ) {
 
     if (
@@ -2057,11 +2283,8 @@ function drawCustomizationLayout(
     ) {
 
         drawCustomClassic(
-
             canvas,
-
             images
-
         );
 
     }
@@ -2072,11 +2295,8 @@ function drawCustomizationLayout(
     ) {
 
         drawCustomFour(
-
             canvas,
-
             images
-
         );
 
     }
@@ -2087,15 +2307,11 @@ function drawCustomizationLayout(
     ) {
 
         drawCustomGrid(
-
             canvas,
-
             images
-
         );
 
     }
-
 }
 
 
@@ -2104,32 +2320,24 @@ function drawCustomizationLayout(
 ======================================== */
 
 function drawCustomClassic(
-
     canvas,
-
     images
-
 ) {
 
     const width =
         600;
 
-
     const photoWidth =
         540;
-
 
     const photoHeight =
         405;
 
-
     const padding =
         30;
 
-
     const gap =
         20;
-
 
     const bottomArea =
         110;
@@ -2138,22 +2346,15 @@ function drawCustomClassic(
     canvas.width =
         width;
 
-
     canvas.height =
-
         padding +
-
         (photoHeight * 3) +
-
         (gap * 2) +
-
         bottomArea;
 
 
     drawCustomizationBackground(
-
         canvas
-
     );
 
 
@@ -2170,36 +2371,26 @@ function drawCustomClassic(
     ) {
 
         drawCoverImage(
-
             ctx,
-
             images[i],
-
             padding,
-
             padding +
-
             i *
-
-            (photoHeight + gap),
-
+            (
+                photoHeight +
+                gap
+            ),
             photoWidth,
-
             photoHeight
-
         );
 
     }
 
 
     drawCustomizationDetails(
-
         ctx,
-
         canvas
-
     );
-
 }
 
 
@@ -2208,32 +2399,24 @@ function drawCustomClassic(
 ======================================== */
 
 function drawCustomFour(
-
     canvas,
-
     images
-
 ) {
 
     const width =
         600;
 
-
     const photoWidth =
         540;
-
 
     const photoHeight =
         360;
 
-
     const padding =
         30;
 
-
     const gap =
         18;
-
 
     const bottomArea =
         110;
@@ -2242,22 +2425,15 @@ function drawCustomFour(
     canvas.width =
         width;
 
-
     canvas.height =
-
         padding +
-
         (photoHeight * 4) +
-
         (gap * 3) +
-
         bottomArea;
 
 
     drawCustomizationBackground(
-
         canvas
-
     );
 
 
@@ -2274,36 +2450,26 @@ function drawCustomFour(
     ) {
 
         drawCoverImage(
-
             ctx,
-
             images[i],
-
             padding,
-
             padding +
-
             i *
-
-            (photoHeight + gap),
-
+            (
+                photoHeight +
+                gap
+            ),
             photoWidth,
-
             photoHeight
-
         );
 
     }
 
 
     drawCustomizationDetails(
-
         ctx,
-
         canvas
-
     );
-
 }
 
 
@@ -2312,73 +2478,52 @@ function drawCustomFour(
 ======================================== */
 
 function drawCustomGrid(
-
     canvas,
-
     images
-
 ) {
 
     const width =
         700;
 
-
     const height =
         700;
-
 
     const padding =
         30;
 
-
     const gap =
         20;
-
 
     const labelHeight =
         110;
 
 
     const photoWidth =
-
         (
-
             width -
-
             (padding * 2) -
-
             gap
-
         ) / 2;
 
 
     const photoHeight =
-
         (
-
             height -
-
             padding -
-
             labelHeight -
-
             gap
-
         ) / 2;
 
 
     canvas.width =
         width;
 
-
     canvas.height =
         height;
 
 
     drawCustomizationBackground(
-
         canvas
-
     );
 
 
@@ -2399,13 +2544,11 @@ function drawCustomGrid(
             padding +
             photoWidth +
             gap,
-
             padding
         ],
 
         [
             padding,
-
             padding +
             photoHeight +
             gap
@@ -2415,7 +2558,6 @@ function drawCustomGrid(
             padding +
             photoWidth +
             gap,
-
             padding +
             photoHeight +
             gap
@@ -2431,32 +2573,21 @@ function drawCustomGrid(
     ) {
 
         drawCoverImage(
-
             ctx,
-
             images[i],
-
             positions[i][0],
-
             positions[i][1],
-
             photoWidth,
-
             photoHeight
-
         );
 
     }
 
 
     drawCustomizationDetails(
-
         ctx,
-
         canvas
-
     );
-
 }
 
 
@@ -2465,9 +2596,7 @@ function drawCustomGrid(
 ======================================== */
 
 function drawCustomizationBackground(
-
     canvas
-
 ) {
 
     const ctx =
@@ -2475,23 +2604,15 @@ function drawCustomizationBackground(
             "2d"
         );
 
-
     ctx.fillStyle =
         customizationBackground;
 
-
     ctx.fillRect(
-
         0,
-
         0,
-
         canvas.width,
-
         canvas.height
-
     );
-
 }
 
 
@@ -2500,24 +2621,20 @@ function drawCustomizationBackground(
 ======================================== */
 
 function drawCustomizationDetails(
-
     ctx,
-
     canvas
-
 ) {
 
     const centerX =
         canvas.width / 2;
 
-
     const bottomY =
         canvas.height - 65;
 
 
-    /*
-        FRAME
-    */
+    /* ====================================
+       FRAME
+    ==================================== */
 
     if (
         customizationFrame ===
@@ -2527,21 +2644,14 @@ function drawCustomizationDetails(
         ctx.strokeStyle =
             "#28657d";
 
-
         ctx.lineWidth =
             12;
 
-
         ctx.strokeRect(
-
             8,
-
             8,
-
             canvas.width - 16,
-
             canvas.height - 16
-
         );
 
     }
@@ -2555,25 +2665,16 @@ function drawCustomizationDetails(
         ctx.strokeStyle =
             "#28657d";
 
-
         ctx.lineWidth =
             10;
 
-
         drawRoundedRectangle(
-
             ctx,
-
             8,
-
             8,
-
             canvas.width - 16,
-
             canvas.height - 16,
-
             30
-
         );
 
     }
@@ -2587,110 +2688,70 @@ function drawCustomizationDetails(
         ctx.strokeStyle =
             "#28657d";
 
-
         ctx.lineWidth =
             6;
 
-
         ctx.strokeRect(
-
             10,
-
             10,
-
             canvas.width - 20,
-
             canvas.height - 20
-
         );
-
 
         ctx.lineWidth =
             3;
 
-
         ctx.strokeRect(
-
             20,
-
             20,
-
             canvas.width - 40,
-
             canvas.height - 40
-
         );
 
     }
 
 
-    /*
-        CUSTOM TEXT
-    */
+    /* ====================================
+       CUSTOM TEXT OR DEFAULT LABEL
+    ==================================== */
+
+    ctx.fillStyle =
+        "#28657d";
+
+    ctx.textAlign =
+        "center";
+
 
     if (
         customizationText
     ) {
 
-        ctx.fillStyle =
-            "#28657d";
-
-
         ctx.font =
             "bold 24px Arial";
 
-
-        ctx.textAlign =
-            "center";
-
-
         ctx.fillText(
-
             customizationText,
-
             centerX,
-
             bottomY
-
         );
 
-    }
-
-
-    /*
-        DEFAULT LABEL
-    */
-
-    else {
-
-        ctx.fillStyle =
-            "#28657d";
-
+    } else {
 
         ctx.font =
             "bold 24px Arial";
 
-
-        ctx.textAlign =
-            "center";
-
-
         ctx.fillText(
-
             "PHOTO BOOTH",
-
             centerX,
-
             bottomY
-
         );
 
     }
 
 
-    /*
-        DATE
-    */
+    /* ====================================
+       DATE
+    ==================================== */
 
     if (
         customizationShowDate
@@ -2699,31 +2760,22 @@ function drawCustomizationDetails(
         const today =
             new Date();
 
-
         const dateText =
             today.toLocaleDateString();
-
 
         ctx.fillStyle =
             "#28657d";
 
-
         ctx.font =
             "16px Arial";
 
-
         ctx.fillText(
-
             dateText,
-
             centerX,
-
             canvas.height - 30
-
         );
 
     }
-
 }
 
 
@@ -2732,23 +2784,15 @@ function drawCustomizationDetails(
 ======================================== */
 
 function drawRoundedRectangle(
-
     ctx,
-
     x,
-
     y,
-
     width,
-
     height,
-
     radius
-
 ) {
 
     ctx.beginPath();
-
 
     if (
         typeof ctx.roundRect ===
@@ -2756,17 +2800,11 @@ function drawRoundedRectangle(
     ) {
 
         ctx.roundRect(
-
             x,
-
             y,
-
             width,
-
             height,
-
             radius
-
         );
 
     } else {
@@ -2782,82 +2820,53 @@ function drawRoundedRectangle(
         );
 
         ctx.quadraticCurveTo(
-
             x + width,
-
             y,
-
             x + width,
-
             y + radius
-
         );
 
         ctx.lineTo(
-
             x + width,
-
             y + height - radius
-
         );
 
         ctx.quadraticCurveTo(
-
             x + width,
-
             y + height,
-
             x + width - radius,
-
             y + height
-
         );
 
         ctx.lineTo(
-
             x + radius,
-
             y + height
-
         );
 
         ctx.quadraticCurveTo(
-
             x,
-
             y + height,
-
             x,
-
             y + height - radius
-
         );
 
         ctx.lineTo(
-
             x,
-
             y + radius
-
         );
 
         ctx.quadraticCurveTo(
-
             x,
-
             y,
-
             x + radius,
-
             y
-
         );
 
     }
 
+    ctx.closePath();
 
     ctx.stroke();
-
 }
 
 
@@ -2868,1089 +2877,27 @@ function drawRoundedRectangle(
 function finishCustomization() {
 
     localStorage.setItem(
-
         "customizationBackground",
-
         customizationBackground
-
     );
 
-
     localStorage.setItem(
-
         "customizationFrame",
-
         customizationFrame
-
     );
 
-
     localStorage.setItem(
-
         "customizationText",
-
         customizationText
-
     );
-
 
     localStorage.setItem(
-
         "customizationShowDate",
-
         customizationShowDate
-
     );
-
 
     window.location.href =
         "result.html";
-
-}
-
-
-/* ========================================
-   RESULT LAYOUT ENGINE
-======================================== */
-
-function createFinalPhoto() {
-
-    const canvas =
-        document.getElementById(
-            "finalCanvas"
-        );
-
-
-    if (!canvas) {
-
-        return;
-
-    }
-
-
-    capturedPhotos =
-        JSON.parse(
-
-            localStorage.getItem(
-                "capturedPhotos"
-            )
-
-        ) || [];
-
-
-    capturedFilters =
-        JSON.parse(
-
-            localStorage.getItem(
-                "capturedFilters"
-            )
-
-        ) || [];
-
-
-    selectedLayout =
-        localStorage.getItem(
-            "selectedLayout"
-        ) || "classic";
-
-
-    selectedPhotoCount =
-        parseInt(
-
-            localStorage.getItem(
-                "selectedPhotoCount"
-            )
-
-        ) || 3;
-
-
-    /*
-        Load customization data.
-    */
-
-    customizationBackground =
-        localStorage.getItem(
-            "customizationBackground"
-        ) || "#ffffff";
-
-
-    customizationFrame =
-        localStorage.getItem(
-            "customizationFrame"
-        ) || "none";
-
-
-    customizationText =
-        localStorage.getItem(
-            "customizationText"
-        ) || "";
-
-
-    customizationShowDate =
-        localStorage.getItem(
-            "customizationShowDate"
-        ) === "true";
-
-
-    /*
-        Update layout name.
-    */
-
-    const layoutName =
-        document.getElementById(
-            "resultLayoutName"
-        );
-
-
-    if (layoutName) {
-
-        layoutName.textContent =
-
-            layoutNames[
-                selectedLayout
-            ] ||
-
-            "Photo Booth";
-
-    }
-
-
-    /*
-        Load images.
-    */
-
-    const images =
-        [];
-
-
-    let loaded =
-        0;
-
-
-    const photosToLoad =
-        capturedPhotos.slice(
-
-            0,
-
-            selectedPhotoCount
-
-        );
-
-
-    if (!photosToLoad.length) {
-
-        return;
-
-    }
-
-
-    photosToLoad.forEach(
-
-        (src, index) => {
-
-            const image =
-                new Image();
-
-
-            image.onload =
-                () => {
-
-                    loaded++;
-
-
-                    if (
-                        loaded ===
-                        photosToLoad.length
-                    ) {
-
-                        drawFinalCanvas(
-
-                            canvas,
-
-                            images
-
-                        );
-
-                    }
-
-                };
-
-
-            image.src =
-                src;
-
-
-            images[index] =
-                image;
-
-        }
-
-    );
-
-}
-
-
-/* ========================================
-   DRAW FINAL CANVAS
-======================================== */
-
-function drawFinalCanvas(
-
-    canvas,
-
-    images
-
-) {
-
-    if (
-        selectedLayout ===
-        "classic"
-    ) {
-
-        drawFinalClassicStrip(
-
-            canvas,
-
-            images
-
-        );
-
-    }
-
-    else if (
-        selectedLayout ===
-        "four"
-    ) {
-
-        drawFinalFourStrip(
-
-            canvas,
-
-            images
-
-        );
-
-    }
-
-    else if (
-        selectedLayout ===
-        "grid"
-    ) {
-
-        drawFinalGrid(
-
-            canvas,
-
-            images
-
-        );
-
-    }
-
-}
-
-
-/* ========================================
-   FINAL CLASSIC 3 PHOTO STRIP
-======================================== */
-
-function drawFinalClassicStrip(
-
-    canvas,
-
-    images
-
-) {
-
-    const width =
-        600;
-
-
-    const photoWidth =
-        540;
-
-
-    const photoHeight =
-        405;
-
-
-    const sidePadding =
-        30;
-
-
-    const gap =
-        20;
-
-
-    const topPadding =
-        30;
-
-
-    const bottomArea =
-        110;
-
-
-    canvas.width =
-        width;
-
-
-    canvas.height =
-
-        topPadding +
-
-        (photoHeight * 3) +
-
-        (gap * 2) +
-
-        bottomArea;
-
-
-    drawCustomizationBackground(
-
-        canvas
-
-    );
-
-
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
-
-
-    for (
-        let i = 0;
-        i < 3;
-        i++
-    ) {
-
-        drawCoverImage(
-
-            ctx,
-
-            images[i],
-
-            sidePadding,
-
-            topPadding +
-
-            (
-
-                i *
-
-                (
-
-                    photoHeight +
-
-                    gap
-
-                )
-
-            ),
-
-            photoWidth,
-
-            photoHeight
-
-        );
-
-    }
-
-
-    drawCustomizationDetails(
-
-        ctx,
-
-        canvas
-
-    );
-
-}
-
-
-/* ========================================
-   FINAL FOUR PHOTO STRIP
-======================================== */
-
-function drawFinalFourStrip(
-
-    canvas,
-
-    images
-
-) {
-
-    const width =
-        600;
-
-
-    const photoWidth =
-        540;
-
-
-    const photoHeight =
-        360;
-
-
-    const sidePadding =
-        30;
-
-
-    const gap =
-        18;
-
-
-    const topPadding =
-        30;
-
-
-    const bottomArea =
-        110;
-
-
-    canvas.width =
-        width;
-
-
-    canvas.height =
-
-        topPadding +
-
-        (photoHeight * 4) +
-
-        (gap * 3) +
-
-        bottomArea;
-
-
-    drawCustomizationBackground(
-
-        canvas
-
-    );
-
-
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
-
-
-    for (
-        let i = 0;
-        i < 4;
-        i++
-    ) {
-
-        drawCoverImage(
-
-            ctx,
-
-            images[i],
-
-            sidePadding,
-
-            topPadding +
-
-            (
-
-                i *
-
-                (
-
-                    photoHeight +
-
-                    gap
-
-                )
-
-            ),
-
-            photoWidth,
-
-            photoHeight
-
-        );
-
-    }
-
-
-    drawCustomizationDetails(
-
-        ctx,
-
-        canvas
-
-    );
-
-}
-
-
-/* ========================================
-   FINAL 2 × 2 GRID
-======================================== */
-
-function drawFinalGrid(
-
-    canvas,
-
-    images
-
-) {
-
-    const width =
-        700;
-
-
-    const height =
-        700;
-
-
-    const padding =
-        30;
-
-
-    const gap =
-        20;
-
-
-    const labelHeight =
-        110;
-
-
-    const photoWidth =
-
-        (
-
-            width -
-
-            (padding * 2) -
-
-            gap
-
-        ) / 2;
-
-
-    const photoHeight =
-
-        (
-
-            height -
-
-            padding -
-
-            labelHeight -
-
-            gap
-
-        ) / 2;
-
-
-    canvas.width =
-        width;
-
-
-    canvas.height =
-        height;
-
-
-    drawCustomizationBackground(
-
-        canvas
-
-    );
-
-
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
-
-
-    const positions = [
-
-        [
-            padding,
-            padding
-        ],
-
-        [
-            padding +
-
-            photoWidth +
-
-            gap,
-
-            padding
-        ],
-
-        [
-            padding,
-
-            padding +
-
-            photoHeight +
-
-            gap
-        ],
-
-        [
-            padding +
-
-            photoWidth +
-
-            gap,
-
-            padding +
-
-            photoHeight +
-
-            gap
-        ]
-
-    ];
-
-
-    for (
-        let i = 0;
-        i < 4;
-        i++
-    ) {
-
-        drawCoverImage(
-
-            ctx,
-
-            images[i],
-
-            positions[i][0],
-
-            positions[i][1],
-
-            photoWidth,
-
-            photoHeight
-
-        );
-
-    }
-
-
-    drawCustomizationDetails(
-
-        ctx,
-
-        canvas
-
-    );
-
-}
-
-
-/* ========================================
-   COVER IMAGE
-======================================== */
-
-function drawCoverImage(
-
-    ctx,
-
-    image,
-
-    x,
-
-    y,
-
-    width,
-
-    height
-
-) {
-
-    if (!image) {
-
-        return;
-
-    }
-
-
-    const imageRatio =
-
-        image.width /
-
-        image.height;
-
-
-    const boxRatio =
-
-        width /
-
-        height;
-
-
-    let sourceWidth =
-        image.width;
-
-
-    let sourceHeight =
-        image.height;
-
-
-    let sourceX =
-        0;
-
-
-    let sourceY =
-        0;
-
-
-    if (
-        imageRatio >
-        boxRatio
-    ) {
-
-        sourceWidth =
-
-            image.height *
-
-            boxRatio;
-
-
-        sourceX =
-
-            (
-
-                image.width -
-
-                sourceWidth
-
-            ) / 2;
-
-    }
-
-    else {
-
-        sourceHeight =
-
-            image.width /
-
-            boxRatio;
-
-
-        sourceY =
-
-            (
-
-                image.height -
-
-                sourceHeight
-
-            ) / 2;
-
-    }
-
-
-    ctx.drawImage(
-
-        image,
-
-        sourceX,
-
-        sourceY,
-
-        sourceWidth,
-
-        sourceHeight,
-
-        x,
-
-        y,
-
-        width,
-
-        height
-
-    );
-
-}
-
-
-/* ========================================
-   DOWNLOAD
-======================================== */
-
-function downloadPhoto() {
-
-    const canvas =
-        document.getElementById(
-            "finalCanvas"
-        );
-
-
-    if (!canvas) {
-
-        return;
-
-    }
-
-
-    const link =
-        document.createElement(
-            "a"
-        );
-
-
-    link.download =
-
-        `photo-booth-${selectedLayout}.png`;
-
-
-    link.href =
-
-        canvas.toDataURL(
-            "image/png"
-        );
-
-
-    link.click();
-
-}
-
-
-/* ========================================
-   RETAKE ALL
-======================================== */
-
-function retakePhotos() {
-
-    capturedPhotos =
-        [];
-
-
-    capturedFilters =
-        [];
-
-
-    localStorage.removeItem(
-
-        "capturedPhotos"
-
-    );
-
-
-    localStorage.removeItem(
-
-        "capturedFilters"
-
-    );
-
-
-    window.location.href =
-        "capture.html";
-
-}
-
-
-/* ========================================
-   PRINT PHOTO
-======================================== */
-
-function printPhoto() {
-
-    const modal =
-        document.getElementById(
-            "printModal"
-        );
-
-
-    if (!modal) {
-
-        return;
-
-    }
-
-
-    modal.classList.add(
-        "active"
-    );
-
-
-    copyCanvasToPrinter();
-
-}
-
-
-/* ========================================
-   COPY FINAL CANVAS TO PRINTER
-======================================== */
-
-function copyCanvasToPrinter() {
-
-    const original =
-        document.getElementById(
-            "finalCanvas"
-        );
-
-
-    const printerCanvas =
-        document.getElementById(
-            "printCanvas"
-        );
-
-
-    if (
-        !original ||
-        !printerCanvas
-    ) {
-
-        return;
-
-    }
-
-
-    printerCanvas.width =
-        original.width;
-
-
-    printerCanvas.height =
-        original.height;
-
-
-    const context =
-        printerCanvas.getContext(
-            "2d"
-        );
-
-
-    context.clearRect(
-
-        0,
-
-        0,
-
-        printerCanvas.width,
-
-        printerCanvas.height
-
-    );
-
-
-    context.drawImage(
-
-        original,
-
-        0,
-
-        0
-
-    );
-
-}
-
-
-/* ========================================
-   START PRINTING
-======================================== */
-
-function startPrinting() {
-
-    const status =
-        document.getElementById(
-            "printerStatus"
-        );
-
-
-    const photo =
-        document.getElementById(
-            "printedPhoto"
-        );
-
-
-    const button =
-        document.getElementById(
-            "startPrintButton"
-        );
-
-
-    if (
-        !status ||
-        !photo ||
-        !button
-    ) {
-
-        return;
-
-    }
-
-
-    status.textContent =
-        "Printing...";
-
-
-    button.disabled =
-        true;
-
-
-    photo.classList.remove(
-        "printing"
-    );
-
-
-    void photo.offsetWidth;
-
-
-    photo.classList.add(
-        "printing"
-    );
-
-
-    setTimeout(
-
-        () => {
-
-            status.textContent =
-                "Printing complete!";
-
-
-            button.disabled =
-                false;
-
-
-            button.textContent =
-                "PRINT AGAIN";
-
-        },
-
-        5000
-
-    );
-
-}
-
-
-/* ========================================
-   CLOSE PRINT
-======================================== */
-
-function closePrint() {
-
-    const modal =
-        document.getElementById(
-            "printModal"
-        );
-
-
-    if (!modal) {
-
-        return;
-
-    }
-
-
-    modal.classList.remove(
-        "active"
-    );
-
 }
 
 
@@ -3959,47 +2906,34 @@ function closePrint() {
 ======================================== */
 
 document.addEventListener(
-
     "DOMContentLoaded",
-
     () => {
-
 
         /* ================================
            HOME PAGE
         ================================= */
 
         const layoutOptions =
-
             document.querySelectorAll(
-
                 ".layout-option"
-
             );
 
 
         layoutOptions.forEach(
-
             option => {
 
                 if (
-
                     option.dataset.layout ===
-
                     selectedLayout
-
                 ) {
 
                     option.classList.add(
-
                         "selected"
-
                     );
 
                 }
 
             }
-
         );
 
 
@@ -4008,42 +2942,27 @@ document.addEventListener(
         ================================= */
 
         if (
-
-            document.body.classList
-
-                .contains(
-
-                    "capture-page"
-
-                )
-
+            document.body.classList.contains(
+                "capture-page"
+            )
         ) {
 
-
             selectedFilter =
-
                 localStorage.getItem(
-
                     "selectedFilter"
-
                 ) || "normal";
 
 
             const activeButton =
-
                 document.querySelector(
-
                     `[data-filter="${selectedFilter}"]`
-
                 );
 
 
             if (activeButton) {
 
                 activeButton.classList.add(
-
                     "active"
-
                 );
 
             }
@@ -4051,9 +2970,7 @@ document.addEventListener(
 
             applyCameraFilter();
 
-
             updatePreview();
-
 
             updateCounter();
 
@@ -4061,19 +2978,13 @@ document.addEventListener(
 
 
         /* ================================
-           CUSTOMIZATION PAGE
+           CUSTOMIZE PAGE
         ================================= */
 
         if (
-
-            document.body.classList
-
-                .contains(
-
-                    "customize-page"
-
-                )
-
+            document.body.classList.contains(
+                "customize-page"
+            )
         ) {
 
             createCustomizationPreview();
@@ -4086,15 +2997,9 @@ document.addEventListener(
         ================================= */
 
         if (
-
-            document.body.classList
-
-                .contains(
-
-                    "result-page"
-
-                )
-
+            document.body.classList.contains(
+                "result-page"
+            )
         ) {
 
             createFinalPhoto();
@@ -4102,5 +3007,5 @@ document.addEventListener(
         }
 
     }
-
 );
+```

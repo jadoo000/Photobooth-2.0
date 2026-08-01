@@ -4356,4 +4356,1694 @@ document.addEventListener(
 
 );
 ```
+/* ========================================
+   STAGE 5 - CUSTOMIZE PAGE
+======================================== */
+
+/* ========================================
+   CUSTOMIZATION DATA
+======================================== */
+
+let customizeBackground =
+    localStorage.getItem("customizeBackground") || "#ffffff";
+
+let customizeFrame =
+    localStorage.getItem("customizeFrame") || "none";
+
+let customizeText =
+    localStorage.getItem("customizeText") || "";
+
+let customizeShowDate =
+    localStorage.getItem("customizeShowDate") === "true";
+
+
+/* ========================================
+   BACK TO CAPTURE
+======================================== */
+
+function backToCapture() {
+
+    window.location.href =
+        "capture.html";
+
+}
+
+
+/* ========================================
+   SELECT BACKGROUND
+======================================== */
+
+function selectBackground(
+    background,
+    button
+) {
+
+    customizeBackground =
+        background;
+
+
+    localStorage.setItem(
+
+        "customizeBackground",
+
+        customizeBackground
+
+    );
+
+
+    /*
+        Remove active state
+        from all background buttons.
+    */
+
+    const buttons =
+        document.querySelectorAll(
+            ".background-button"
+        );
+
+
+    buttons.forEach(
+        item => {
+
+            item.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    /*
+        Activate selected button.
+    */
+
+    if (button) {
+
+        button.classList.add(
+            "active"
+        );
+
+    }
+
+
+    /*
+        Redraw preview.
+    */
+
+    drawCustomizePreview();
+
+}
+
+
+/* ========================================
+   SELECT FRAME
+======================================== */
+
+function selectFrame(
+    frame,
+    button
+) {
+
+    customizeFrame =
+        frame;
+
+
+    localStorage.setItem(
+
+        "customizeFrame",
+
+        customizeFrame
+
+    );
+
+
+    /*
+        Remove active state
+        from all frame buttons.
+    */
+
+    const buttons =
+        document.querySelectorAll(
+            ".frame-button"
+        );
+
+
+    buttons.forEach(
+        item => {
+
+            item.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    /*
+        Activate selected button.
+    */
+
+    if (button) {
+
+        button.classList.add(
+            "active"
+        );
+
+    }
+
+
+    /*
+        Redraw preview.
+    */
+
+    drawCustomizePreview();
+
+}
+
+
+/* ========================================
+   CUSTOM TEXT
+======================================== */
+
+function updateCustomText(
+    value
+) {
+
+    customizeText =
+        value;
+
+
+    localStorage.setItem(
+
+        "customizeText",
+
+        customizeText
+
+    );
+
+
+    drawCustomizePreview();
+
+}
+
+
+/* ========================================
+   TOGGLE DATE
+======================================== */
+
+function toggleDate(
+    checked
+) {
+
+    customizeShowDate =
+        checked;
+
+
+    localStorage.setItem(
+
+        "customizeShowDate",
+
+        customizeShowDate
+
+    );
+
+
+    drawCustomizePreview();
+
+}
+
+
+/* ========================================
+   GET TODAY'S DATE
+======================================== */
+
+function getTodayDate() {
+
+    const today =
+        new Date();
+
+
+    const month =
+        String(
+            today.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            today.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const year =
+        today.getFullYear();
+
+
+    return `${month}/${day}/${year}`;
+
+}
+
+
+/* ========================================
+   LOAD CUSTOMIZATION DATA
+======================================== */
+
+function loadCustomizationData() {
+
+    customizeBackground =
+
+        localStorage.getItem(
+
+            "customizeBackground"
+
+        ) || "#ffffff";
+
+
+    customizeFrame =
+
+        localStorage.getItem(
+
+            "customizeFrame"
+
+        ) || "none";
+
+
+    customizeText =
+
+        localStorage.getItem(
+
+            "customizeText"
+
+        ) || "";
+
+
+    customizeShowDate =
+
+        localStorage.getItem(
+
+            "customizeShowDate"
+
+        ) === "true";
+
+
+    /*
+        Restore text field.
+    */
+
+    const textInput =
+        document.getElementById(
+            "customText"
+        );
+
+
+    if (textInput) {
+
+        textInput.value =
+            customizeText;
+
+    }
+
+
+    /*
+        Restore date checkbox.
+    */
+
+    const dateCheckbox =
+        document.getElementById(
+            "showDate"
+        );
+
+
+    if (dateCheckbox) {
+
+        dateCheckbox.checked =
+            customizeShowDate;
+
+    }
+
+
+    /*
+        Restore background button.
+    */
+
+    const backgroundButtons =
+        document.querySelectorAll(
+            ".background-button"
+        );
+
+
+    backgroundButtons.forEach(
+        button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+
+            if (
+
+                button.dataset.background ===
+
+                customizeBackground
+
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+        Restore frame button.
+    */
+
+    const frameButtons =
+        document.querySelectorAll(
+            ".frame-button"
+        );
+
+
+    frameButtons.forEach(
+        button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+
+            if (
+
+                button.dataset.frame ===
+
+                customizeFrame
+
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ========================================
+   DRAW CUSTOMIZE PREVIEW
+======================================== */
+
+function drawCustomizePreview() {
+
+    const canvas =
+        document.getElementById(
+            "customizeCanvas"
+        );
+
+
+    if (!canvas) {
+
+        return;
+
+    }
+
+
+    /*
+        Get saved photos.
+    */
+
+    const photos =
+
+        JSON.parse(
+
+            localStorage.getItem(
+                "capturedPhotos"
+            )
+
+        ) || [];
+
+
+    const layout =
+
+        localStorage.getItem(
+            "selectedLayout"
+        ) || "classic";
+
+
+    const photoCount =
+
+        parseInt(
+
+            localStorage.getItem(
+                "selectedPhotoCount"
+            )
+
+        ) || 3;
+
+
+    /*
+        Canvas dimensions.
+    */
+
+    let width =
+        600;
+
+    let height;
+
+
+    if (
+        layout === "classic"
+    ) {
+
+        height =
+            30 +
+            (405 * 3) +
+            (20 * 2) +
+            90;
+
+    }
+
+    else if (
+        layout === "four"
+    ) {
+
+        height =
+            30 +
+            (360 * 4) +
+            (18 * 3) +
+            90;
+
+    }
+
+    else {
+
+        width =
+            700;
+
+        height =
+            700;
+
+    }
+
+
+    canvas.width =
+        width;
+
+    canvas.height =
+        height;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    /*
+        Background.
+    */
+
+    ctx.fillStyle =
+        customizeBackground;
+
+
+    ctx.fillRect(
+
+        0,
+
+        0,
+
+        width,
+
+        height
+
+    );
+
+
+    /*
+        Draw photos.
+    */
+
+    const images = [];
+
+
+    let loaded =
+        0;
+
+
+    const imagesToLoad =
+
+        Math.min(
+
+            photos.length,
+
+            photoCount
+
+        );
+
+
+    /*
+        Nothing to draw.
+    */
+
+    if (
+        imagesToLoad === 0
+    ) {
+
+        drawCustomizeDecorations(
+
+            ctx,
+
+            width,
+
+            height
+
+        );
+
+
+        return;
+
+    }
+
+
+    photos
+
+        .slice(
+            0,
+            imagesToLoad
+        )
+
+        .forEach(
+
+            (src, index) => {
+
+                const image =
+                    new Image();
+
+
+                image.onload =
+                    () => {
+
+                        images[index] =
+                            image;
+
+
+                        loaded++;
+
+
+                        if (
+                            loaded ===
+                            imagesToLoad
+                        ) {
+
+                            drawCustomizePhotos(
+
+                                ctx,
+
+                                images,
+
+                                layout,
+
+                                width,
+
+                                height
+
+                            );
+
+
+                            drawCustomizeDecorations(
+
+                                ctx,
+
+                                width,
+
+                                height
+
+                            );
+
+                        }
+
+                    };
+
+
+                image.src =
+                    src;
+
+            }
+
+        );
+
+}
+
+
+/* ========================================
+   DRAW CUSTOMIZE PHOTOS
+======================================== */
+
+function drawCustomizePhotos(
+
+    ctx,
+
+    images,
+
+    layout,
+
+    width,
+
+    height
+
+) {
+
+    if (
+        layout === "classic"
+    ) {
+
+        const photoWidth =
+            540;
+
+        const photoHeight =
+            405;
+
+        const x =
+            30;
+
+        const gap =
+            20;
+
+        const top =
+            30;
+
+
+        images.forEach(
+
+            (image, index) => {
+
+                drawCoverImage(
+
+                    ctx,
+
+                    image,
+
+                    x,
+
+                    top +
+                    index *
+                    (
+                        photoHeight +
+                        gap
+                    ),
+
+                    photoWidth,
+
+                    photoHeight
+
+                );
+
+            }
+
+        );
+
+    }
+
+
+    else if (
+        layout === "four"
+    ) {
+
+        const photoWidth =
+            540;
+
+        const photoHeight =
+            360;
+
+        const x =
+            30;
+
+        const gap =
+            18;
+
+        const top =
+            30;
+
+
+        images.forEach(
+
+            (image, index) => {
+
+                drawCoverImage(
+
+                    ctx,
+
+                    image,
+
+                    x,
+
+                    top +
+                    index *
+                    (
+                        photoHeight +
+                        gap
+                    ),
+
+                    photoWidth,
+
+                    photoHeight
+
+                );
+
+            }
+
+        );
+
+    }
+
+
+    else if (
+        layout === "grid"
+    ) {
+
+        const padding =
+            30;
+
+        const gap =
+            20;
+
+        const labelHeight =
+            80;
+
+
+        const photoWidth =
+
+            (
+                width -
+                padding * 2 -
+                gap
+            ) / 2;
+
+
+        const photoHeight =
+
+            (
+                height -
+                padding -
+                labelHeight -
+                gap
+            ) / 2;
+
+
+        const positions = [
+
+            [
+                padding,
+                padding
+            ],
+
+            [
+                padding +
+                photoWidth +
+                gap,
+
+                padding
+            ],
+
+            [
+                padding,
+
+                padding +
+                photoHeight +
+                gap
+            ],
+
+            [
+                padding +
+                photoWidth +
+                gap,
+
+                padding +
+                photoHeight +
+                gap
+            ]
+
+        ];
+
+
+        images.forEach(
+
+            (image, index) => {
+
+                if (
+                    positions[index]
+                ) {
+
+                    drawCoverImage(
+
+                        ctx,
+
+                        image,
+
+                        positions[index][0],
+
+                        positions[index][1],
+
+                        photoWidth,
+
+                        photoHeight
+
+                    );
+
+                }
+
+            }
+
+        );
+
+    }
+
+}
+
+
+/* ========================================
+   CUSTOMIZE DECORATIONS
+======================================== */
+
+function drawCustomizeDecorations(
+
+    ctx,
+
+    width,
+
+    height
+
+) {
+
+    /*
+        SIMPLE FRAME
+    */
+
+    if (
+        customizeFrame ===
+        "simple"
+    ) {
+
+        ctx.strokeStyle =
+            "#28657d";
+
+        ctx.lineWidth =
+            12;
+
+
+        ctx.strokeRect(
+
+            6,
+
+            6,
+
+            width - 12,
+
+            height - 12
+
+        );
+
+    }
+
+
+    /*
+        ROUNDED FRAME
+    */
+
+    else if (
+        customizeFrame ===
+        "rounded"
+    ) {
+
+        ctx.strokeStyle =
+            "#28657d";
+
+        ctx.lineWidth =
+            12;
+
+
+        roundRectStroke(
+
+            ctx,
+
+            6,
+
+            6,
+
+            width - 12,
+
+            height - 12,
+
+            30
+
+        );
+
+    }
+
+
+    /*
+        DOUBLE FRAME
+    */
+
+    else if (
+        customizeFrame ===
+        "double"
+    ) {
+
+        ctx.strokeStyle =
+            "#28657d";
+
+        ctx.lineWidth =
+            8;
+
+
+        ctx.strokeRect(
+
+            6,
+
+            6,
+
+            width - 12,
+
+            height - 12
+
+        );
+
+
+        ctx.lineWidth =
+            3;
+
+
+        ctx.strokeRect(
+
+            18,
+
+            18,
+
+            width - 36,
+
+            height - 36
+
+        );
+
+    }
+
+
+    /*
+        CUSTOM TEXT
+    */
+
+    if (
+        customizeText.trim()
+            .length > 0
+    ) {
+
+        ctx.fillStyle =
+            "#28657d";
+
+
+        ctx.font =
+            "bold 28px Arial";
+
+
+        ctx.textAlign =
+            "center";
+
+
+        ctx.fillText(
+
+            customizeText,
+
+            width / 2,
+
+            height - 55
+
+        );
+
+    }
+
+
+    /*
+        DATE
+    */
+
+    if (
+        customizeShowDate
+    ) {
+
+        ctx.fillStyle =
+            "#28657d";
+
+
+        ctx.font =
+            "18px Arial";
+
+
+        ctx.textAlign =
+            "center";
+
+
+        ctx.fillText(
+
+            getTodayDate(),
+
+            width / 2,
+
+            height - 25
+
+        );
+
+    }
+
+}
+
+
+/* ========================================
+   ROUNDED RECTANGLE STROKE
+======================================== */
+
+function roundRectStroke(
+
+    ctx,
+
+    x,
+
+    y,
+
+    width,
+
+    height,
+
+    radius
+
+) {
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+
+        x + radius,
+
+        y
+
+    );
+
+
+    ctx.lineTo(
+
+        x + width - radius,
+
+        y
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x + width,
+
+        y,
+
+        x + width,
+
+        y + radius
+
+    );
+
+
+    ctx.lineTo(
+
+        x + width,
+
+        y + height - radius
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x + width,
+
+        y + height,
+
+        x + width - radius,
+
+        y + height
+
+    );
+
+
+    ctx.lineTo(
+
+        x + radius,
+
+        y + height
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x,
+
+        y + height,
+
+        x,
+
+        y + height - radius
+
+    );
+
+
+    ctx.lineTo(
+
+        x,
+
+        y + radius
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x,
+
+        y,
+
+        x + radius,
+
+        y
+
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.stroke();
+
+}
+
+
+/* ========================================
+   FINISH CUSTOMIZATION
+======================================== */
+
+function finishCustomization() {
+
+    /*
+        Save customization.
+    */
+
+    localStorage.setItem(
+
+        "customizeBackground",
+
+        customizeBackground
+
+    );
+
+
+    localStorage.setItem(
+
+        "customizeFrame",
+
+        customizeFrame
+
+    );
+
+
+    localStorage.setItem(
+
+        "customizeText",
+
+        customizeText
+
+    );
+
+
+    localStorage.setItem(
+
+        "customizeShowDate",
+
+        customizeShowDate
+
+    );
+
+
+    /*
+        Go to result page.
+    */
+
+    window.location.href =
+        "result.html";
+
+}
+
+
+/* ========================================
+   INITIALIZE CUSTOMIZE PAGE
+======================================== */
+
+function initializeCustomizePage() {
+
+    loadCustomizationData();
+
+    drawCustomizePreview();
+
+}
+
+
+/* ========================================
+   RESULT PAGE WITH CUSTOMIZATION
+======================================== */
+
+function createCustomizedFinalPhoto() {
+
+    /*
+        First create the normal
+        final photo using the existing
+        result system.
+    */
+
+    createFinalPhoto();
+
+
+    /*
+        Customization will be applied
+        after the normal canvas is ready.
+    */
+
+    setTimeout(
+
+        () => {
+
+            applyCustomizationToFinalCanvas();
+
+        },
+
+        500
+
+    );
+
+}
+
+
+/* ========================================
+   APPLY CUSTOMIZATION TO FINAL CANVAS
+======================================== */
+
+function applyCustomizationToFinalCanvas() {
+
+    const canvas =
+        document.getElementById(
+            "finalCanvas"
+        );
+
+
+    if (!canvas) {
+
+        return;
+
+    }
+
+
+    const background =
+
+        localStorage.getItem(
+
+            "customizeBackground"
+
+        ) || "#ffffff";
+
+
+    const frame =
+
+        localStorage.getItem(
+
+            "customizeFrame"
+
+        ) || "none";
+
+
+    const text =
+
+        localStorage.getItem(
+
+            "customizeText"
+
+        ) || "";
+
+
+    const showDate =
+
+        localStorage.getItem(
+
+            "customizeShowDate"
+
+        ) === "true";
+
+
+    /*
+        Save existing canvas.
+    */
+
+    const original =
+        document.createElement(
+            "canvas"
+        );
+
+
+    original.width =
+        canvas.width;
+
+
+    original.height =
+        canvas.height;
+
+
+    const originalContext =
+        original.getContext(
+            "2d"
+        );
+
+
+    originalContext.drawImage(
+
+        canvas,
+
+        0,
+
+        0
+
+    );
+
+
+    /*
+        Background.
+    */
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    ctx.clearRect(
+
+        0,
+
+        0,
+
+        canvas.width,
+
+        canvas.height
+
+    );
+
+
+    ctx.fillStyle =
+        background;
+
+
+    ctx.fillRect(
+
+        0,
+
+        0,
+
+        canvas.width,
+
+        canvas.height
+
+    );
+
+
+    /*
+        Draw original photo.
+    */
+
+    ctx.drawImage(
+
+        original,
+
+        0,
+
+        0
+
+    );
+
+
+    /*
+        Frame.
+    */
+
+    if (
+        frame === "simple"
+    ) {
+
+        ctx.strokeStyle =
+            "#28657d";
+
+        ctx.lineWidth =
+            12;
+
+
+        ctx.strokeRect(
+
+            6,
+
+            6,
+
+            canvas.width - 12,
+
+            canvas.height - 12
+
+        );
+
+    }
+
+
+    else if (
+        frame === "rounded"
+    ) {
+
+        ctx.strokeStyle =
+            "#28657d";
+
+        ctx.lineWidth =
+            12;
+
+
+        roundRectStroke(
+
+            ctx,
+
+            6,
+
+            6,
+
+            canvas.width - 12,
+
+            canvas.height - 12,
+
+            30
+
+        );
+
+    }
+
+
+    else if (
+        frame === "double"
+    ) {
+
+        ctx.strokeStyle =
+            "#28657d";
+
+
+        ctx.lineWidth =
+            8;
+
+
+        ctx.strokeRect(
+
+            6,
+
+            6,
+
+            canvas.width - 12,
+
+            canvas.height - 12
+
+        );
+
+
+        ctx.lineWidth =
+            3;
+
+
+        ctx.strokeRect(
+
+            18,
+
+            18,
+
+            canvas.width - 36,
+
+            canvas.height - 36
+
+        );
+
+    }
+
+
+    /*
+        Custom text.
+    */
+
+    if (
+        text.trim()
+            .length > 0
+    ) {
+
+        ctx.fillStyle =
+            "#28657d";
+
+
+        ctx.font =
+            "bold 28px Arial";
+
+
+        ctx.textAlign =
+            "center";
+
+
+        ctx.fillText(
+
+            text,
+
+            canvas.width / 2,
+
+            canvas.height - 55
+
+        );
+
+    }
+
+
+    /*
+        Date.
+    */
+
+    if (
+        showDate
+    ) {
+
+        ctx.fillStyle =
+            "#28657d";
+
+
+        ctx.font =
+            "18px Arial";
+
+
+        ctx.textAlign =
+            "center";
+
+
+        ctx.fillText(
+
+            getTodayDate(),
+
+            canvas.width / 2,
+
+            canvas.height - 25
+
+        );
+
+    }
+
+}
+
+
+/* ========================================
+   UPDATED PAGE INITIALIZATION
+======================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    () => {
+
+        /*
+            CUSTOMIZE PAGE
+        */
+
+        if (
+
+            document.body.classList
+
+                .contains(
+
+                    "customize-page"
+
+                )
+
+        ) {
+
+            initializeCustomizePage();
+
+        }
+
+
+        /*
+            RESULT PAGE
+        */
+
+        if (
+
+            document.body.classList
+
+                .contains(
+
+                    "result-page"
+
+                )
+
+        ) {
+
+            setTimeout(
+
+                () => {
+
+                    applyCustomizationToFinalCanvas();
+
+                },
+
+                700
+
+            );
+
+        }
+
+    }
+
+);
 

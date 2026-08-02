@@ -412,23 +412,15 @@ function goBackHome() {
 
 async function startCamera() {
 
-    /* ========================================
-       IF CAMERA IS ALREADY OPEN,
-       CLOSE IT INSTEAD
-    ======================================== */
-
-    if (cameraStream) {
-
-        closeCamera();
-
-        return;
-
-    }
-
 
     try {
 
+
+        stopCamera();
+
+
         cameraStream =
+
             await navigator
                 .mediaDevices
                 .getUserMedia({
@@ -476,16 +468,6 @@ async function startCamera() {
             );
 
 
-        const cameraButton =
-            document.querySelector(
-                ".secondary-button"
-            );
-
-
-
-        /* ====================================
-           SHOW CAMERA
-        ==================================== */
 
         video.srcObject =
             cameraStream;
@@ -502,210 +484,6 @@ async function startCamera() {
         captureButton.disabled =
             false;
 
-
-
-        /* ====================================
-           CHANGE BUTTON TO CLOSE CAMERA
-        ==================================== */
-
-        if (
-            cameraButton
-        ) {
-
-            cameraButton.textContent =
-                "CLOSE CAMERA";
-
-        }
-
-
-
-        /* ====================================
-           CAMERA DIRECTION
-        ==================================== */
-
-        if (
-
-            currentCamera
-            ===
-            "environment"
-
-        ) {
-
-            video.classList.add(
-                "back-camera"
-            );
-
-        }
-
-        else {
-
-            video.classList.remove(
-                "back-camera"
-            );
-
-        }
-
-
-
-        /* ====================================
-           APPLY CURRENT FILTER
-        ==================================== */
-
-        applyCameraFilter(
-            video
-        );
-
-
-        updateCounter();
-
-
-    }
-
-
-    catch (
-        error
-    ) {
-
-        console.error(
-
-            "Camera error:",
-
-            error
-
-        );
-
-
-        alert(
-
-            "Camera access was blocked. Please allow camera permissions and try again."
-
-        );
-
-    }
-
-}
-
-/* ========================================
-   CLOSE CAMERA
-======================================== */
-
-function closeCamera() {
-
-    const video =
-        document.getElementById(
-            "cameraVideo"
-        );
-
-
-    const placeholder =
-        document.getElementById(
-            "cameraPlaceholder"
-        );
-
-
-    const captureButton =
-        document.getElementById(
-            "captureButton"
-        );
-
-
-    const cameraButton =
-        document.querySelector(
-            ".secondary-button"
-        );
-
-
-
-    /* ====================================
-       STOP CAMERA STREAM
-    ==================================== */
-
-    if (
-        cameraStream
-    ) {
-
-        cameraStream
-            .getTracks()
-            .forEach(
-
-                track => {
-
-                    track.stop();
-
-                }
-
-            );
-
-    }
-
-
-    cameraStream =
-        null;
-
-
-
-    /* ====================================
-       HIDE CAMERA
-    ==================================== */
-
-    if (
-        video
-    ) {
-
-        video.srcObject =
-            null;
-
-        video.style.display =
-            "none";
-
-    }
-
-
-
-    /* ====================================
-       SHOW PLACEHOLDER
-    ==================================== */
-
-    if (
-        placeholder
-    ) {
-
-        placeholder.style.display =
-            "flex";
-
-    }
-
-
-
-    /* ====================================
-       DISABLE CAPTURE BUTTON
-    ==================================== */
-
-    if (
-        captureButton
-    ) {
-
-        captureButton.disabled =
-            true;
-
-    }
-
-
-
-    /* ====================================
-       CHANGE BUTTON BACK
-    ==================================== */
-
-    if (
-        cameraButton
-    ) {
-
-        cameraButton.textContent =
-            "OPEN CAMERA";
-
-    }
-
-}
 
 
         /* ================================

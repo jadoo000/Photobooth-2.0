@@ -1,29 +1,51 @@
 /* ========================================
-   PHOTO BOOTH GLOBAL DATA
+   PHOTO BOOTH DATA
 ======================================== */
 
 let selectedLayout =
-    localStorage.getItem("selectedLayout")
+    localStorage.getItem(
+        "selectedLayout"
+    )
     || "classic";
 
 
 let selectedPhotoCount =
     parseInt(
-        localStorage.getItem("selectedPhotoCount")
+        localStorage.getItem(
+            "selectedPhotoCount"
+        )
     )
     || 3;
 
 
-let capturedPhotos = [];
+let capturedPhotos =
+    JSON.parse(
+        localStorage.getItem(
+            "capturedPhotos"
+        )
+    )
+    || [];
 
-let cameraStream = null;
 
-let currentCamera = "user";
+let cameraStream =
+    null;
+
+
+let currentCamera =
+    "user";
+
+
+let retakeIndex =
+    null;
+
+
+let isTakingPhoto =
+    false;
 
 
 
 /* ========================================
-   LAYOUT SELECTION
+   SELECT LAYOUT
 ======================================== */
 
 function selectLayout(button) {
@@ -34,13 +56,15 @@ function selectLayout(button) {
         );
 
 
-    options.forEach(option => {
+    options.forEach(
+        option => {
 
-        option.classList.remove(
-            "selected"
-        );
+            option.classList.remove(
+                "selected"
+            );
 
-    });
+        }
+    );
 
 
     button.classList.add(
@@ -79,6 +103,9 @@ function selectLayout(button) {
 
 function startPhotoBooth() {
 
+    capturedPhotos = [];
+
+
     localStorage.setItem(
         "selectedLayout",
         selectedLayout
@@ -91,6 +118,11 @@ function startPhotoBooth() {
     );
 
 
+    localStorage.removeItem(
+        "capturedPhotos"
+    );
+
+
     window.location.href =
         "capture.html";
 
@@ -99,12 +131,13 @@ function startPhotoBooth() {
 
 
 /* ========================================
-   GO BACK HOME
+   BACK HOME
 ======================================== */
 
 function goBackHome() {
 
     stopCamera();
+
 
     window.location.href =
         "index.html";
@@ -114,28 +147,33 @@ function goBackHome() {
 
 
 /* ========================================
-   CAMERA
+   START CAMERA
 ======================================== */
 
 async function startCamera() {
 
     try {
 
-        if (cameraStream) {
-
-            stopCamera();
-
-        }
+        stopCamera();
 
 
         cameraStream =
-            await navigator.mediaDevices
+            await navigator
+                .mediaDevices
                 .getUserMedia({
 
                     video: {
 
                         facingMode:
-                            currentCamera
+                            currentCamera,
+
+                        width: {
+                            ideal: 1280
+                        },
+
+                        height: {
+                            ideal: 720
+                        }
 
                     },
 
@@ -151,8 +189,14 @@ async function startCamera() {
 
 
         const placeholder =
-            document.querySelector(
-                ".camera-placeholder"
+            document.getElementById(
+                "cameraPlaceholder"
+            );
+
+
+        const captureButton =
+            document.getElementById(
+                "captureButton"
             );
 
 
@@ -160,12 +204,35 @@ async function startCamera() {
             cameraStream;
 
 
-        video.hidden =
-            false;
+        video.style.display =
+            "block";
 
 
         placeholder.style.display =
             "none";
+
+
+        captureButton.disabled =
+            false;
+
+
+        if (
+            currentCamera
+            === "environment"
+        ) {
+
+            video.classList.add(
+                "back-camera"
+            );
+
+        }
+        else {
+
+            video.classList.remove(
+                "back-camera"
+            );
+
+        }
 
 
         updateCounter();
@@ -175,13 +242,12 @@ async function startCamera() {
     catch (error) {
 
         console.error(
-            "Camera error:",
             error
         );
 
 
         alert(
-            "Unable to access your camera. Please allow camera permissions and try again."
+            "Camera access was blocked. Please allow camera permissions and try again."
         );
 
     }
@@ -196,7 +262,9 @@ async function startCamera() {
 
 function stopCamera() {
 
-    if (!cameraStream) {
+    if (
+        !cameraStream
+    ) {
 
         return;
 
@@ -206,8 +274,11 @@ function stopCamera() {
     cameraStream
         .getTracks()
         .forEach(
-            track =>
-                track.stop()
+            track => {
+
+                track.stop();
+
+            }
         );
 
 
@@ -224,9 +295,21 @@ function stopCamera() {
 
 async function switchCamera() {
 
+    if (
+        isTakingPhoto
+    ) {
+
+        return;
+
+    }
+
+
     currentCamera =
-        currentCamera === "user"
+        currentCamera
+        === "user"
+
             ? "environment"
+
             : "user";
 
 
@@ -237,7 +320,7 @@ async function switchCamera() {
 
 
 /* ========================================
-   PHOTO COUNTER
+   COUNTER
 ======================================== */
 
 function updateCounter() {
@@ -248,7 +331,24 @@ function updateCounter() {
         );
 
 
-    if (!counter) {
+    if (
+        !counter
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        retakeIndex
+        !== null
+    ) {
+
+        counter.textContent =
+            `Retaking photo ${
+                retakeIndex + 1
+            }`;
 
         return;
 
@@ -262,6 +362,7 @@ function updateCounter() {
 
         counter.textContent =
             "All photos captured!";
+
 
         return;
 
@@ -285,6 +386,15 @@ function updateCounter() {
 
 async function capturePhoto() {
 
+    if (
+        isTakingPhoto
+    ) {
+
+        return;
+
+    }
+
+
     const video =
         document.getElementById(
             "cameraVideo"
@@ -292,13 +402,15 @@ async function capturePhoto() {
 
 
     if (
-        !video
-        || video.hidden
+        !cameraStream
+        || video.style.display
+            === "none"
     ) {
 
         alert(
             "Please open the camera first."
         );
+
 
         return;
 
@@ -306,6 +418,9 @@ async function capturePhoto() {
 
 
     if (
+        retakeIndex
+        === null
+        &&
         capturedPhotos.length
         >= selectedPhotoCount
     ) {
@@ -315,8 +430,42 @@ async function capturePhoto() {
     }
 
 
+    isTakingPhoto =
+        true;
+
+
+    const targetIndex =
+        retakeIndex;
+
+
+    retakeIndex =
+        null;
+
+
+    updateCounter();
+
+
     await runCountdown();
 
+
+    /* ================================
+       FLASH
+    ================================= */
+
+    triggerFlash();
+
+
+    playShutterSound();
+
+
+    await wait(
+        150
+    );
+
+
+    /* ================================
+       CREATE CANVAS
+    ================================= */
 
     const canvas =
         document.createElement(
@@ -338,38 +487,90 @@ async function capturePhoto() {
         );
 
 
+    /*
+       IMPORTANT:
+
+       The camera preview is mirrored
+       using CSS.
+
+       We DO NOT mirror the canvas.
+
+       This means:
+
+       Preview:
+       👈 Mirrored selfie view
+
+       Saved photo:
+       👉 Normal orientation
+    */
+
+
     context.drawImage(
+
         video,
+
         0,
+
         0,
+
         canvas.width,
+
         canvas.height
+
     );
 
 
     const photo =
         canvas.toDataURL(
             "image/jpeg",
-            0.9
+            0.92
         );
 
 
-    capturedPhotos.push(
-        photo
-    );
+
+    /* ================================
+       SAVE PHOTO
+    ================================= */
+
+    if (
+        targetIndex
+        !== null
+    ) {
+
+        capturedPhotos[
+            targetIndex
+        ] =
+            photo;
+
+    }
+    else {
+
+        capturedPhotos.push(
+            photo
+        );
+
+    }
 
 
     localStorage.setItem(
+
         "capturedPhotos",
+
         JSON.stringify(
             capturedPhotos
         )
+
     );
 
 
     updatePreview();
 
+
     updateCounter();
+
+
+    isTakingPhoto =
+        false;
 
 
     if (
@@ -381,7 +582,8 @@ async function capturePhoto() {
             .getElementById(
                 "finishButton"
             )
-            .disabled = false;
+            .disabled =
+                false;
 
     }
 
@@ -404,7 +606,8 @@ function runCountdown() {
                 );
 
 
-            let number = 3;
+            let number =
+                3;
 
 
             countdown.textContent =
@@ -419,7 +622,8 @@ function runCountdown() {
 
 
                         if (
-                            number <= 0
+                            number
+                            <= 0
                         ) {
 
                             clearInterval(
@@ -437,10 +641,13 @@ function runCountdown() {
                                     countdown.textContent =
                                         "";
 
+
                                     resolve();
 
                                 },
-                                400
+
+                                350
+
                             );
 
 
@@ -452,8 +659,11 @@ function runCountdown() {
                         countdown.textContent =
                             number;
 
+
                     },
+
                     1000
+
                 );
 
         }
@@ -464,7 +674,165 @@ function runCountdown() {
 
 
 /* ========================================
-   PHOTO PREVIEW
+   FLASH
+======================================== */
+
+function triggerFlash() {
+
+    const flash =
+        document.getElementById(
+            "cameraFlash"
+        );
+
+
+    if (
+        !flash
+    ) {
+
+        return;
+
+    }
+
+
+    flash.classList.remove(
+        "active"
+    );
+
+
+    void flash.offsetWidth;
+
+
+    flash.classList.add(
+        "active"
+    );
+
+}
+
+
+
+/* ========================================
+   SHUTTER SOUND
+======================================== */
+
+function playShutterSound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext
+            ||
+            window.webkitAudioContext;
+
+
+        const audioContext =
+            new AudioContext();
+
+
+        const oscillator =
+            audioContext
+                .createOscillator();
+
+
+        const gain =
+            audioContext
+                .createGain();
+
+
+        oscillator.type =
+            "square";
+
+
+        oscillator.frequency
+            .setValueAtTime(
+                900,
+                audioContext
+                    .currentTime
+            );
+
+
+        oscillator.frequency
+            .exponentialRampToValueAtTime(
+                150,
+                audioContext
+                    .currentTime
+                    + 0.12
+            );
+
+
+        gain.gain
+            .setValueAtTime(
+                0.3,
+                audioContext
+                    .currentTime
+            );
+
+
+        gain.gain
+            .exponentialRampToValueAtTime(
+                0.01,
+                audioContext
+                    .currentTime
+                    + 0.12
+            );
+
+
+        oscillator.connect(
+            gain
+        );
+
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+            audioContext
+                .currentTime
+                + 0.12
+        );
+
+    }
+
+    catch (
+        error
+    ) {
+
+        console.log(
+            "Shutter sound unavailable."
+        );
+
+    }
+
+}
+
+
+
+/* ========================================
+   WAIT
+======================================== */
+
+function wait(
+    milliseconds
+) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
+    );
+
+}
+
+
+
+/* ========================================
+   UPDATE PHOTO PREVIEW
 ======================================== */
 
 function updatePreview() {
@@ -475,7 +843,9 @@ function updatePreview() {
         );
 
 
-    if (!preview) {
+    if (
+        !preview
+    ) {
 
         return;
 
@@ -486,8 +856,42 @@ function updatePreview() {
         "";
 
 
-    capturedPhotos.forEach(
-        (photo, index) => {
+    const strip =
+        document.createElement(
+            "div"
+        );
+
+
+    strip.className =
+        "preview-strip";
+
+
+
+    /* ================================
+       CREATE PHOTO SLOTS
+    ================================= */
+
+    for (
+        let i = 0;
+
+        i < selectedPhotoCount;
+
+        i++
+    ) {
+
+        const slot =
+            document.createElement(
+                "div"
+            );
+
+
+        slot.className =
+            "preview-slot";
+
+
+        if (
+            capturedPhotos[i]
+        ) {
 
             const image =
                 document.createElement(
@@ -496,32 +900,91 @@ function updatePreview() {
 
 
             image.src =
-                photo;
+                capturedPhotos[i];
 
 
-            image.alt =
-                `Photo ${
-                    index + 1
-                }`;
-
-
-            image.style.width =
-                "100%";
-
-
-            image.style.display =
-                "block";
-
-
-            image.style.marginBottom =
-                "8px";
-
-
-            preview.appendChild(
+            slot.appendChild(
                 image
             );
 
+
+            const retake =
+                document.createElement(
+                    "button"
+                );
+
+
+            retake.className =
+                "retake-button";
+
+
+            retake.textContent =
+                "RETAKE";
+
+
+            retake.onclick =
+                () => {
+
+                    retakePhoto(
+                        i
+                    );
+
+                };
+
+
+            slot.appendChild(
+                retake
+            );
+
         }
+        else {
+
+            slot.classList.add(
+                "empty"
+            );
+
+
+            slot.textContent =
+                `PHOTO ${
+                    i + 1
+                }`;
+
+        }
+
+
+        strip.appendChild(
+            slot
+        );
+
+    }
+
+
+
+    /* ================================
+       LABEL
+    ================================= */
+
+    const label =
+        document.createElement(
+            "div"
+        );
+
+
+    label.className =
+        "preview-label";
+
+
+    label.textContent =
+        "PHOTO BOOTH";
+
+
+    strip.appendChild(
+        label
+    );
+
+
+    preview.appendChild(
+        strip
     );
 
 }
@@ -529,7 +992,44 @@ function updatePreview() {
 
 
 /* ========================================
-   FINISH PHOTOS
+   RETAKE INDIVIDUAL PHOTO
+======================================== */
+
+function retakePhoto(
+    index
+) {
+
+    if (
+        isTakingPhoto
+    ) {
+
+        return;
+
+    }
+
+
+    retakeIndex =
+        index;
+
+
+    updateCounter();
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior:
+            "smooth"
+
+    });
+
+}
+
+
+
+/* ========================================
+   FINISH
 ======================================== */
 
 function finishPhotos() {
@@ -544,197 +1044,22 @@ function finishPhotos() {
     }
 
 
+    localStorage.setItem(
+
+        "capturedPhotos",
+
+        JSON.stringify(
+            capturedPhotos
+        )
+
+    );
+
+
     stopCamera();
 
 
     window.location.href =
         "result.html";
-
-}
-
-
-
-/* ========================================
-   RESULT PAGE
-======================================== */
-
-function createFinalPhoto() {
-
-    const canvas =
-        document.getElementById(
-            "finalCanvas"
-        );
-
-
-    if (!canvas) {
-
-        return;
-
-    }
-
-
-    const photos =
-        JSON.parse(
-            localStorage.getItem(
-                "capturedPhotos"
-            )
-        )
-        || [];
-
-
-    if (!photos.length) {
-
-        return;
-
-    }
-
-
-    const images = [];
-
-
-    let loaded =
-        0;
-
-
-    photos.forEach(
-        (src, index) => {
-
-            const image =
-                new Image();
-
-
-            image.onload =
-                () => {
-
-                    loaded++;
-
-
-                    if (
-                        loaded
-                        === photos.length
-                    ) {
-
-                        drawFinalCanvas(
-                            canvas,
-                            images
-                        );
-
-                    }
-
-                };
-
-
-            image.src =
-                src;
-
-
-            images[index] =
-                image;
-
-        }
-    );
-
-}
-
-
-
-/* ========================================
-   DRAW PHOTO STRIP
-======================================== */
-
-function drawFinalCanvas(
-    canvas,
-    images
-) {
-
-    const width =
-        600;
-
-
-    const photoHeight =
-        450;
-
-
-    const padding =
-        30;
-
-
-    const labelHeight =
-        80;
-
-
-    canvas.width =
-        width;
-
-
-    canvas.height =
-        (
-            photoHeight
-            * images.length
-        )
-        + padding * 2
-        + labelHeight;
-
-
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
-
-
-    ctx.fillStyle =
-        "#ffffff";
-
-
-    ctx.fillRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
-
-
-    images.forEach(
-        (image, index) => {
-
-            const y =
-                padding
-                + (
-                    index
-                    * photoHeight
-                );
-
-
-            ctx.drawImage(
-                image,
-                padding,
-                y,
-                width
-                - padding * 2,
-                photoHeight
-            );
-
-        }
-    );
-
-
-    ctx.fillStyle =
-        "#28657d";
-
-
-    ctx.font =
-        "bold 24px Arial";
-
-
-    ctx.textAlign =
-        "center";
-
-
-    ctx.fillText(
-        "PHOTO BOOTH",
-        width / 2,
-        canvas.height - 30
-    );
 
 }
 
@@ -752,7 +1077,9 @@ function downloadPhoto() {
         );
 
 
-    if (!canvas) {
+    if (
+        !canvas
+    ) {
 
         return;
 
@@ -782,10 +1109,14 @@ function downloadPhoto() {
 
 
 /* ========================================
-   RETAKE
+   RETAKE ALL
 ======================================== */
 
 function retakePhotos() {
+
+    capturedPhotos =
+        [];
+
 
     localStorage.removeItem(
         "capturedPhotos"
@@ -800,7 +1131,7 @@ function retakePhotos() {
 
 
 /* ========================================
-   PRINT PHOTO
+   PRINT
 ======================================== */
 
 function printPhoto() {
@@ -811,7 +1142,9 @@ function printPhoto() {
         );
 
 
-    if (!modal) {
+    if (
+        !modal
+    ) {
 
         return;
 
@@ -830,125 +1163,6 @@ function printPhoto() {
 
 
 /* ========================================
-   COPY PHOTO TO PRINTER
-======================================== */
-
-function copyCanvasToPrinter() {
-
-    const original =
-        document.getElementById(
-            "finalCanvas"
-        );
-
-
-    const printerCanvas =
-        document.getElementById(
-            "printCanvas"
-        );
-
-
-    if (
-        !original
-        || !printerCanvas
-    ) {
-
-        return;
-
-    }
-
-
-    printerCanvas.width =
-        original.width;
-
-
-    printerCanvas.height =
-        original.height;
-
-
-    const context =
-        printerCanvas.getContext(
-            "2d"
-        );
-
-
-    context.drawImage(
-        original,
-        0,
-        0
-    );
-
-}
-
-
-
-/* ========================================
-   START PRINTING
-======================================== */
-
-function startPrinting() {
-
-    const status =
-        document.getElementById(
-            "printerStatus"
-        );
-
-
-    const photo =
-        document.getElementById(
-            "printedPhoto"
-        );
-
-
-    const button =
-        document.getElementById(
-            "startPrintButton"
-        );
-
-
-    status.textContent =
-        "Printing...";
-
-
-    button.disabled =
-        true;
-
-
-    photo.classList.remove(
-        "printing"
-    );
-
-
-    void photo.offsetWidth;
-
-
-    photo.classList.add(
-        "printing"
-    );
-
-
-    setTimeout(
-        () => {
-
-            status.textContent =
-                "Printing complete!";
-
-
-            button.disabled =
-                false;
-
-
-            button.textContent =
-                "PRINT AGAIN";
-
-        },
-        5000
-    );
-
-}
-
-
-
-/* ========================================
    CLOSE PRINT
 ======================================== */
 
@@ -960,9 +1174,15 @@ function closePrint() {
         );
 
 
-    modal.classList.remove(
-        "active"
-    );
+    if (
+        modal
+    ) {
+
+        modal.classList.remove(
+            "active"
+        );
+
+    }
 
 }
 
@@ -973,11 +1193,15 @@ function closePrint() {
 ======================================== */
 
 document.addEventListener(
+
     "DOMContentLoaded",
+
     () => {
 
 
-        /* Load selected layout */
+        /* ============================
+           HOME
+        ============================ */
 
         const layoutOptions =
             document.querySelectorAll(
@@ -998,50 +1222,41 @@ document.addEventListener(
                     );
 
                 }
-                else {
-
-                    option.classList.remove(
-                        "selected"
-                    );
-
-                }
 
             }
         );
 
 
 
-        /* Capture page */
+        /* ============================
+           CAPTURE PAGE
+        ============================ */
 
         if (
-            document.body.classList.contains(
-                "capture-page"
-            )
+            document.body.classList
+                .contains(
+                    "capture-page"
+                )
         ) {
 
-            capturedPhotos =
-                JSON.parse(
-                    localStorage.getItem(
-                        "capturedPhotos"
-                    )
-                )
-                || [];
+            updatePreview();
 
 
             updateCounter();
-
-            updatePreview();
 
         }
 
 
 
-        /* Result page */
+        /* ============================
+           RESULT PAGE
+        ============================ */
 
         if (
-            document.body.classList.contains(
-                "result-page"
-            )
+            document.body.classList
+                .contains(
+                    "result-page"
+                )
         ) {
 
             createFinalPhoto();
@@ -1049,4 +1264,5 @@ document.addEventListener(
         }
 
     }
+
 );

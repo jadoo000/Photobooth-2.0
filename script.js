@@ -66,6 +66,23 @@ const filterCSS = {
 
 
 /* ========================================
+   SMALL HELPERS
+======================================== */
+
+// Safer getter that uses querySelector to tolerate duplicate/malformed HTML
+function getEl(id) {
+    return document.querySelector(`#${id}`);
+}
+
+// Helper to add listener to all buttons that match a selector
+function addClick(selector, handler) {
+    document.querySelectorAll(selector).forEach(el => {
+        el.addEventListener('click', handler);
+    });
+}
+
+
+/* ========================================
    SELECT LAYOUT
 ======================================== */
 
@@ -150,7 +167,7 @@ function selectFilter(filter) {
 ======================================== */
 
 function applyCameraFilter() {
-    const video = document.getElementById("cameraVideo");
+    const video = getEl("cameraVideo");
 
     if (!video) {
         return;
@@ -181,11 +198,9 @@ async function startCamera() {
             audio: false
         });
 
-        const video = document.getElementById("cameraVideo");
-        const placeholder =
-            document.getElementById("cameraPlaceholder");
-        const captureButton =
-            document.getElementById("captureButton");
+        const video = getEl("cameraVideo");
+        const placeholder = getEl("cameraPlaceholder");
+        const captureButton = getEl("captureButton");
 
         if (!video) {
             return;
@@ -268,8 +283,7 @@ async function switchCamera() {
 ======================================== */
 
 function updateCounter() {
-    const counter =
-        document.getElementById("photoCounter");
+    const counter = getEl("photoCounter");
 
     if (!counter) {
         return;
@@ -303,8 +317,7 @@ async function capturePhoto() {
         return;
     }
 
-    const video =
-        document.getElementById("cameraVideo");
+    const video = getEl("cameraVideo");
 
     if (
         !cameraStream ||
@@ -453,7 +466,7 @@ async function capturePhoto() {
         capturedPhotos.length >= selectedPhotoCount
     ) {
         const finishButton =
-            document.getElementById("finishButton");
+            getEl("finishButton");
 
         if (finishButton) {
             finishButton.disabled = false;
@@ -624,7 +637,7 @@ function applyFilterToCanvas(
 function runCountdown() {
     return new Promise(resolve => {
         const countdown =
-            document.getElementById("countdown");
+            getEl("countdown");
 
         if (!countdown) {
             resolve();
@@ -667,7 +680,7 @@ function runCountdown() {
 
 function triggerFlash() {
     const flash =
-        document.getElementById("cameraFlash");
+        getEl("cameraFlash");
 
     if (!flash) {
         return;
@@ -766,7 +779,7 @@ function wait(milliseconds) {
 
 function updatePreview() {
     const preview =
-        document.getElementById("photoPreview");
+        getEl("photoPreview");
 
     if (!preview) {
         return;
@@ -1036,7 +1049,7 @@ function finishPhotos() {
 
 function createFinalPhoto() {
     const canvas =
-        document.getElementById(
+        getEl(
             "finalCanvas"
         );
 
@@ -1081,7 +1094,7 @@ function createFinalPhoto() {
     ======================================== */
 
     const layoutName =
-        document.getElementById(
+        getEl(
             "resultLayoutName"
         );
 
@@ -1322,565 +1335,4 @@ function drawFourStrip(
             images[i],
             sidePadding,
             topPadding +
-                i *
-                    (
-                        photoHeight +
-                        gap
-                    ),
-            photoWidth,
-            photoHeight
-        );
-    }
-
-
-    /* ========================================
-       DRAW LABEL
-    ======================================== */
-
-    drawLabel(
-        ctx,
-        width / 2,
-        canvas.height - 35
-    );
-}
-
-
-/* ========================================
-   2 × 2 GRID
-======================================== */
-
-function drawGrid(
-    canvas,
-    images
-) {
-    const width = 700;
-    const height = 700;
-
-    const padding = 30;
-    const gap = 20;
-
-    const labelHeight = 80;
-
-
-    const photoWidth =
-        (
-            width -
-            padding * 2 -
-            gap
-        ) / 2;
-
-
-    const photoHeight =
-        (
-            height -
-            padding -
-            labelHeight -
-            gap
-        ) / 2;
-
-
-    canvas.width =
-        width;
-
-    canvas.height =
-        height;
-
-
-    const ctx =
-        canvas.getContext("2d");
-
-
-    /* ========================================
-       WHITE BACKGROUND
-    ======================================== */
-
-    ctx.fillStyle =
-        "#ffffff";
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    /* ========================================
-       PHOTO POSITIONS
-    ======================================== */
-
-    const positions = [
-        [
-            padding,
-            padding
-        ],
-
-        [
-            padding +
-                photoWidth +
-                gap,
-            padding
-        ],
-
-        [
-            padding,
-            padding +
-                photoHeight +
-                gap
-        ],
-
-        [
-            padding +
-                photoWidth +
-                gap,
-            padding +
-                photoHeight +
-                gap
-        ]
-    ];
-
-
-    /* ========================================
-       DRAW PHOTOS
-    ======================================== */
-
-    for (
-        let i = 0;
-        i < 4;
-        i++
-    ) {
-        drawCoverImage(
-            ctx,
-            images[i],
-            positions[i][0],
-            positions[i][1],
-            photoWidth,
-            photoHeight
-        );
-    }
-
-
-    /* ========================================
-       DRAW LABEL
-    ======================================== */
-
-    drawLabel(
-        ctx,
-        width / 2,
-        height - 35
-    );
-}
-
-
-/* ========================================
-   COVER IMAGE
-======================================== */
-
-function drawCoverImage(
-    ctx,
-    image,
-    x,
-    y,
-    width,
-    height
-) {
-    if (!image) {
-        return;
-    }
-
-
-    const imageRatio =
-        image.width /
-        image.height;
-
-    const boxRatio =
-        width /
-        height;
-
-
-    let sourceWidth =
-        image.width;
-
-    let sourceHeight =
-        image.height;
-
-    let sourceX = 0;
-    let sourceY = 0;
-
-
-    if (
-        imageRatio >
-        boxRatio
-    ) {
-        sourceWidth =
-            image.height *
-            boxRatio;
-
-        sourceX =
-            (
-                image.width -
-                sourceWidth
-            ) / 2;
-
-    } else {
-        sourceHeight =
-            image.width /
-            boxRatio;
-
-        sourceY =
-            (
-                image.height -
-                sourceHeight
-            ) / 2;
-    }
-
-
-    ctx.drawImage(
-        image,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
-        x,
-        y,
-        width,
-        height
-    );
-}
-
-
-/* ========================================
-   PHOTO BOOTH LABEL
-======================================== */
-
-function drawLabel(
-    ctx,
-    x,
-    y
-) {
-    ctx.fillStyle =
-        "#28657d";
-
-    ctx.font =
-        "bold 28px Arial";
-
-    ctx.textAlign =
-        "center";
-
-    ctx.fillText(
-        "PHOTO BOOTH",
-        x,
-        y
-    );
-}
-
-
-/* ========================================
-   DOWNLOAD
-======================================== */
-
-function downloadPhoto() {
-    const canvas =
-        document.getElementById(
-            "finalCanvas"
-        );
-
-    if (!canvas) {
-        return;
-    }
-
-
-    const link =
-        document.createElement("a");
-
-
-    link.download =
-        `photo-booth-${selectedLayout}.png`;
-
-
-    link.href =
-        canvas.toDataURL(
-            "image/png"
-        );
-
-
-    link.click();
-}
-
-
-/* ========================================
-   RETAKE ALL
-======================================== */
-
-function retakePhotos() {
-    capturedPhotos = [];
-    capturedFilters = [];
-
-
-    localStorage.removeItem(
-        "capturedPhotos"
-    );
-
-    localStorage.removeItem(
-        "capturedFilters"
-    );
-
-
-    window.location.href =
-        "capture.html";
-}
-
-
-/* ========================================
-   PRINT PHOTO
-======================================== */
-
-function printPhoto() {
-    const modal =
-        document.getElementById(
-            "printModal"
-        );
-
-    if (!modal) {
-        return;
-    }
-
-
-    modal.classList.add(
-        "active"
-    );
-
-
-    copyCanvasToPrinter();
-}
-
-
-/* ========================================
-   COPY FINAL CANVAS TO PRINTER
-======================================== */
-
-function copyCanvasToPrinter() {
-    const original =
-        document.getElementById(
-            "finalCanvas"
-        );
-
-    const printerCanvas =
-        document.getElementById(
-            "printCanvas"
-        );
-
-
-    if (
-        !original ||
-        !printerCanvas
-    ) {
-        return;
-    }
-
-
-    printerCanvas.width =
-        original.width;
-
-    printerCanvas.height =
-        original.height;
-
-
-    const context =
-        printerCanvas.getContext(
-            "2d"
-        );
-
-
-    context.drawImage(
-        original,
-        0,
-        0
-    );
-}
-
-
-/* ========================================
-   START PRINTING
-======================================== */
-
-function startPrinting() {
-    const status =
-        document.getElementById(
-            "printerStatus"
-        );
-
-    const photo =
-        document.getElementById(
-            "printedPhoto"
-        );
-
-    const button =
-        document.getElementById(
-            "startPrintButton"
-        );
-
-
-    if (
-        !status ||
-        !photo ||
-        !button
-    ) {
-        return;
-    }
-
-
-    status.textContent =
-        "Printing...";
-
-
-    button.disabled =
-        true;
-
-
-    photo.classList.remove(
-        "printing"
-    );
-
-
-    void photo.offsetWidth;
-
-
-    photo.classList.add(
-        "printing"
-    );
-
-
-    setTimeout(() => {
-        status.textContent =
-            "Printing complete!";
-
-
-        button.disabled =
-            false;
-
-
-        button.textContent =
-            "PRINT AGAIN";
-
-    }, 5000);
-}
-
-
-/* ========================================
-   CLOSE PRINT
-======================================== */
-
-function closePrint() {
-    const modal =
-        document.getElementById(
-            "printModal"
-        );
-
-    if (!modal) {
-        return;
-    }
-
-
-    modal.classList.remove(
-        "active"
-    );
-}
-
-
-/* ========================================
-   PAGE INITIALIZATION
-======================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        /* ========================================
-           HOME PAGE
-        ======================================== */
-
-        const layoutOptions =
-            document.querySelectorAll(
-                ".layout-option"
-            );
-
-
-        layoutOptions.forEach(
-            option => {
-
-                if (
-                    option.dataset.layout ===
-                    selectedLayout
-                ) {
-                    option.classList.add(
-                        "selected"
-                    );
-                }
-            }
-        );
-
-
-        /* ========================================
-           CAPTURE PAGE
-        ======================================== */
-
-        if (
-            document.body.classList.contains(
-                "capture-page"
-            )
-        ) {
-
-            /* Restore selected filter. */
-
-            selectedFilter =
-                localStorage.getItem(
-                    "selectedFilter"
-                ) || "normal";
-
-
-            /* Update active button. */
-
-            const activeButton =
-                document.querySelector(
-                    `[data-filter="${selectedFilter}"]`
-                );
-
-
-            if (activeButton) {
-                activeButton.classList.add(
-                    "active"
-                );
-            }
-
-
-            /* Apply camera filter. */
-
-            applyCameraFilter();
-
-
-            /* Update preview. */
-
-            updatePreview();
-
-
-            /* Update counter. */
-
-            updateCounter();
-        }
-
-
-        /* ========================================
-           RESULT PAGE
-        ======================================== */
-
-        if (
-            document.body.classList.contains(
-                "result-page"
-            )
-        ) {
-            createFinalPhoto();
-        }
-
-    }
-);
+            (continued)

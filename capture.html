@@ -61,7 +61,7 @@
 
 
 
-        <!-- MAIN CAMERA AREA -->
+        <!-- CAMERA + PREVIEW -->
 
         <section class="camera-layout">
 
@@ -70,11 +70,10 @@
 
             <div class="camera-section">
 
-
                 <div class="camera-frame">
 
 
-                    <!-- CAMERA VIDEO -->
+                    <!-- LIVE CAMERA -->
 
                     <video
                         id="cameraVideo"
@@ -82,7 +81,6 @@
                         playsinline
                         muted
                     ></video>
-
 
 
                     <!-- CAMERA PLACEHOLDER -->
@@ -103,14 +101,12 @@
                     </div>
 
 
-
                     <!-- COUNTDOWN -->
 
                     <div
                         id="countdown"
                         class="countdown"
                     ></div>
-
 
                 </div>
 
@@ -129,7 +125,6 @@
                     </button>
 
 
-
                     <button
                         id="captureButton"
                         class="shutter-button"
@@ -142,7 +137,6 @@
                     </button>
 
 
-
                     <button
                         class="secondary-button"
                         onclick="switchCamera()"
@@ -153,30 +147,28 @@
 
                 </div>
 
-
             </div>
 
 
 
-            <!-- PHOTO STRIP -->
+            <!-- PHOTO PREVIEW -->
 
             <aside class="preview-section">
-
 
                 <h2>
                     YOUR PHOTO STRIP
                 </h2>
 
 
+                <!--
+                    JavaScript will create
+                    the selected layout here.
+                -->
 
                 <div
                     id="photoPreview"
                     class="photo-preview"
-                >
-
-                    <!-- JavaScript creates preview -->
-
-                </div>
+                ></div>
 
 
             </aside>

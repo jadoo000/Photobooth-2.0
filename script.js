@@ -5,8 +5,7 @@
 let selectedLayout =
     localStorage.getItem(
         "selectedLayout"
-    )
-    || "classic";
+    ) || "classic";
 
 
 let selectedPhotoCount =
@@ -14,8 +13,7 @@ let selectedPhotoCount =
         localStorage.getItem(
             "selectedPhotoCount"
         )
-    )
-    || 3;
+    ) || 3;
 
 
 let capturedPhotos =
@@ -23,8 +21,7 @@ let capturedPhotos =
         localStorage.getItem(
             "capturedPhotos"
         )
-    )
-    || [];
+    ) || [];
 
 
 let cameraStream =
@@ -45,10 +42,30 @@ let isTakingPhoto =
 
 
 /* ========================================
+   LAYOUT INFORMATION
+======================================== */
+
+const layoutNames = {
+
+    classic:
+        "Classic 3-Photo Strip",
+
+    four:
+        "Four-Photo Strip",
+
+    grid:
+        "2 × 2 Photo Grid"
+
+};
+
+
+
+/* ========================================
    SELECT LAYOUT
 ======================================== */
 
 function selectLayout(button) {
+
 
     const options =
         document.querySelectorAll(
@@ -103,7 +120,11 @@ function selectLayout(button) {
 
 function startPhotoBooth() {
 
+
     capturedPhotos = [];
+
+
+    retakeIndex = null;
 
 
     localStorage.setItem(
@@ -136,6 +157,7 @@ function startPhotoBooth() {
 
 function goBackHome() {
 
+
     stopCamera();
 
 
@@ -152,7 +174,9 @@ function goBackHome() {
 
 async function startCamera() {
 
+
     try {
+
 
         stopCamera();
 
@@ -168,11 +192,15 @@ async function startCamera() {
                             currentCamera,
 
                         width: {
+
                             ideal: 1280
+
                         },
 
                         height: {
+
                             ideal: 720
+
                         }
 
                     },
@@ -221,27 +249,35 @@ async function startCamera() {
             === "environment"
         ) {
 
+
             video.classList.add(
                 "back-camera"
             );
 
+
         }
         else {
+
 
             video.classList.remove(
                 "back-camera"
             );
+
 
         }
 
 
         updateCounter();
 
+
     }
+
 
     catch (error) {
 
+
         console.error(
+            "Camera error:",
             error
         );
 
@@ -249,6 +285,7 @@ async function startCamera() {
         alert(
             "Camera access was blocked. Please allow camera permissions and try again."
         );
+
 
     }
 
@@ -261,6 +298,7 @@ async function startCamera() {
 ======================================== */
 
 function stopCamera() {
+
 
     if (
         !cameraStream
@@ -295,6 +333,7 @@ function stopCamera() {
 
 async function switchCamera() {
 
+
     if (
         isTakingPhoto
     ) {
@@ -325,6 +364,7 @@ async function switchCamera() {
 
 function updateCounter() {
 
+
     const counter =
         document.getElementById(
             "photoCounter"
@@ -345,10 +385,12 @@ function updateCounter() {
         !== null
     ) {
 
+
         counter.textContent =
             `Retaking photo ${
                 retakeIndex + 1
             }`;
+
 
         return;
 
@@ -359,6 +401,7 @@ function updateCounter() {
         capturedPhotos.length
         >= selectedPhotoCount
     ) {
+
 
         counter.textContent =
             "All photos captured!";
@@ -386,6 +429,7 @@ function updateCounter() {
 
 async function capturePhoto() {
 
+
     if (
         isTakingPhoto
     ) {
@@ -403,9 +447,11 @@ async function capturePhoto() {
 
     if (
         !cameraStream
-        || video.style.display
-            === "none"
+        ||
+        video.style.display
+        === "none"
     ) {
+
 
         alert(
             "Please open the camera first."
@@ -424,6 +470,7 @@ async function capturePhoto() {
         capturedPhotos.length
         >= selectedPhotoCount
     ) {
+
 
         return;
 
@@ -448,10 +495,6 @@ async function capturePhoto() {
     await runCountdown();
 
 
-    /* ================================
-       FLASH
-    ================================= */
-
     triggerFlash();
 
 
@@ -463,9 +506,10 @@ async function capturePhoto() {
     );
 
 
-    /* ================================
-       CREATE CANVAS
-    ================================= */
+    /* ====================================
+       CREATE IMAGE
+    ==================================== */
+
 
     const canvas =
         document.createElement(
@@ -490,18 +534,13 @@ async function capturePhoto() {
     /*
        IMPORTANT:
 
-       The camera preview is mirrored
+       Video preview is mirrored
        using CSS.
 
-       We DO NOT mirror the canvas.
+       Canvas is NOT mirrored.
 
-       This means:
-
-       Preview:
-       👈 Mirrored selfie view
-
-       Saved photo:
-       👉 Normal orientation
+       Therefore the saved photo
+       is normal and not backwards.
     */
 
 
@@ -522,32 +561,40 @@ async function capturePhoto() {
 
     const photo =
         canvas.toDataURL(
+
             "image/jpeg",
+
             0.92
+
         );
 
 
 
-    /* ================================
+    /* ====================================
        SAVE PHOTO
-    ================================= */
+    ==================================== */
+
 
     if (
         targetIndex
         !== null
     ) {
 
+
         capturedPhotos[
             targetIndex
         ] =
             photo;
 
+
     }
     else {
+
 
         capturedPhotos.push(
             photo
         );
+
 
     }
 
@@ -578,12 +625,14 @@ async function capturePhoto() {
         >= selectedPhotoCount
     ) {
 
+
         document
             .getElementById(
                 "finishButton"
             )
             .disabled =
                 false;
+
 
     }
 
@@ -597,8 +646,10 @@ async function capturePhoto() {
 
 function runCountdown() {
 
+
     return new Promise(
         resolve => {
+
 
             const countdown =
                 document.getElementById(
@@ -618,6 +669,7 @@ function runCountdown() {
                 setInterval(
                     () => {
 
+
                         number--;
 
 
@@ -625,6 +677,7 @@ function runCountdown() {
                             number
                             <= 0
                         ) {
+
 
                             clearInterval(
                                 timer
@@ -638,11 +691,13 @@ function runCountdown() {
                             setTimeout(
                                 () => {
 
+
                                     countdown.textContent =
                                         "";
 
 
                                     resolve();
+
 
                                 },
 
@@ -666,7 +721,9 @@ function runCountdown() {
 
                 );
 
+
         }
+
     );
 
 }
@@ -678,6 +735,7 @@ function runCountdown() {
 ======================================== */
 
 function triggerFlash() {
+
 
     const flash =
         document.getElementById(
@@ -716,7 +774,9 @@ function triggerFlash() {
 
 function playShutterSound() {
 
+
     try {
+
 
         const AudioContext =
             window.AudioContext
@@ -744,35 +804,47 @@ function playShutterSound() {
 
         oscillator.frequency
             .setValueAtTime(
+
                 900,
+
                 audioContext
                     .currentTime
+
             );
 
 
         oscillator.frequency
             .exponentialRampToValueAtTime(
+
                 150,
+
                 audioContext
                     .currentTime
                     + 0.12
+
             );
 
 
         gain.gain
             .setValueAtTime(
+
                 0.3,
+
                 audioContext
                     .currentTime
+
             );
 
 
         gain.gain
             .exponentialRampToValueAtTime(
+
                 0.01,
+
                 audioContext
                     .currentTime
                     + 0.12
+
             );
 
 
@@ -790,20 +862,26 @@ function playShutterSound() {
 
 
         oscillator.stop(
+
             audioContext
                 .currentTime
                 + 0.12
+
         );
 
+
     }
+
 
     catch (
         error
     ) {
 
+
         console.log(
             "Shutter sound unavailable."
         );
+
 
     }
 
@@ -819,12 +897,19 @@ function wait(
     milliseconds
 ) {
 
+
     return new Promise(
+
         resolve =>
+
             setTimeout(
+
                 resolve,
+
                 milliseconds
+
             )
+
     );
 
 }
@@ -832,10 +917,11 @@ function wait(
 
 
 /* ========================================
-   UPDATE PHOTO PREVIEW
+   UPDATE LIVE PREVIEW
 ======================================== */
 
 function updatePreview() {
+
 
     const preview =
         document.getElementById(
@@ -856,6 +942,12 @@ function updatePreview() {
         "";
 
 
+    /*
+       Create the appropriate
+       layout class.
+    */
+
+
     const strip =
         document.createElement(
             "div"
@@ -866,18 +958,36 @@ function updatePreview() {
         "preview-strip";
 
 
+    if (
+        selectedLayout
+        === "grid"
+    ) {
 
-    /* ================================
+
+        strip.classList.add(
+            "preview-grid"
+        );
+
+
+    }
+
+
+
+    /* ====================================
        CREATE PHOTO SLOTS
-    ================================= */
+    ==================================== */
+
 
     for (
+
         let i = 0;
 
         i < selectedPhotoCount;
 
         i++
+
     ) {
+
 
         const slot =
             document.createElement(
@@ -893,6 +1003,7 @@ function updatePreview() {
             capturedPhotos[i]
         ) {
 
+
             const image =
                 document.createElement(
                     "img"
@@ -901,6 +1012,12 @@ function updatePreview() {
 
             image.src =
                 capturedPhotos[i];
+
+
+            image.alt =
+                `Photo ${
+                    i + 1
+                }`;
 
 
             slot.appendChild(
@@ -925,9 +1042,11 @@ function updatePreview() {
             retake.onclick =
                 () => {
 
+
                     retakePhoto(
                         i
                     );
+
 
                 };
 
@@ -936,8 +1055,10 @@ function updatePreview() {
                 retake
             );
 
+
         }
         else {
+
 
             slot.classList.add(
                 "empty"
@@ -949,6 +1070,7 @@ function updatePreview() {
                     i + 1
                 }`;
 
+
         }
 
 
@@ -956,13 +1078,15 @@ function updatePreview() {
             slot
         );
 
+
     }
 
 
 
-    /* ================================
+    /* ====================================
        LABEL
-    ================================= */
+    ==================================== */
+
 
     const label =
         document.createElement(
@@ -976,6 +1100,12 @@ function updatePreview() {
 
     label.textContent =
         "PHOTO BOOTH";
+
+
+    /*
+       For the grid layout,
+       put label below grid.
+    */
 
 
     strip.appendChild(
@@ -998,6 +1128,7 @@ function updatePreview() {
 function retakePhoto(
     index
 ) {
+
 
     if (
         isTakingPhoto
@@ -1034,6 +1165,7 @@ function retakePhoto(
 
 function finishPhotos() {
 
+
     if (
         capturedPhotos.length
         < selectedPhotoCount
@@ -1055,6 +1187,24 @@ function finishPhotos() {
     );
 
 
+    localStorage.setItem(
+
+        "selectedLayout",
+
+        selectedLayout
+
+    );
+
+
+    localStorage.setItem(
+
+        "selectedPhotoCount",
+
+        selectedPhotoCount
+
+    );
+
+
     stopCamera();
 
 
@@ -1066,10 +1216,902 @@ function finishPhotos() {
 
 
 /* ========================================
+   RESULT LAYOUT ENGINE
+======================================== */
+
+function createFinalPhoto() {
+
+
+    const canvas =
+        document.getElementById(
+            "finalCanvas"
+        );
+
+
+    if (
+        !canvas
+    ) {
+
+        return;
+
+    }
+
+
+    capturedPhotos =
+        JSON.parse(
+
+            localStorage.getItem(
+                "capturedPhotos"
+            )
+
+        )
+        || [];
+
+
+    selectedLayout =
+        localStorage.getItem(
+            "selectedLayout"
+        )
+        || "classic";
+
+
+    selectedPhotoCount =
+        parseInt(
+
+            localStorage.getItem(
+                "selectedPhotoCount"
+            )
+
+        )
+        || 3;
+
+
+
+    /* ====================================
+       UPDATE LAYOUT NAME
+    ==================================== */
+
+
+    const layoutName =
+        document.getElementById(
+            "resultLayoutName"
+        );
+
+
+    if (
+        layoutName
+    ) {
+
+
+        layoutName.textContent =
+            layoutNames[
+                selectedLayout
+            ]
+            || "Photo Booth";
+
+
+    }
+
+
+
+    /* ====================================
+       LOAD IMAGES
+    ==================================== */
+
+
+    const images = [];
+
+
+    let loaded =
+        0;
+
+
+    capturedPhotos
+        .slice(
+            0,
+            selectedPhotoCount
+        )
+        .forEach(
+
+            (src, index) => {
+
+
+                const image =
+                    new Image();
+
+
+                image.onload =
+                    () => {
+
+
+                        loaded++;
+
+
+                        if (
+                            loaded
+                            === selectedPhotoCount
+                        ) {
+
+
+                            drawFinalCanvas(
+
+                                canvas,
+
+                                images
+
+                            );
+
+
+                        }
+
+
+                    };
+
+
+                image.src =
+                    src;
+
+
+                images[index] =
+                    image;
+
+
+            }
+
+        );
+
+}
+
+
+
+/* ========================================
+   DRAW FINAL CANVAS
+======================================== */
+
+function drawFinalCanvas(
+
+    canvas,
+
+    images
+
+) {
+
+
+    if (
+        selectedLayout
+        === "classic"
+    ) {
+
+
+        drawClassicStrip(
+
+            canvas,
+
+            images
+
+        );
+
+
+    }
+
+
+    else if (
+        selectedLayout
+        === "four"
+    ) {
+
+
+        drawFourStrip(
+
+            canvas,
+
+            images
+
+        );
+
+
+    }
+
+
+    else if (
+        selectedLayout
+        === "grid"
+    ) {
+
+
+        drawGrid(
+
+            canvas,
+
+            images
+
+        );
+
+
+    }
+
+}
+
+
+
+/* ========================================
+   CLASSIC 3 PHOTO STRIP
+======================================== */
+
+function drawClassicStrip(
+
+    canvas,
+
+    images
+
+) {
+
+
+    const width =
+        600;
+
+
+    const photoWidth =
+        540;
+
+
+    const photoHeight =
+        405;
+
+
+    const sidePadding =
+        30;
+
+
+    const gap =
+        20;
+
+
+    const topPadding =
+        30;
+
+
+    const bottomArea =
+        90;
+
+
+    canvas.width =
+        width;
+
+
+    canvas.height =
+
+        topPadding
+
+        +
+
+        (
+            photoHeight
+            * 3
+        )
+
+        +
+
+        (
+            gap
+            * 2
+        )
+
+        +
+
+        bottomArea;
+
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    /* Background */
+
+    ctx.fillStyle =
+        "#ffffff";
+
+
+    ctx.fillRect(
+
+        0,
+
+        0,
+
+        canvas.width,
+
+        canvas.height
+
+    );
+
+
+
+    /* Photos */
+
+    for (
+
+        let i = 0;
+
+        i < 3;
+
+        i++
+
+    ) {
+
+
+        drawCoverImage(
+
+            ctx,
+
+            images[i],
+
+            sidePadding,
+
+            topPadding
+            +
+            (
+                i
+                *
+                (
+                    photoHeight
+                    + gap
+                )
+            ),
+
+            photoWidth,
+
+            photoHeight
+
+        );
+
+
+    }
+
+
+
+    drawLabel(
+
+        ctx,
+
+        width / 2,
+
+        canvas.height - 35
+
+    );
+
+}
+
+
+
+/* ========================================
+   FOUR PHOTO STRIP
+======================================== */
+
+function drawFourStrip(
+
+    canvas,
+
+    images
+
+) {
+
+
+    const width =
+        600;
+
+
+    const photoWidth =
+        540;
+
+
+    const photoHeight =
+        360;
+
+
+    const sidePadding =
+        30;
+
+
+    const gap =
+        18;
+
+
+    const topPadding =
+        30;
+
+
+    const bottomArea =
+        90;
+
+
+    canvas.width =
+        width;
+
+
+    canvas.height =
+
+        topPadding
+
+        +
+
+        (
+            photoHeight
+            * 4
+        )
+
+        +
+
+        (
+            gap
+            * 3
+        )
+
+        +
+
+        bottomArea;
+
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    /* Background */
+
+    ctx.fillStyle =
+        "#ffffff";
+
+
+    ctx.fillRect(
+
+        0,
+
+        0,
+
+        canvas.width,
+
+        canvas.height
+
+    );
+
+
+
+    /* Photos */
+
+    for (
+
+        let i = 0;
+
+        i < 4;
+
+        i++
+
+    ) {
+
+
+        drawCoverImage(
+
+            ctx,
+
+            images[i],
+
+            sidePadding,
+
+            topPadding
+            +
+            (
+                i
+                *
+                (
+                    photoHeight
+                    + gap
+                )
+            ),
+
+            photoWidth,
+
+            photoHeight
+
+        );
+
+
+    }
+
+
+
+    drawLabel(
+
+        ctx,
+
+        width / 2,
+
+        canvas.height - 35
+
+    );
+
+}
+
+
+
+/* ========================================
+   2 × 2 GRID
+======================================== */
+
+function drawGrid(
+
+    canvas,
+
+    images
+
+) {
+
+
+    const width =
+        700;
+
+
+    const height =
+        700;
+
+
+    const padding =
+        30;
+
+
+    const gap =
+        20;
+
+
+    const labelHeight =
+        80;
+
+
+    const photoWidth =
+
+        (
+            width
+            -
+            (
+                padding
+                * 2
+            )
+            -
+            gap
+        )
+        / 2;
+
+
+    const photoHeight =
+
+        (
+            height
+            -
+            padding
+            -
+            labelHeight
+            -
+            gap
+        )
+        / 2;
+
+
+
+    canvas.width =
+        width;
+
+
+    canvas.height =
+        height;
+
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    /* Background */
+
+    ctx.fillStyle =
+        "#ffffff";
+
+
+    ctx.fillRect(
+
+        0,
+
+        0,
+
+        width,
+
+        height
+
+    );
+
+
+
+    /* Four photos */
+
+    const positions = [
+
+        [
+            padding,
+
+            padding
+
+        ],
+
+        [
+
+            padding
+            +
+            photoWidth
+            +
+            gap,
+
+            padding
+
+        ],
+
+        [
+
+            padding,
+
+            padding
+            +
+            photoHeight
+            +
+            gap
+
+        ],
+
+        [
+
+            padding
+            +
+            photoWidth
+            +
+            gap,
+
+            padding
+            +
+            photoHeight
+            +
+            gap
+
+        ]
+
+    ];
+
+
+
+    for (
+
+        let i = 0;
+
+        i < 4;
+
+        i++
+
+    ) {
+
+
+        drawCoverImage(
+
+            ctx,
+
+            images[i],
+
+            positions[i][0],
+
+            positions[i][1],
+
+            photoWidth,
+
+            photoHeight
+
+        );
+
+
+    }
+
+
+
+    drawLabel(
+
+        ctx,
+
+        width / 2,
+
+        height - 35
+
+    );
+
+}
+
+
+
+/* ========================================
+   COVER IMAGE
+======================================== */
+
+function drawCoverImage(
+
+    ctx,
+
+    image,
+
+    x,
+
+    y,
+
+    width,
+
+    height
+
+) {
+
+
+    const imageRatio =
+
+        image.width
+        /
+        image.height;
+
+
+    const boxRatio =
+
+        width
+        /
+        height;
+
+
+    let sourceWidth =
+        image.width;
+
+
+    let sourceHeight =
+        image.height;
+
+
+    let sourceX =
+        0;
+
+
+    let sourceY =
+        0;
+
+
+
+    if (
+        imageRatio
+        > boxRatio
+    ) {
+
+
+        sourceWidth =
+
+            image.height
+            *
+            boxRatio;
+
+
+        sourceX =
+
+            (
+                image.width
+                -
+                sourceWidth
+            )
+            / 2;
+
+
+    }
+
+
+    else {
+
+
+        sourceHeight =
+
+            image.width
+            /
+            boxRatio;
+
+
+        sourceY =
+
+            (
+                image.height
+                -
+                sourceHeight
+            )
+            / 2;
+
+
+    }
+
+
+
+    ctx.drawImage(
+
+        image,
+
+        sourceX,
+
+        sourceY,
+
+        sourceWidth,
+
+        sourceHeight,
+
+        x,
+
+        y,
+
+        width,
+
+        height
+
+    );
+
+}
+
+
+
+/* ========================================
+   PHOTO BOOTH LABEL
+======================================== */
+
+function drawLabel(
+
+    ctx,
+
+    x,
+
+    y
+
+) {
+
+
+    ctx.fillStyle =
+        "#28657d";
+
+
+    ctx.font =
+        "bold 28px Arial";
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.fillText(
+
+        "PHOTO BOOTH",
+
+        x,
+
+        y
+
+    );
+
+}
+
+
+
+/* ========================================
    DOWNLOAD
 ======================================== */
 
 function downloadPhoto() {
+
 
     const canvas =
         document.getElementById(
@@ -1093,7 +2135,10 @@ function downloadPhoto() {
 
 
     link.download =
-        "my-photo-booth.png";
+
+        `photo-booth-${
+            selectedLayout
+        }.png`;
 
 
     link.href =
@@ -1114,6 +2159,7 @@ function downloadPhoto() {
 
 function retakePhotos() {
 
+
     capturedPhotos =
         [];
 
@@ -1131,10 +2177,11 @@ function retakePhotos() {
 
 
 /* ========================================
-   PRINT
+   PRINT PHOTO
 ======================================== */
 
 function printPhoto() {
+
 
     const modal =
         document.getElementById(
@@ -1163,26 +2210,131 @@ function printPhoto() {
 
 
 /* ========================================
-   CLOSE PRINT
+   COPY FINAL CANVAS TO PRINTER
 ======================================== */
 
-function closePrint() {
+function copyCanvasToPrinter() {
 
-    const modal =
+
+    const original =
         document.getElementById(
-            "printModal"
+            "finalCanvas"
+        );
+
+
+    const printerCanvas =
+        document.getElementById(
+            "printCanvas"
         );
 
 
     if (
-        modal
+        !original
+        ||
+        !printerCanvas
     ) {
 
-        modal.classList.remove(
-            "active"
-        );
+        return;
 
     }
+
+
+    printerCanvas.width =
+        original.width;
+
+
+    printerCanvas.height =
+        original.height;
+
+
+    const context =
+        printerCanvas.getContext(
+            "2d"
+        );
+
+
+    context.drawImage(
+
+        original,
+
+        0,
+
+        0
+
+    );
+
+}
+
+
+
+/* ========================================
+   START PRINTING
+======================================== */
+
+function startPrinting() {
+
+
+    const status =
+        document.getElementById(
+            "printerStatus"
+        );
+
+
+    const photo =
+        document.getElementById(
+            "printedPhoto"
+        );
+
+
+    const button =
+        document.getElementById(
+            "startPrintButton"
+        );
+
+
+    status.textContent =
+        "Printing...";
+
+
+    button.disabled =
+        true;
+
+
+    photo.classList.remove(
+        "printing"
+    );
+
+
+    void photo.offsetWidth;
+
+
+    photo.classList.add(
+        "printing"
+    );
+
+
+    setTimeout(
+
+        () => {
+
+
+            status.textContent =
+                "Printing complete!";
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "PRINT AGAIN";
+
+
+        },
+
+        5000
+
+    );
 
 }
 
@@ -1199,9 +2351,10 @@ document.addEventListener(
     () => {
 
 
-        /* ============================
-           HOME
-        ============================ */
+        /* ================================
+           HOME PAGE
+        ================================= */
+
 
         const layoutOptions =
             document.querySelectorAll(
@@ -1210,56 +2363,74 @@ document.addEventListener(
 
 
         layoutOptions.forEach(
+
             option => {
 
+
                 if (
+
                     option.dataset.layout
-                    === selectedLayout
+                    ===
+                    selectedLayout
+
                 ) {
+
 
                     option.classList.add(
                         "selected"
                     );
 
+
                 }
 
             }
+
         );
 
 
 
-        /* ============================
+        /* ================================
            CAPTURE PAGE
-        ============================ */
+        ================================= */
+
 
         if (
+
             document.body.classList
                 .contains(
                     "capture-page"
                 )
+
         ) {
+
 
             updatePreview();
 
 
             updateCounter();
 
+
         }
 
 
 
-        /* ============================
+        /* ================================
            RESULT PAGE
-        ============================ */
+        ================================= */
+
 
         if (
+
             document.body.classList
                 .contains(
                     "result-page"
                 )
+
         ) {
 
+
             createFinalPhoto();
+
 
         }
 

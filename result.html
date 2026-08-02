@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
+    <meta 
+        name="viewport" 
         content="width=device-width, initial-scale=1.0"
     >
 
     <title>Your Photo</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -26,38 +22,26 @@
     <main class="result-container">
 
 
-        <!-- HEADER -->
-
         <header class="result-header">
 
-            <h1>
-                YOUR PHOTO
-            </h1>
+            <h1>YOUR PHOTO</h1>
 
             <p>
                 Your memories are ready!
-            </p>
-
-            <p
-                id="resultLayoutName"
-                class="result-layout-name"
-            >
             </p>
 
         </header>
 
 
 
-        <!-- FINAL PHOTO -->
-
         <section class="result-content">
 
 
-            <div
-                class="final-photo-container"
-            >
+            <!-- FINAL PHOTO -->
 
-                <canvas
+            <div class="final-photo-container">
+
+                <canvas 
                     id="finalCanvas"
                 ></canvas>
 
@@ -65,14 +49,11 @@
 
 
 
-            <!-- ACTION BUTTONS -->
+            <!-- ACTIONS -->
 
-            <div
-                class="result-actions"
-            >
+            <div class="result-actions">
 
-
-                <button
+                <button 
                     class="main-button"
                     onclick="printPhoto()"
                 >
@@ -80,7 +61,7 @@
                 </button>
 
 
-                <button
+                <button 
                     class="secondary-button"
                     onclick="downloadPhoto()"
                 >
@@ -88,13 +69,12 @@
                 </button>
 
 
-                <button
+                <button 
                     class="secondary-button"
                     onclick="retakePhotos()"
                 >
                     RETAKE
                 </button>
-
 
             </div>
 
@@ -106,20 +86,17 @@
 
 
 
-    <!-- PRINT MODAL -->
+    <!-- PRINTING MODAL -->
 
-    <div
+    <div 
         id="printModal"
         class="print-modal"
     >
 
-
-        <div
-            class="printer-container"
-        >
+        <div class="printer-container">
 
 
-            <button
+            <button 
                 class="close-print"
                 onclick="closePrint()"
             >
@@ -127,18 +104,12 @@
             </button>
 
 
-            <h2>
-                PHOTO BOOTH PRINTER
-            </h2>
+            <h2>PHOTO BOOTH PRINTER</h2>
 
 
-            <div
-                class="printer-screen"
-            >
+            <div class="printer-screen">
 
-                <p
-                    id="printerStatus"
-                >
+                <p id="printerStatus">
                     Ready to print
                 </p>
 
@@ -147,28 +118,21 @@
 
             <div class="printer">
 
+                <div class="printer-top">
 
-                <div
-                    class="printer-top"
-                >
-
-                    <div
-                        class="printer-light"
-                    ></div>
+                    <div class="printer-light"></div>
 
                 </div>
 
 
-                <div
-                    class="printer-slot"
-                >
+                <div class="printer-slot">
 
-                    <div
+                    <div 
                         id="printedPhoto"
                         class="printed-photo"
                     >
 
-                        <canvas
+                        <canvas 
                             id="printCanvas"
                         ></canvas>
 
@@ -176,11 +140,10 @@
 
                 </div>
 
-
             </div>
 
 
-            <button
+            <button 
                 id="startPrintButton"
                 class="main-button"
                 onclick="startPrinting()"
@@ -191,12 +154,13 @@
 
         </div>
 
-
     </div>
 
 
-
     <script src="script.js"></script>
+
+</body>
+</html>
 
 </body>
 

@@ -6,18 +6,14 @@
 /* Selected layout */
 
 let selectedLayout =
-    localStorage.getItem(
-        "selectedLayout"
-    ) || "classic";
+    localStorage.getItem("selectedLayout") || "classic";
 
 
 /* Number of photos */
 
 let selectedPhotoCount =
     parseInt(
-        localStorage.getItem(
-            "selectedPhotoCount"
-        )
+        localStorage.getItem("selectedPhotoCount")
     ) || 3;
 
 
@@ -25,42 +21,34 @@ let selectedPhotoCount =
 
 let capturedPhotos =
     JSON.parse(
-        localStorage.getItem(
-            "capturedPhotos"
-        )
+        localStorage.getItem("capturedPhotos")
     ) || [];
 
 
 /* Camera */
 
-let cameraStream =
-    null;
+let cameraStream = null;
 
 
 /* Current camera */
 
-let currentCamera =
-    "user";
+let currentCamera = "user";
 
 
 /* Retake index */
 
-let retakeIndex =
-    null;
+let retakeIndex = null;
 
 
 /* Prevent multiple captures */
 
-let isTakingPhoto =
-    false;
+let isTakingPhoto = false;
 
 
 /* Current filter */
 
 let selectedFilter =
-    localStorage.getItem(
-        "selectedFilter"
-    ) || "normal";
+    localStorage.getItem("selectedFilter") || "normal";
 
 
 
@@ -143,10 +131,7 @@ const filterStyles = {
    SELECT LAYOUT
 ======================================== */
 
-function selectLayout(
-    button
-) {
-
+function selectLayout(button) {
 
     const options =
         document.querySelectorAll(
@@ -199,27 +184,15 @@ function selectLayout(
    SELECT FILTER
 ======================================== */
 
-function selectFilter(
-    filter
-) {
+function selectFilter(filter) {
 
-
-    selectedFilter =
-        filter;
+    selectedFilter = filter;
 
 
     localStorage.setItem(
-
         "selectedFilter",
-
         selectedFilter
-
     );
-
-
-    /* ================================
-       Update active button
-    ================================= */
 
 
     const options =
@@ -231,35 +204,24 @@ function selectFilter(
     options.forEach(
         option => {
 
-
             option.classList.remove(
                 "active"
             );
 
 
             if (
-                option.dataset.filter
-                ===
+                option.dataset.filter ===
                 filter
             ) {
-
 
                 option.classList.add(
                     "active"
                 );
 
-
             }
 
         }
-
     );
-
-
-
-    /* ================================
-       Update camera preview
-    ================================= */
 
 
     const video =
@@ -268,15 +230,11 @@ function selectFilter(
         );
 
 
-    if (
-        video
-    ) {
-
+    if (video) {
 
         applyCameraFilter(
             video
         );
-
 
     }
 
@@ -288,21 +246,14 @@ function selectFilter(
    APPLY CAMERA FILTER
 ======================================== */
 
-function applyCameraFilter(
-    video
-) {
+function applyCameraFilter(video) {
 
-
-    if (
-        !video
-    ) {
+    if (!video) {
 
         return;
 
     }
 
-
-    /* Remove old filters */
 
     Object.keys(
         filterStyles
@@ -311,9 +262,7 @@ function applyCameraFilter(
         filter => {
 
             video.classList.remove(
-
                 `filter-${filter}`
-
             );
 
         }
@@ -321,12 +270,8 @@ function applyCameraFilter(
     );
 
 
-    /* Add current filter */
-
     video.classList.add(
-
         `filter-${selectedFilter}`
-
     );
 
 }
@@ -339,46 +284,32 @@ function applyCameraFilter(
 
 function startPhotoBooth() {
 
-
-    capturedPhotos =
-        [];
+    capturedPhotos = [];
 
 
-    retakeIndex =
-        null;
+    retakeIndex = null;
 
 
     localStorage.setItem(
-
         "selectedLayout",
-
         selectedLayout
-
     );
 
 
     localStorage.setItem(
-
         "selectedPhotoCount",
-
         selectedPhotoCount
-
     );
 
 
     localStorage.setItem(
-
         "selectedFilter",
-
         selectedFilter
-
     );
 
 
     localStorage.removeItem(
-
         "capturedPhotos"
-
     );
 
 
@@ -395,7 +326,6 @@ function startPhotoBooth() {
 
 function goBackHome() {
 
-
     stopCamera();
 
 
@@ -407,20 +337,35 @@ function goBackHome() {
 
 
 /* ========================================
-   START CAMERA
+   START / CLOSE CAMERA TOGGLE
 ======================================== */
 
 async function startCamera() {
 
 
+    /* ====================================
+       IF CAMERA IS ALREADY OPEN,
+       CLOSE IT
+    ==================================== */
+
+    if (cameraStream) {
+
+        closeCamera();
+
+        return;
+
+    }
+
+
+
     try {
 
 
-        stopCamera();
-
+        /* ====================================
+           GET CAMERA
+        ==================================== */
 
         cameraStream =
-
             await navigator
                 .mediaDevices
                 .getUserMedia({
@@ -450,6 +395,10 @@ async function startCamera() {
 
 
 
+        /* ====================================
+           GET ELEMENTS
+        ==================================== */
+
         const video =
             document.getElementById(
                 "cameraVideo"
@@ -468,6 +417,16 @@ async function startCamera() {
             );
 
 
+        const cameraButton =
+            document.getElementById(
+                "cameraToggleButton"
+            );
+
+
+
+        /* ====================================
+           SHOW CAMERA
+        ==================================== */
 
         video.srcObject =
             cameraStream;
@@ -486,40 +445,47 @@ async function startCamera() {
 
 
 
-        /* ================================
-           CAMERA DIRECTION
-        ================================= */
+        /* ====================================
+           CHANGE BUTTON TEXT
+        ==================================== */
 
+        if (cameraButton) {
+
+            cameraButton.textContent =
+                "CLOSE CAMERA";
+
+        }
+
+
+
+        /* ====================================
+           CAMERA DIRECTION
+        ==================================== */
 
         if (
-            currentCamera
-            === "environment"
+            currentCamera ===
+            "environment"
         ) {
-
 
             video.classList.add(
                 "back-camera"
             );
 
-
         }
 
         else {
-
 
             video.classList.remove(
                 "back-camera"
             );
 
-
         }
 
 
 
-        /* ================================
+        /* ====================================
            APPLY FILTER
-        ================================= */
-
+        ==================================== */
 
         applyCameraFilter(
             video
@@ -532,26 +498,140 @@ async function startCamera() {
     }
 
 
-    catch (
-        error
-    ) {
+    catch (error) {
 
 
         console.error(
-
             "Camera error:",
-
             error
-
         );
+
+
+        cameraStream = null;
 
 
         alert(
-
             "Camera access was blocked. Please allow camera permissions and try again."
-
         );
 
+    }
+
+}
+
+
+
+/* ========================================
+   CLOSE CAMERA
+======================================== */
+
+function closeCamera() {
+
+
+    const video =
+        document.getElementById(
+            "cameraVideo"
+        );
+
+
+    const placeholder =
+        document.getElementById(
+            "cameraPlaceholder"
+        );
+
+
+    const captureButton =
+        document.getElementById(
+            "captureButton"
+        );
+
+
+    const cameraButton =
+        document.getElementById(
+            "cameraToggleButton"
+        );
+
+
+
+    /* ====================================
+       STOP CAMERA STREAM
+    ==================================== */
+
+    if (cameraStream) {
+
+
+        cameraStream
+            .getTracks()
+            .forEach(
+
+                track => {
+
+                    track.stop();
+
+                }
+
+            );
+
+    }
+
+
+    cameraStream = null;
+
+
+
+    /* ====================================
+       HIDE CAMERA
+    ==================================== */
+
+    if (video) {
+
+
+        video.srcObject = null;
+
+
+        video.style.display =
+            "none";
+
+    }
+
+
+
+    /* ====================================
+       SHOW PLACEHOLDER
+    ==================================== */
+
+    if (placeholder) {
+
+
+        placeholder.style.display =
+            "flex";
+
+    }
+
+
+
+    /* ====================================
+       DISABLE CAPTURE
+    ==================================== */
+
+    if (captureButton) {
+
+
+        captureButton.disabled =
+            true;
+
+    }
+
+
+
+    /* ====================================
+       CHANGE BUTTON BACK
+    ==================================== */
+
+    if (cameraButton) {
+
+
+        cameraButton.textContent =
+            "OPEN CAMERA";
 
     }
 
@@ -566,9 +646,7 @@ async function startCamera() {
 function stopCamera() {
 
 
-    if (
-        !cameraStream
-    ) {
+    if (!cameraStream) {
 
         return;
 
@@ -588,8 +666,7 @@ function stopCamera() {
         );
 
 
-    cameraStream =
-        null;
+    cameraStream = null;
 
 }
 
@@ -602,9 +679,7 @@ function stopCamera() {
 async function switchCamera() {
 
 
-    if (
-        isTakingPhoto
-    ) {
+    if (isTakingPhoto) {
 
         return;
 
@@ -613,16 +688,26 @@ async function switchCamera() {
 
     currentCamera =
 
-        currentCamera
-        ===
-        "user"
+        currentCamera === "user"
 
             ? "environment"
 
             : "user";
 
 
-    await startCamera();
+
+    /* If camera is currently open,
+       restart with new camera */
+
+    if (cameraStream) {
+
+        closeCamera();
+
+        await wait(100);
+
+        await startCamera();
+
+    }
 
 }
 
@@ -641,9 +726,7 @@ function updateCounter() {
         );
 
 
-    if (
-        !counter
-    ) {
+    if (!counter) {
 
         return;
 
@@ -651,9 +734,7 @@ function updateCounter() {
 
 
     if (
-        retakeIndex
-        !==
-        null
+        retakeIndex !== null
     ) {
 
 
@@ -670,14 +751,12 @@ function updateCounter() {
 
 
     if (
-        capturedPhotos.length
-        >=
+        capturedPhotos.length >=
         selectedPhotoCount
     ) {
 
 
         counter.textContent =
-
             "All photos captured!";
 
 
@@ -705,9 +784,7 @@ function updateCounter() {
 async function capturePhoto() {
 
 
-    if (
-        isTakingPhoto
-    ) {
+    if (isTakingPhoto) {
 
         return;
 
@@ -721,18 +798,13 @@ async function capturePhoto() {
 
 
     if (
-        !cameraStream
-        ||
-        video.style.display
-        ===
-        "none"
+        !cameraStream ||
+        !video
     ) {
 
 
         alert(
-
             "Please open the camera first."
-
         );
 
 
@@ -743,14 +815,9 @@ async function capturePhoto() {
 
     if (
 
-        retakeIndex
-        ===
-        null
+        retakeIndex === null &&
 
-        &&
-
-        capturedPhotos.length
-        >=
+        capturedPhotos.length >=
         selectedPhotoCount
 
     ) {
@@ -762,16 +829,14 @@ async function capturePhoto() {
 
 
 
-    isTakingPhoto =
-        true;
+    isTakingPhoto = true;
 
 
     const targetIndex =
         retakeIndex;
 
 
-    retakeIndex =
-        null;
+    retakeIndex = null;
 
 
     updateCounter();
@@ -786,16 +851,13 @@ async function capturePhoto() {
     playShutterSound();
 
 
-    await wait(
-        150
-    );
+    await wait(150);
 
 
 
     /* ====================================
        CREATE CANVAS
     ==================================== */
-
 
     const canvas =
         document.createElement(
@@ -822,34 +884,17 @@ async function capturePhoto() {
        APPLY FILTER TO SAVED IMAGE
     ==================================== */
 
-
     context.filter =
 
         filterStyles[
             selectedFilter
-        ]
-        ||
-        "none";
+        ] || "none";
 
 
 
     /* ====================================
        IMPORTANT MIRROR FIX
     ==================================== */
-
-
-    /*
-       We DO NOT flip the canvas.
-
-       The live camera preview is mirrored
-       using CSS.
-
-       The saved photo is NOT mirrored.
-
-       Therefore text and logos
-       will appear correctly.
-    */
-
 
     context.drawImage(
 
@@ -867,17 +912,14 @@ async function capturePhoto() {
 
 
 
-    /* Reset filter */
-
     context.filter =
         "none";
 
 
 
     /* ====================================
-       CREATE PHOTO DATA
+       CREATE PHOTO
     ==================================== */
-
 
     const photo =
 
@@ -895,18 +937,14 @@ async function capturePhoto() {
        SAVE PHOTO
     ==================================== */
 
-
     if (
-        targetIndex
-        !==
-        null
+        targetIndex !== null
     ) {
 
 
         capturedPhotos[
             targetIndex
-        ] =
-            photo;
+        ] = photo;
 
 
     }
@@ -918,7 +956,6 @@ async function capturePhoto() {
             photo
         );
 
-
     }
 
 
@@ -926,7 +963,6 @@ async function capturePhoto() {
     /* ====================================
        SAVE TO LOCAL STORAGE
     ==================================== */
-
 
     localStorage.setItem(
 
@@ -953,15 +989,13 @@ async function capturePhoto() {
        UPDATE PREVIEW
     ==================================== */
 
-
     updatePreview();
 
 
     updateCounter();
 
 
-    isTakingPhoto =
-        false;
+    isTakingPhoto = false;
 
 
 
@@ -969,23 +1003,26 @@ async function capturePhoto() {
        ENABLE FINISH
     ==================================== */
 
-
     if (
 
-        capturedPhotos.length
-        >=
+        capturedPhotos.length >=
         selectedPhotoCount
 
     ) {
 
 
-        document
-            .getElementById(
+        const finishButton =
+            document.getElementById(
                 "finishButton"
-            )
-            .disabled =
+            );
+
+
+        if (finishButton) {
+
+            finishButton.disabled =
                 false;
 
+        }
 
     }
 
@@ -1011,8 +1048,7 @@ function runCountdown() {
                 );
 
 
-            let number =
-                3;
+            let number = 3;
 
 
             countdown.textContent =
@@ -1030,9 +1066,7 @@ function runCountdown() {
 
 
                         if (
-                            number
-                            <=
-                            0
+                            number <= 0
                         ) {
 
 
@@ -1101,9 +1135,7 @@ function triggerFlash() {
         );
 
 
-    if (
-        !flash
-    ) {
+    if (!flash) {
 
         return;
 
@@ -1138,24 +1170,20 @@ function playShutterSound() {
 
         const AudioContext =
 
-            window.AudioContext
-            ||
+            window.AudioContext ||
             window.webkitAudioContext;
 
 
         const audioContext =
-
             new AudioContext();
 
 
         const oscillator =
-
             audioContext
                 .createOscillator();
 
 
         const gain =
-
             audioContext
                 .createGain();
 
@@ -1169,8 +1197,7 @@ function playShutterSound() {
 
                 900,
 
-                audioContext
-                    .currentTime
+                audioContext.currentTime
 
             );
 
@@ -1180,9 +1207,8 @@ function playShutterSound() {
 
                 150,
 
-                audioContext
-                    .currentTime
-                    + 0.12
+                audioContext.currentTime +
+                0.12
 
             );
 
@@ -1192,8 +1218,7 @@ function playShutterSound() {
 
                 0.3,
 
-                audioContext
-                    .currentTime
+                audioContext.currentTime
 
             );
 
@@ -1203,9 +1228,8 @@ function playShutterSound() {
 
                 0.01,
 
-                audioContext
-                    .currentTime
-                    + 0.12
+                audioContext.currentTime +
+                0.12
 
             );
 
@@ -1225,24 +1249,19 @@ function playShutterSound() {
 
         oscillator.stop(
 
-            audioContext
-                .currentTime
-                + 0.12
+            audioContext.currentTime +
+            0.12
 
         );
 
 
     }
 
-    catch (
-        error
-    ) {
+    catch (error) {
 
 
         console.log(
-
             "Shutter sound unavailable."
-
         );
 
 
@@ -1256,9 +1275,7 @@ function playShutterSound() {
    WAIT
 ======================================== */
 
-function wait(
-    milliseconds
-) {
+function wait(milliseconds) {
 
 
     return new Promise(
@@ -1292,9 +1309,7 @@ function updatePreview() {
         );
 
 
-    if (
-        !preview
-    ) {
+    if (!preview) {
 
         return;
 
@@ -1303,7 +1318,6 @@ function updatePreview() {
 
     preview.innerHTML =
         "";
-
 
 
     const strip =
@@ -1317,11 +1331,12 @@ function updatePreview() {
 
 
 
-    /* Grid */
+    /* ====================================
+       GRID
+    ==================================== */
 
     if (
-        selectedLayout
-        ===
+        selectedLayout ===
         "grid"
     ) {
 
@@ -1329,7 +1344,6 @@ function updatePreview() {
         strip.classList.add(
             "preview-grid"
         );
-
 
     }
 
@@ -1339,13 +1353,11 @@ function updatePreview() {
        CREATE PHOTO SLOTS
     ==================================== */
 
-
     for (
 
         let i = 0;
 
-        i <
-        selectedPhotoCount;
+        i < selectedPhotoCount;
 
         i++
 
@@ -1410,9 +1422,7 @@ function updatePreview() {
 
                 () => {
 
-                    retakePhoto(
-                        i
-                    );
+                    retakePhoto(i);
 
                 };
 
@@ -1421,7 +1431,6 @@ function updatePreview() {
             slot.appendChild(
                 retake
             );
-
 
         }
 
@@ -1439,14 +1448,12 @@ function updatePreview() {
                     i + 1
                 }`;
 
-
         }
 
 
         strip.appendChild(
             slot
         );
-
 
     }
 
@@ -1455,7 +1462,6 @@ function updatePreview() {
     /* ====================================
        LABEL
     ==================================== */
-
 
     const label =
         document.createElement(
@@ -1488,14 +1494,10 @@ function updatePreview() {
    RETAKE PHOTO
 ======================================== */
 
-function retakePhoto(
-    index
-) {
+function retakePhoto(index) {
 
 
-    if (
-        isTakingPhoto
-    ) {
+    if (isTakingPhoto) {
 
         return;
 
@@ -1513,8 +1515,7 @@ function retakePhoto(
 
         top: 0,
 
-        behavior:
-            "smooth"
+        behavior: "smooth"
 
     });
 
@@ -1531,11 +1532,11 @@ function finishPhotos() {
 
     if (
 
-        capturedPhotos.length
-        <
+        capturedPhotos.length <
         selectedPhotoCount
 
     ) {
+
 
         return;
 
@@ -1603,9 +1604,7 @@ function createFinalPhoto() {
         );
 
 
-    if (
-        !canvas
-    ) {
+    if (!canvas) {
 
         return;
 
@@ -1621,9 +1620,7 @@ function createFinalPhoto() {
                 "capturedPhotos"
             )
 
-        )
-        ||
-        [];
+        ) || [];
 
 
 
@@ -1631,9 +1628,7 @@ function createFinalPhoto() {
 
         localStorage.getItem(
             "selectedLayout"
-        )
-        ||
-        "classic";
+        ) || "classic";
 
 
 
@@ -1645,9 +1640,7 @@ function createFinalPhoto() {
                 "selectedPhotoCount"
             )
 
-        )
-        ||
-        3;
+        ) || 3;
 
 
 
@@ -1655,9 +1648,7 @@ function createFinalPhoto() {
 
         localStorage.getItem(
             "selectedFilter"
-        )
-        ||
-        "normal";
+        ) || "normal";
 
 
 
@@ -1665,55 +1656,20 @@ function createFinalPhoto() {
        LAYOUT NAME
     ==================================== */
 
-
     const layoutName =
         document.getElementById(
             "resultLayoutName"
         );
 
 
-    if (
-        layoutName
-    ) {
+    if (layoutName) {
 
 
         layoutName.textContent =
 
             layoutNames[
                 selectedLayout
-            ]
-            ||
-            "Photo Booth";
-
-
-    }
-
-
-
-    /* ====================================
-       FILTER NAME
-    ==================================== */
-
-
-    const filterDisplay =
-        document.getElementById(
-            "resultFilterName"
-        );
-
-
-    if (
-        filterDisplay
-    ) {
-
-
-        filterDisplay.textContent =
-
-            filterNames[
-                selectedFilter
-            ]
-            ||
-            "Normal";
-
+            ] || "Photo Booth";
 
     }
 
@@ -1723,23 +1679,17 @@ function createFinalPhoto() {
        LOAD IMAGES
     ==================================== */
 
-
-    const images =
-        [];
+    const images = [];
 
 
-    let loaded =
-        0;
+    let loaded = 0;
 
 
     capturedPhotos
 
         .slice(
-
             0,
-
             selectedPhotoCount
-
         )
 
         .forEach(
@@ -1760,8 +1710,7 @@ function createFinalPhoto() {
 
                         if (
 
-                            loaded
-                            ===
+                            loaded ===
                             selectedPhotoCount
 
                         ) {
@@ -1775,9 +1724,7 @@ function createFinalPhoto() {
 
                             );
 
-
                         }
-
 
                     };
 
@@ -1788,7 +1735,6 @@ function createFinalPhoto() {
 
                 images[index] =
                     image;
-
 
             }
 
@@ -1812,64 +1758,43 @@ function drawFinalCanvas(
 
 
     if (
-
-        selectedLayout
-        ===
+        selectedLayout ===
         "classic"
-
     ) {
 
 
         drawClassicStrip(
-
             canvas,
-
             images
-
         );
-
 
     }
 
 
     else if (
-
-        selectedLayout
-        ===
+        selectedLayout ===
         "four"
-
     ) {
 
 
         drawFourStrip(
-
             canvas,
-
             images
-
         );
-
 
     }
 
 
     else if (
-
-        selectedLayout
-        ===
+        selectedLayout ===
         "grid"
-
     ) {
 
 
         drawGrid(
-
             canvas,
-
             images
-
         );
-
 
     }
 
@@ -1890,32 +1815,25 @@ function drawClassicStrip(
 ) {
 
 
-    const width =
-        600;
+    const width = 600;
 
 
-    const photoWidth =
-        540;
+    const photoWidth = 540;
 
 
-    const photoHeight =
-        405;
+    const photoHeight = 405;
 
 
-    const sidePadding =
-        30;
+    const sidePadding = 30;
 
 
-    const gap =
-        20;
+    const gap = 20;
 
 
-    const topPadding =
-        30;
+    const topPadding = 30;
 
 
-    const bottomArea =
-        90;
+    const bottomArea = 90;
 
 
 
@@ -1930,17 +1848,13 @@ function drawClassicStrip(
         +
 
         (
-            photoHeight
-            *
-            3
+            photoHeight * 3
         )
 
         +
 
         (
-            gap
-            *
-            2
+            gap * 2
         )
 
         +
@@ -1955,8 +1869,6 @@ function drawClassicStrip(
         );
 
 
-
-    /* Background */
 
     ctx.fillStyle =
         "#ffffff";
@@ -1975,8 +1887,6 @@ function drawClassicStrip(
     );
 
 
-
-    /* Photos */
 
     for (
 
@@ -1997,14 +1907,12 @@ function drawClassicStrip(
 
             sidePadding,
 
-            topPadding
-            +
+            topPadding +
+
             (
-                i
-                *
+                i *
                 (
-                    photoHeight
-                    +
+                    photoHeight +
                     gap
                 )
             ),
@@ -2014,7 +1922,6 @@ function drawClassicStrip(
             photoHeight
 
         );
-
 
     }
 
@@ -2047,32 +1954,25 @@ function drawFourStrip(
 ) {
 
 
-    const width =
-        600;
+    const width = 600;
 
 
-    const photoWidth =
-        540;
+    const photoWidth = 540;
 
 
-    const photoHeight =
-        360;
+    const photoHeight = 360;
 
 
-    const sidePadding =
-        30;
+    const sidePadding = 30;
 
 
-    const gap =
-        18;
+    const gap = 18;
 
 
-    const topPadding =
-        30;
+    const topPadding = 30;
 
 
-    const bottomArea =
-        90;
+    const bottomArea = 90;
 
 
 
@@ -2087,17 +1987,13 @@ function drawFourStrip(
         +
 
         (
-            photoHeight
-            *
-            4
+            photoHeight * 4
         )
 
         +
 
         (
-            gap
-            *
-            3
+            gap * 3
         )
 
         +
@@ -2112,8 +2008,6 @@ function drawFourStrip(
         );
 
 
-
-    /* Background */
 
     ctx.fillStyle =
         "#ffffff";
@@ -2132,8 +2026,6 @@ function drawFourStrip(
     );
 
 
-
-    /* Photos */
 
     for (
 
@@ -2154,14 +2046,12 @@ function drawFourStrip(
 
             sidePadding,
 
-            topPadding
-            +
+            topPadding +
+
             (
-                i
-                *
+                i *
                 (
-                    photoHeight
-                    +
+                    photoHeight +
                     gap
                 )
             ),
@@ -2171,7 +2061,6 @@ function drawFourStrip(
             photoHeight
 
         );
-
 
     }
 
@@ -2204,24 +2093,19 @@ function drawGrid(
 ) {
 
 
-    const width =
-        700;
+    const width = 700;
 
 
-    const height =
-        700;
+    const height = 700;
 
 
-    const padding =
-        30;
+    const padding = 30;
 
 
-    const gap =
-        20;
+    const gap = 20;
 
 
-    const labelHeight =
-        80;
+    const labelHeight = 80;
 
 
 
@@ -2234,9 +2118,7 @@ function drawGrid(
             -
 
             (
-                padding
-                *
-                2
+                padding * 2
             )
 
             -
@@ -2244,7 +2126,9 @@ function drawGrid(
             gap
 
         )
+
         /
+
         2;
 
 
@@ -2268,7 +2152,9 @@ function drawGrid(
             gap
 
         )
+
         /
+
         2;
 
 
@@ -2289,8 +2175,6 @@ function drawGrid(
 
 
 
-    /* Background */
-
     ctx.fillStyle =
         "#ffffff";
 
@@ -2309,68 +2193,42 @@ function drawGrid(
 
 
 
-    /* Positions */
-
     const positions = [
 
-
         [
-
             padding,
-
             padding
-
         ],
 
-
         [
-
-            padding
-            +
-            photoWidth
-            +
+            padding +
+            photoWidth +
             gap,
 
             padding
-
         ],
 
-
         [
-
             padding,
 
-            padding
-            +
-            photoHeight
-            +
+            padding +
+            photoHeight +
             gap
-
         ],
 
-
         [
-
-            padding
-            +
-            photoWidth
-            +
+            padding +
+            photoWidth +
             gap,
 
-            padding
-            +
-            photoHeight
-            +
+            padding +
+            photoHeight +
             gap
-
         ]
-
 
     ];
 
 
-
-    /* Draw photos */
 
     for (
 
@@ -2398,7 +2256,6 @@ function drawGrid(
             photoHeight
 
         );
-
 
     }
 
@@ -2439,17 +2296,22 @@ function drawCoverImage(
 ) {
 
 
+    if (!image) {
+
+        return;
+
+    }
+
+
     const imageRatio =
 
-        image.width
-        /
+        image.width /
         image.height;
 
 
     const boxRatio =
 
-        width
-        /
+        width /
         height;
 
 
@@ -2461,43 +2323,35 @@ function drawCoverImage(
         image.height;
 
 
-    let sourceX =
-        0;
+    let sourceX = 0;
 
 
-    let sourceY =
-        0;
+    let sourceY = 0;
 
 
 
     if (
-
-        imageRatio
-        >
+        imageRatio >
         boxRatio
-
     ) {
 
 
         sourceWidth =
 
-            image.height
-            *
+            image.height *
             boxRatio;
 
 
         sourceX =
 
             (
-
-                image.width
-                -
+                image.width -
                 sourceWidth
-
             )
-            /
-            2;
 
+            /
+
+            2;
 
     }
 
@@ -2506,23 +2360,20 @@ function drawCoverImage(
 
         sourceHeight =
 
-            image.width
-            /
+            image.width /
             boxRatio;
 
 
         sourceY =
 
             (
-
-                image.height
-                -
+                image.height -
                 sourceHeight
-
             )
-            /
-            2;
 
+            /
+
+            2;
 
     }
 
@@ -2608,9 +2459,7 @@ function downloadPhoto() {
         );
 
 
-    if (
-        !canvas
-    ) {
+    if (!canvas) {
 
         return;
 
@@ -2652,14 +2501,11 @@ function downloadPhoto() {
 function retakePhotos() {
 
 
-    capturedPhotos =
-        [];
+    capturedPhotos = [];
 
 
     localStorage.removeItem(
-
         "capturedPhotos"
-
     );
 
 
@@ -2683,9 +2529,7 @@ function printPhoto() {
         );
 
 
-    if (
-        !modal
-    ) {
+    if (!modal) {
 
         return;
 
@@ -2723,11 +2567,8 @@ function copyCanvasToPrinter() {
 
 
     if (
-
-        !original
-        ||
+        !original ||
         !printerCanvas
-
     ) {
 
         return;
@@ -2776,15 +2617,12 @@ function closePrint() {
         );
 
 
-    if (
-        modal
-    ) {
+    if (modal) {
 
 
         modal.classList.remove(
             "active"
         );
-
 
     }
 
@@ -2815,6 +2653,17 @@ function startPrinting() {
         document.getElementById(
             "startPrintButton"
         );
+
+
+    if (
+        !status ||
+        !photo ||
+        !button
+    ) {
+
+        return;
+
+    }
 
 
     status.textContent =
@@ -2876,10 +2725,9 @@ document.addEventListener(
     () => {
 
 
-        /* ================================
+        /* ====================================
            HOME PAGE
-        ================================= */
-
+        ==================================== */
 
         const layoutOptions =
             document.querySelectorAll(
@@ -2894,8 +2742,7 @@ document.addEventListener(
 
                 if (
 
-                    option.dataset.layout
-                    ===
+                    option.dataset.layout ===
                     selectedLayout
 
                 ) {
@@ -2905,7 +2752,6 @@ document.addEventListener(
                         "selected"
                     );
 
-
                 }
 
             }
@@ -2914,17 +2760,15 @@ document.addEventListener(
 
 
 
-        /* ================================
+        /* ====================================
            CAPTURE PAGE
-        ================================= */
-
+        ==================================== */
 
         if (
 
-            document.body.classList
-                .contains(
-                    "capture-page"
-                )
+            document.body.classList.contains(
+                "capture-page"
+            )
 
         ) {
 
@@ -2935,35 +2779,28 @@ document.addEventListener(
             updateCounter();
 
 
-
-            /* Restore filter */
-
             selectFilter(
                 selectedFilter
             );
-
 
         }
 
 
 
-        /* ================================
+        /* ====================================
            RESULT PAGE
-        ================================= */
-
+        ==================================== */
 
         if (
 
-            document.body.classList
-                .contains(
-                    "result-page"
-                )
+            document.body.classList.contains(
+                "result-page"
+            )
 
         ) {
 
 
             createFinalPhoto();
-
 
         }
 

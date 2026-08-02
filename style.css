@@ -1460,3 +1460,374 @@ body::after {
         center;
 
 }
+
+/* ========================================
+   STAGE 4
+   FILTER SECTION
+======================================== */
+
+.filter-section {
+
+    width: 100%;
+
+    margin-top: 25px;
+
+    text-align: center;
+
+}
+
+
+.filter-section h3 {
+
+    margin-bottom: 15px;
+
+    color: white;
+
+    font-size: 0.9rem;
+
+    letter-spacing: 2px;
+
+    text-shadow:
+        1px 1px 0 #4f9bb8;
+
+}
+
+
+
+/* ========================================
+   FILTER OPTIONS
+======================================== */
+
+.filter-options {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+}
+
+
+
+/* ========================================
+   FILTER BUTTON
+======================================== */
+
+.filter-option {
+
+    width: 80px;
+
+    padding: 5px;
+
+    border:
+        3px solid
+        transparent;
+
+    border-radius: 12px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.5
+        );
+
+    cursor: pointer;
+
+    transition:
+        transform
+        0.2s ease,
+
+        border
+        0.2s ease,
+
+        background
+        0.2s ease;
+
+}
+
+
+.filter-option:hover {
+
+    transform:
+        translateY(-3px);
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.8
+        );
+
+}
+
+
+.filter-option.active {
+
+    border-color:
+        white;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.9
+        );
+
+    box-shadow:
+        0 0 0 2px
+        #58aeca;
+
+}
+
+
+
+/* ========================================
+   FILTER PREVIEW
+======================================== */
+
+.filter-preview {
+
+    width: 100%;
+
+    aspect-ratio:
+        1 / 1;
+
+    border-radius: 8px;
+
+    background:
+
+        linear-gradient(
+
+            135deg,
+
+            #83c9e4,
+
+            #f4d9b5
+
+        );
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+
+/* Fake light effect */
+
+.filter-preview::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+
+        radial-gradient(
+
+            circle at
+            30% 25%,
+
+            rgba(
+                255,
+                255,
+                255,
+                0.6
+            ),
+
+            transparent
+            35%
+
+        );
+
+}
+
+
+
+/* ========================================
+   FILTER LABEL
+======================================== */
+
+.filter-option span {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color:
+        #28657d;
+
+    font-size:
+        0.65rem;
+
+    font-weight:
+        bold;
+
+}
+
+
+
+/* ========================================
+   FILTER PREVIEW STYLES
+======================================== */
+
+.filter-normal {
+
+    filter:
+        none;
+
+}
+
+
+.filter-vintage {
+
+    filter:
+        sepia(0.35)
+        contrast(0.9)
+        brightness(1.05);
+
+}
+
+
+.filter-bw {
+
+    filter:
+        grayscale(1)
+        contrast(1.1);
+
+}
+
+
+.filter-sepia {
+
+    filter:
+        sepia(0.8)
+        contrast(0.95);
+
+}
+
+
+.filter-cool {
+
+    filter:
+        hue-rotate(15deg)
+        saturate(0.9)
+        brightness(1.05);
+
+}
+
+
+.filter-warm {
+
+    filter:
+        sepia(0.2)
+        saturate(1.3)
+        brightness(1.05);
+
+}
+
+
+
+/* ========================================
+   CAMERA FILTERS
+======================================== */
+
+#cameraVideo.filter-normal {
+
+    filter:
+        none;
+
+}
+
+
+#cameraVideo.filter-vintage {
+
+    filter:
+        sepia(0.35)
+        contrast(0.9)
+        brightness(1.05);
+
+}
+
+
+#cameraVideo.filter-bw {
+
+    filter:
+        grayscale(1)
+        contrast(1.1);
+
+}
+
+
+#cameraVideo.filter-sepia {
+
+    filter:
+        sepia(0.8)
+        contrast(0.95);
+
+}
+
+
+#cameraVideo.filter-cool {
+
+    filter:
+        hue-rotate(15deg)
+        saturate(0.9)
+        brightness(1.05);
+
+}
+
+
+#cameraVideo.filter-warm {
+
+    filter:
+        sepia(0.2)
+        saturate(1.3)
+        brightness(1.05);
+
+}
+
+
+
+/* ========================================
+   MOBILE FILTERS
+======================================== */
+
+@media (
+    max-width: 500px
+) {
+
+    .filter-option {
+
+        width: 65px;
+
+    }
+
+
+    .filter-option span {
+
+        font-size:
+            0.55rem;
+
+    }
+
+
+    .filter-options {
+
+        gap: 7px;
+
+    }
+
+}

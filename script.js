@@ -1,4 +1,7 @@
+/* ========================================
+   PHOTO BOOTH DATA
 ======================================== */
+
 
 let selectedLayout =
     localStorage.getItem("selectedLayout") || "classic";

@@ -23,7 +23,9 @@
 <body class="capture-page">
 
 
-    <!-- FLASH EFFECT -->
+    <!-- ========================================
+         CAMERA FLASH
+    ========================================= -->
 
     <div
         id="cameraFlash"
@@ -35,9 +37,12 @@
     <main class="capture-container">
 
 
-        <!-- HEADER -->
+        <!-- ========================================
+             HEADER
+        ========================================= -->
 
         <header class="capture-header">
+
 
             <button
                 class="back-button"
@@ -49,7 +54,10 @@
 
             <div>
 
-                <h1>TAKE A PIC</h1>
+                <h1>
+                    TAKE A PIC
+                </h1>
+
 
                 <p id="photoCounter">
                     Ready?
@@ -57,18 +65,24 @@
 
             </div>
 
+
         </header>
 
 
 
-        <!-- CAMERA + PREVIEW -->
+        <!-- ========================================
+             MAIN CAMERA AREA
+        ========================================= -->
 
         <section class="camera-layout">
 
 
-            <!-- CAMERA -->
+            <!-- ====================================
+                 CAMERA
+            ===================================== -->
 
             <div class="camera-section">
+
 
                 <div class="camera-frame">
 
@@ -94,6 +108,7 @@
                             📷
                         </div>
 
+
                         <p>
                             Open your camera to begin
                         </p>
@@ -108,11 +123,158 @@
                         class="countdown"
                     ></div>
 
+
                 </div>
 
 
 
-                <!-- CAMERA CONTROLS -->
+                <!-- ====================================
+                     FILTER SELECTOR
+                ===================================== -->
+
+                <div class="filter-section">
+
+
+                    <h3>
+                        CHOOSE YOUR FILTER
+                    </h3>
+
+
+                    <div
+                        id="filterOptions"
+                        class="filter-options"
+                    >
+
+
+                        <!-- NORMAL -->
+
+                        <button
+                            class="filter-option active"
+                            data-filter="normal"
+                            onclick="selectFilter('normal')"
+                        >
+
+                            <div
+                                class="filter-preview filter-normal"
+                            ></div>
+
+                            <span>
+                                Normal
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- VINTAGE -->
+
+                        <button
+                            class="filter-option"
+                            data-filter="vintage"
+                            onclick="selectFilter('vintage')"
+                        >
+
+                            <div
+                                class="filter-preview filter-vintage"
+                            ></div>
+
+                            <span>
+                                Vintage
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- BLACK AND WHITE -->
+
+                        <button
+                            class="filter-option"
+                            data-filter="bw"
+                            onclick="selectFilter('bw')"
+                        >
+
+                            <div
+                                class="filter-preview filter-bw"
+                            ></div>
+
+                            <span>
+                                B&W
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- SEPIA -->
+
+                        <button
+                            class="filter-option"
+                            data-filter="sepia"
+                            onclick="selectFilter('sepia')"
+                        >
+
+                            <div
+                                class="filter-preview filter-sepia"
+                            ></div>
+
+                            <span>
+                                Sepia
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- COOL -->
+
+                        <button
+                            class="filter-option"
+                            data-filter="cool"
+                            onclick="selectFilter('cool')"
+                        >
+
+                            <div
+                                class="filter-preview filter-cool"
+                            ></div>
+
+                            <span>
+                                Cool
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- WARM -->
+
+                        <button
+                            class="filter-option"
+                            data-filter="warm"
+                            onclick="selectFilter('warm')"
+                        >
+
+                            <div
+                                class="filter-preview filter-warm"
+                            ></div>
+
+                            <span>
+                                Warm
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ====================================
+                     CAMERA CONTROLS
+                ===================================== -->
 
                 <div class="camera-controls">
 
@@ -123,6 +285,7 @@
                     >
                         OPEN CAMERA
                     </button>
+
 
 
                     <button
@@ -137,6 +300,7 @@
                     </button>
 
 
+
                     <button
                         class="secondary-button"
                         onclick="switchCamera()"
@@ -147,23 +311,22 @@
 
                 </div>
 
+
             </div>
 
 
 
-            <!-- PHOTO PREVIEW -->
+            <!-- ====================================
+                 PHOTO PREVIEW
+            ===================================== -->
 
             <aside class="preview-section">
+
 
                 <h2>
                     YOUR PHOTO STRIP
                 </h2>
 
-
-                <!--
-                    JavaScript will create
-                    the selected layout here.
-                -->
 
                 <div
                     id="photoPreview"
@@ -178,7 +341,9 @@
 
 
 
-        <!-- FINISH -->
+        <!-- ========================================
+             FINISH
+        ========================================= -->
 
         <button
             id="finishButton"

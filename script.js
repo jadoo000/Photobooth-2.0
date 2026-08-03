@@ -2807,3 +2807,74 @@ document.addEventListener(
     }
 
 );
+/* ========================================
+   STAGE 7
+   MOBILE MENU
+======================================== */
+
+const menuToggle =
+    document.querySelector(
+        ".menu-toggle"
+    );
+
+const navLinks =
+    document.querySelector(
+        ".nav-links"
+    );
+
+
+if (
+    menuToggle &&
+    navLinks
+) {
+
+    menuToggle.addEventListener(
+        "click",
+        function () {
+
+            menuToggle.classList.toggle(
+                "active"
+            );
+
+            navLinks.classList.toggle(
+                "active"
+            );
+
+            document.body.classList.toggle(
+                "menu-open"
+            );
+
+        }
+    );
+
+
+    navLinks
+        .querySelectorAll(
+            "a"
+        )
+        .forEach(
+            function (link) {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        menuToggle.classList.remove(
+                            "active"
+                        );
+
+                        navLinks.classList.remove(
+                            "active"
+                        );
+
+                        document.body.classList.remove(
+                            "menu-open"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}

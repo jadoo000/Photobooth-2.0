@@ -3974,3 +3974,722 @@ footer {
     }
 
 }
+/* ========================================
+   STAGE 5D
+   FINAL FUTURISTIC POLISH + ANIMATIONS
+======================================== */
+
+
+/* ========================================
+   GLOBAL SMOOTHNESS
+======================================== */
+
+* {
+    -webkit-font-smoothing:
+        antialiased;
+
+    -moz-osx-font-smoothing:
+        grayscale;
+}
+
+
+body {
+    transition:
+        background-color
+        0.4s ease;
+}
+
+
+/* ========================================
+   PAGE LOAD ANIMATION
+======================================== */
+
+@keyframes pageReveal {
+
+    from {
+        opacity:
+            0;
+
+        transform:
+            translateY(
+                18px
+            );
+    }
+
+    to {
+        opacity:
+            1;
+
+        transform:
+            translateY(
+                0
+            );
+    }
+
+}
+
+
+.hero,
+.layout-section,
+.camera-section,
+.result-section,
+.capture-main,
+.result-main {
+    animation:
+        pageReveal
+        0.7s
+        ease-out
+        both;
+}
+
+
+/* ========================================
+   HERO TEXT ANIMATION
+======================================== */
+
+.hero-eyebrow {
+    animation:
+        pageReveal
+        0.6s
+        0.1s
+        ease-out
+        both;
+}
+
+
+.hero h1 {
+    animation:
+        pageReveal
+        0.7s
+        0.2s
+        ease-out
+        both;
+}
+
+
+.hero-description {
+    animation:
+        pageReveal
+        0.7s
+        0.3s
+        ease-out
+        both;
+}
+
+
+.hero-actions {
+    animation:
+        pageReveal
+        0.7s
+        0.4s
+        ease-out
+        both;
+}
+
+
+/* ========================================
+   FLOATING LIME ACCENT
+======================================== */
+
+.hero::after {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        18px;
+
+    height:
+        18px;
+
+    right:
+        12%;
+
+    bottom:
+        18%;
+
+    border-radius:
+        50%;
+
+    background:
+        #c9f23b;
+
+    box-shadow:
+        0 0 0 8px
+        rgba(
+            201,
+            242,
+            59,
+            0.12
+        );
+
+    animation:
+        floatingDot
+        4s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes floatingDot {
+
+    0%,
+    100% {
+        transform:
+            translateY(
+                0
+            );
+    }
+
+    50% {
+        transform:
+            translateY(
+                -15px
+            );
+    }
+
+}
+
+
+/* ========================================
+   LAYOUT CARD STAGGER
+======================================== */
+
+.layout-option:nth-child(1) {
+    animation:
+        pageReveal
+        0.6s
+        0.1s
+        ease-out
+        both;
+}
+
+
+.layout-option:nth-child(2) {
+    animation:
+        pageReveal
+        0.6s
+        0.2s
+        ease-out
+        both;
+}
+
+
+.layout-option:nth-child(3) {
+    animation:
+        pageReveal
+        0.6s
+        0.3s
+        ease-out
+        both;
+}
+
+
+.layout-option:nth-child(4) {
+    animation:
+        pageReveal
+        0.6s
+        0.4s
+        ease-out
+        both;
+}
+
+
+/* ========================================
+   CARD HOVER
+======================================== */
+
+.layout-option {
+    will-change:
+        transform;
+}
+
+
+.layout-option:hover {
+    transform:
+        translateY(
+            -8px
+        );
+}
+
+
+/* ========================================
+   LAYOUT CARD ACTIVE EFFECT
+======================================== */
+
+.layout-option.selected {
+    animation:
+        selectedCard
+        0.35s
+        ease-out;
+}
+
+
+@keyframes selectedCard {
+
+    0% {
+        transform:
+            scale(
+                0.98
+            );
+    }
+
+    60% {
+        transform:
+            scale(
+                1.02
+            );
+    }
+
+    100% {
+        transform:
+            scale(
+                1
+            );
+    }
+
+}
+
+
+/* ========================================
+   BUTTON PRESS EFFECT
+======================================== */
+
+button:active {
+    transform:
+        scale(
+            0.97
+        ) !important;
+}
+
+
+/* ========================================
+   FOCUS ACCESSIBILITY
+======================================== */
+
+button:focus-visible,
+a:focus-visible {
+    outline:
+        3px solid
+        #c9f23b;
+
+    outline-offset:
+        4px;
+}
+
+
+/* ========================================
+   CAMERA LIVE INDICATOR
+======================================== */
+
+.camera-status {
+    animation:
+        statusFloat
+        3s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes statusFloat {
+
+    0%,
+    100% {
+        transform:
+            translateY(
+                0
+            );
+    }
+
+    50% {
+        transform:
+            translateY(
+                -3px
+            );
+    }
+
+}
+
+
+/* ========================================
+   SHUTTER PULSE
+======================================== */
+
+.shutter-button::before {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        -8px;
+
+    border:
+        1px solid
+        rgba(
+            201,
+            242,
+            59,
+            0.3
+        );
+
+    border-radius:
+        50%;
+
+    opacity:
+        0;
+
+    transition:
+        0.3s ease;
+}
+
+
+.shutter-button:hover::before {
+    opacity:
+        1;
+
+    animation:
+        shutterPulse
+        1.5s
+        ease-out
+        infinite;
+}
+
+
+@keyframes shutterPulse {
+
+    0% {
+        transform:
+            scale(
+                0.9
+            );
+
+        opacity:
+            0.7;
+    }
+
+    100% {
+        transform:
+            scale(
+                1.25
+            );
+
+        opacity:
+            0;
+    }
+
+}
+
+
+/* ========================================
+   CAMERA PREVIEW SMOOTH APPEARANCE
+======================================== */
+
+#cameraVideo {
+    animation:
+        cameraAppear
+        0.8s
+        ease-out;
+}
+
+
+@keyframes cameraAppear {
+
+    from {
+        opacity:
+            0;
+
+        transform:
+            scale(
+                1.03
+            );
+    }
+
+    to {
+        opacity:
+            1;
+
+        transform:
+            scale(
+                1
+            );
+    }
+
+}
+
+
+/* ========================================
+   PHOTO PREVIEW ANIMATION
+======================================== */
+
+.preview-slot {
+    animation:
+        photoSlotAppear
+        0.4s
+        ease-out
+        both;
+}
+
+
+@keyframes photoSlotAppear {
+
+    from {
+        opacity:
+            0;
+
+        transform:
+            scale(
+                0.85
+            )
+            translateY(
+                10px
+            );
+    }
+
+    to {
+        opacity:
+            1;
+
+        transform:
+            scale(
+                1
+            )
+            translateY(
+                0
+            );
+    }
+
+}
+
+
+/* ========================================
+   RESULT PHOTO HOVER
+======================================== */
+
+.final-photo-card {
+    transition:
+        transform
+        0.4s
+        ease,
+        box-shadow
+        0.4s
+        ease;
+}
+
+
+.final-photo-card:hover {
+    transform:
+        translateY(
+            -5px
+        );
+
+    box-shadow:
+        0 40px 100px
+        rgba(
+            23,
+            26,
+            28,
+            0.16
+        );
+}
+
+
+/* ========================================
+   RESULT CANVAS HOVER
+======================================== */
+
+#resultCanvas {
+    transition:
+        transform
+        0.4s
+        ease,
+        box-shadow
+        0.4s
+        ease;
+}
+
+
+#resultCanvas:hover {
+    transform:
+        rotate(
+            -1deg
+        )
+        scale(
+            1.015
+        );
+
+    box-shadow:
+        0 30px 70px
+        rgba(
+            23,
+            26,
+            28,
+            0.25
+        );
+}
+
+
+/* ========================================
+   RESULT BUTTON STAGGER
+======================================== */
+
+.result-actions > *:nth-child(1) {
+    animation:
+        pageReveal
+        0.5s
+        0.1s
+        ease-out
+        both;
+}
+
+
+.result-actions > *:nth-child(2) {
+    animation:
+        pageReveal
+        0.5s
+        0.2s
+        ease-out
+        both;
+}
+
+
+.result-actions > *:nth-child(3) {
+    animation:
+        pageReveal
+        0.5s
+        0.3s
+        ease-out
+        both;
+}
+
+
+/* ========================================
+   SCROLLBAR
+======================================== */
+
+::-webkit-scrollbar {
+    width:
+        8px;
+
+    height:
+        8px;
+}
+
+
+::-webkit-scrollbar-track {
+    background:
+        rgba(
+            23,
+            26,
+            28,
+            0.06
+        );
+}
+
+
+::-webkit-scrollbar-thumb {
+    border-radius:
+        999px;
+
+    background:
+        rgba(
+            23,
+            26,
+            28,
+            0.3
+        );
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        #c9f23b;
+}
+
+
+/* ========================================
+   SELECTION COLOR
+======================================== */
+
+::selection {
+    background:
+        #c9f23b;
+
+    color:
+        #171a1c;
+}
+
+
+/* ========================================
+   REDUCE MOTION
+======================================== */
+
+@media (
+    prefers-reduced-motion: reduce
+) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        scroll-behavior:
+            auto !important;
+
+        transition-duration:
+            0.01ms !important;
+    }
+
+}
+
+
+/* ========================================
+   MOBILE POLISH
+======================================== */
+
+@media (
+    max-width: 600px
+) {
+
+    .hero::after {
+        width:
+            12px;
+
+        height:
+            12px;
+
+        right:
+            10%;
+
+        bottom:
+            12%;
+    }
+
+
+    .layout-option:hover {
+        transform:
+            translateY(
+                -4px
+            );
+    }
+
+
+    .final-photo-card:hover {
+        transform:
+            none;
+    }
+
+
+    #resultCanvas:hover {
+        transform:
+            none;
+    }
+
+}

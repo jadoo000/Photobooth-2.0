@@ -1953,3 +1953,267 @@ all .28s cubic-bezier(.2,.8,.2,1);
 END OF FILE
 =====================================================*/
 
+/*====================================================
+HOME PAGE V3
+====================================================*/
+
+.home-page{
+
+    min-height:100vh;
+
+    background:
+    radial-gradient(circle at top left,#FDFEFE 0%,#EDF7F8 35%,#D9EEF2 100%);
+
+    color:#24313A;
+
+}
+
+/*==============================
+HERO
+==============================*/
+
+.hero{
+
+    text-align:center;
+
+    padding-top:60px;
+
+    margin-bottom:90px;
+
+}
+
+.hero-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:10px 22px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.75);
+
+    backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,.7);
+
+    font-size:.8rem;
+
+    letter-spacing:.18em;
+
+    font-weight:700;
+
+    color:#6D7C86;
+
+    margin-bottom:28px;
+
+}
+
+.hero-title{
+
+    font-size:clamp(4rem,9vw,7rem);
+
+    line-height:.88;
+
+    letter-spacing:-.08em;
+
+    font-weight:800;
+
+    margin-bottom:28px;
+
+}
+
+.hero-description{
+
+    max-width:650px;
+
+    margin:auto;
+
+    font-size:1.08rem;
+
+    line-height:1.9;
+
+    color:#72818A;
+
+}
+
+/*==============================
+SECTION TITLE
+==============================*/
+
+.section-heading{
+
+    text-align:center;
+
+    margin-bottom:55px;
+
+}
+
+.section-heading h2{
+
+    font-size:2rem;
+
+    margin-bottom:12px;
+
+}
+
+.section-heading p{
+
+    color:#72818A;
+
+}
+
+/*==============================
+LAYOUT GRID
+==============================*/
+
+.layout-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+    gap:30px;
+
+}
+
+/*==============================
+LAYOUT CARD
+==============================*/
+
+.layout-option{
+
+    background:
+    rgba(255,255,255,.82);
+
+    backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,.65);
+
+    border-radius:30px;
+
+    padding:28px;
+
+    text-align:left;
+
+    transition:.35s;
+
+    box-shadow:
+
+    0 22px 60px rgba(36,49,58,.08);
+
+}
+
+.layout-option:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.layout-option.selected{
+
+    border:2px solid #C8F042;
+
+}
+
+/*==============================
+PREVIEW
+==============================*/
+
+.mini-strip,
+.mini-grid{
+
+    background:#F5FAFB;
+
+    border-radius:22px;
+
+    padding:18px;
+
+    margin-bottom:24px;
+
+}
+
+.mini-photo{
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #DDEFF3,
+    #FDFEFE);
+
+    border-radius:12px;
+
+}
+
+/*==============================
+CARD TEXT
+==============================*/
+
+.layout-option h3{
+
+    font-size:1.2rem;
+
+    margin-bottom:10px;
+
+}
+
+.layout-option p{
+
+    color:#72818A;
+
+    line-height:1.7;
+
+}
+
+/*==============================
+BUTTON
+==============================*/
+
+.home-action{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-top:70px;
+
+}
+
+.main-button{
+
+    min-width:260px;
+
+    height:64px;
+
+    border-radius:18px;
+
+    background:#C8F042;
+
+    color:#24313A;
+
+    font-size:1rem;
+
+    font-weight:700;
+
+    letter-spacing:.02em;
+
+    transition:.3s;
+
+    box-shadow:
+
+    0 18px 45px rgba(190,220,60,.28);
+
+}
+
+.main-button:hover{
+
+    transform:translateY(-4px);
+
+    background:#B8E23A;
+
+}

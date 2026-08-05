@@ -489,9 +489,25 @@ LAYOUT SECTION
     display:grid;
 
     grid-template-columns:
-    repeat(auto-fit,minmax(320px,1fr));
 
-    gap:30px;
+    repeat(3,1fr);
+
+    gap:28px;
+
+    align-items:stretch;
+
+}
+.layout-option:first-child{
+
+    transform:scale(1.02);
+
+}
+
+.layout-option:first-child:hover{
+
+    transform:
+    scale(1.02)
+    translateY(-10px);
 
 }
 /*==================================================
@@ -930,5 +946,48 @@ opacity:1;
 transform:none;
 
 }
+
+}
+/*==================================================
+FLOATING LIGHT
+==================================================*/
+
+.hero{
+
+    position:relative;
+
+}
+
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+
+    height:180px;
+
+    left:50%;
+
+    top:140px;
+
+    transform:translateX(-50%);
+
+    border-radius:50%;
+
+    background:
+
+    radial-gradient(
+
+        rgba(200,240,66,.18),
+
+        transparent 72%
+
+    );
+
+    filter:blur(30px);
+
+    z-index:-1;
 
 }

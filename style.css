@@ -1,0 +1,262 @@
+/*==================================================
+PHOTOBOOTH 3.0
+Modern • Editorial • Soft • Premium
+==================================================*/
+
+
+/*==================================================
+RESET
+==================================================*/
+
+*,
+*::before,
+*::after{
+
+    margin:0;
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    min-height:100vh;
+
+}
+
+img{
+
+    display:block;
+
+    max-width:100%;
+
+}
+
+button{
+
+    border:none;
+
+    outline:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    font:inherit;
+
+}
+
+input,
+textarea,
+select{
+
+    font:inherit;
+
+    outline:none;
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+ul{
+
+    list-style:none;
+
+}
+/*==================================================
+DESIGN SYSTEM
+==================================================*/
+
+:root{
+
+    /* Colors */
+
+    --bg:#EAF6F8;
+
+    --bg-soft:#F7FCFD;
+
+    --surface:#FFFFFF;
+
+    --surface-soft:rgba(255,255,255,.72);
+
+    --text:#24313A;
+
+    --muted:#72818A;
+
+    --accent:#C8F042;
+
+    --accent-hover:#B7DE3B;
+
+    --line:rgba(36,49,58,.08);
+
+
+    /* Radius */
+
+    --radius-xl:32px;
+
+    --radius-lg:24px;
+
+    --radius-md:18px;
+
+    --radius-sm:12px;
+
+
+    /* Shadows */
+
+    --shadow-soft:
+
+    0 20px 60px rgba(36,49,58,.08);
+
+    --shadow-hover:
+
+    0 28px 70px rgba(36,49,58,.12);
+
+
+    /* Width */
+
+    --container:1240px;
+
+
+    /* Transition */
+
+    --transition:.28s cubic-bezier(.22,.61,.36,1);
+
+}
+
+/*==================================================
+GLOBAL
+==================================================*/
+
+body{
+
+    font-family:
+    "Inter",
+    "SF Pro Display",
+    "Segoe UI",
+    sans-serif;
+
+    background:
+    radial-gradient(
+        circle at top left,
+        #FFFFFF 0%,
+        #F7FCFD 30%,
+        #EAF6F8 70%,
+        #DCEFF3 100%
+    );
+
+    color:var(--text);
+
+    overflow-x:hidden;
+
+}
+
+
+/*==================================================
+CONTAINER
+==================================================*/
+
+.home-container,
+.capture-container,
+.customize-container,
+.result-container{
+
+    width:min(92%,var(--container));
+
+    margin:auto;
+
+    padding:70px 0 90px;
+
+}
+
+
+/*==================================================
+HEADINGS
+==================================================*/
+
+h1,h2,h3,h4{
+
+    font-weight:700;
+
+    letter-spacing:-.04em;
+
+}
+
+h1{
+
+    font-size:clamp(4rem,8vw,7rem);
+
+    line-height:.88;
+
+}
+
+h2{
+
+    font-size:2.2rem;
+
+}
+
+h3{
+
+    font-size:1.25rem;
+
+}
+
+p{
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+}
+
+
+/*==================================================
+SECTIONS
+==================================================*/
+
+section{
+
+    margin-top:90px;
+
+}
+/*==================================================
+CARD
+==================================================*/
+
+.card{
+
+    background:
+    rgba(255,255,255,.82);
+
+    backdrop-filter:blur(14px);
+
+    border:1px solid rgba(255,255,255,.65);
+
+    border-radius:var(--radius-xl);
+
+    box-shadow:var(--shadow-soft);
+
+    transition:var(--transition);
+
+}
+
+.card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:var(--shadow-hover);
+
+}

@@ -489,6 +489,17 @@ LAYOUT SECTION
 LAYOUT CARD
 ==================================================*/
 
+.layout-card{
+
+    position:relative;
+
+    border-radius:34px;
+
+    transition:all .35s cubic-bezier(.22,.61,.36,1);
+
+}
+
+
 .layout-option{
 
     position:relative;
@@ -499,23 +510,47 @@ LAYOUT CARD
 
     gap:22px;
 
+    width:100%;
+
     padding:30px;
 
-    background:rgba(255,255,255,.88);
+    text-align:left;
 
-    border-radius:32px;
+    border:none;
 
-    border:1px solid rgba(255,255,255,.85);
+    border-radius:34px;
 
-    box-shadow:
+    background:
 
-    0 24px 70px rgba(36,49,58,.08);
+    linear-gradient(
+
+        180deg,
+
+        rgba(255,255,255,.96),
+
+        rgba(248,252,253,.92)
+
+    );
+
+    backdrop-filter:blur(20px);
 
     overflow:hidden;
 
-    transition:all .35s cubic-bezier(.22,.61,.36,1);
+    cursor:pointer;
+
+    box-shadow:
+
+        0 24px 70px rgba(36,49,58,.08);
+
+    transition:
+
+        transform .35s cubic-bezier(.22,.61,.36,1),
+
+        box-shadow .35s cubic-bezier(.22,.61,.36,1);
 
 }
+
+
 .layout-option::after{
 
     content:"";
@@ -537,6 +572,32 @@ LAYOUT CARD
     );
 
     pointer-events:none;
+
+}
+
+
+.layout-option:hover{
+
+    transform:
+
+        translateY(-10px)
+
+        scale(1.02);
+
+    box-shadow:
+
+        0 40px 90px rgba(36,49,58,.14);
+
+}
+
+
+.layout-option.selected{
+
+    box-shadow:
+
+        0 0 0 2px var(--accent),
+
+        0 40px 90px rgba(36,49,58,.14);
 
 }
 /*==================================================

@@ -543,6 +543,10 @@ LAYOUT CARD
 PHOTO STRIP PREVIEW
 ==================================================*/
 
+/*==================================================
+PHOTO STRIP PREVIEW
+==================================================*/
+
 .mini-strip,
 .mini-grid{
 
@@ -550,12 +554,13 @@ PHOTO STRIP PREVIEW
 
     background:#FFFFFF;
 
-    border-radius:20px;
+    padding:18px;
 
-    padding:16px;
+    border-radius:22px;
 
     box-shadow:
-    inset 0 0 0 1px rgba(36,49,58,.05);
+        0 12px 35px rgba(36,49,58,.08),
+        inset 0 0 0 1px rgba(36,49,58,.05);
 
 }
 
@@ -586,20 +591,18 @@ PHOTO STRIP PREVIEW
 
     height:72px;
 
-    border-radius:10px;
-
     overflow:hidden;
 
+    border-radius:12px;
+
     background:
-    linear-gradient(
-        145deg,
-        #EDF7F9,
-        #D9EEF2
-    );
+        linear-gradient(
+            145deg,
+            #EDF7F9,
+            #D7EEF3
+        );
 
 }
-
-/* soft portrait */
 
 .mini-photo::before{
 
@@ -609,24 +612,22 @@ PHOTO STRIP PREVIEW
 
     left:50%;
 
-    top:50%;
-
-    width:34px;
-
-    height:34px;
+    top:46%;
 
     transform:translate(-50%,-50%);
 
+    width:32px;
+
+    height:32px;
+
     border-radius:50%;
 
-    background:rgba(255,255,255,.85);
+    background:rgba(255,255,255,.92);
 
     box-shadow:
-    0 22px 0 12px rgba(255,255,255,.85);
+        0 24px 0 10px rgba(255,255,255,.92);
 
 }
-
-/* glossy reflection */
 
 .mini-photo::after{
 
@@ -637,27 +638,26 @@ PHOTO STRIP PREVIEW
     inset:0;
 
     background:
-    linear-gradient(
-        180deg,
-        rgba(255,255,255,.45),
-        transparent 45%
-    );
+        linear-gradient(
+            rgba(255,255,255,.45),
+            transparent 45%
+        );
 
 }
 
 .mini-label{
 
-    margin-top:12px;
+    margin-top:14px;
 
     text-align:center;
 
-    font-size:.68rem;
+    font-size:.65rem;
 
-    letter-spacing:.18em;
-
-    color:#8A98A0;
+    letter-spacing:.22em;
 
     font-weight:700;
+
+    color:#8E9CA3;
 
 }
 /*==================================================

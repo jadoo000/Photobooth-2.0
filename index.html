@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Photo Booth</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="home-page">
+
+    <main class="home-container">
+
+        <header class="site-header">
+            <h1>PHOTO BOOTH</h1>
+            <p>Capture your little memories</p>
+        </header>
+
+
+        <section class="layout-section">
+
+            <h2>Choose a layout</h2>
+
+            <div class="layout-grid">
+
+                <!-- Layout 1 -->
+                <button 
+                    class="layout-option selected"
+                    data-layout="classic"
+                    data-photos="3"
+                    onclick="selectLayout(this)"
+                >
+
+                    <div class="mini-strip classic-strip">
+
+                        <div class="mini-photo">1</div>
+                        <div class="mini-photo">2</div>
+                        <div class="mini-photo">3</div>
+
+                        <div class="mini-label">
+                            PHOTO BOOTH
+                        </div>
+
+                    </div>
+
+                    <span>Classic Strip</span>
+
+                </button>
+
+
+                <!-- Layout 2 -->
+                <button 
+                    class="layout-option"
+                    data-layout="four"
+                    data-photos="4"
+                    onclick="selectLayout(this)"
+                >
+
+                    <div class="mini-strip four-strip">
+
+                        <div class="mini-photo">1</div>
+                        <div class="mini-photo">2</div>
+                        <div class="mini-photo">3</div>
+                        <div class="mini-photo">4</div>
+
+                        <div class="mini-label">
+                            PHOTO BOOTH
+                        </div>
+
+                    </div>
+
+                    <span>Four Photos</span>
+
+                </button>
+
+
+                <!-- Layout 3 -->
+                <button 
+                    class="layout-option"
+                    data-layout="grid"
+                    data-photos="4"
+                    onclick="selectLayout(this)"
+                >
+
+                    <div class="mini-grid">
+
+                        <div class="mini-photo">1</div>
+                        <div class="mini-photo">2</div>
+                        <div class="mini-photo">3</div>
+                        <div class="mini-photo">4</div>
+
+                    </div>
+
+                    <span>Photo Grid</span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <button 
+            class="main-button"
+            onclick="startPhotoBooth()"
+        >
+            TAKE A PIC
+        </button>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

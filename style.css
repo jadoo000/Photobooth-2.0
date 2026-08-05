@@ -461,6 +461,8 @@ LAYOUT SECTION
 
 .layout-grid{
 
+    position:relative;
+
     display:grid;
 
     grid-template-columns:
@@ -470,6 +472,33 @@ LAYOUT SECTION
     gap:28px;
 
     align-items:stretch;
+
+}
+.layout-grid::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-70px;
+
+    background:
+
+    radial-gradient(
+
+        circle,
+
+        rgba(200,240,66,.10) 0%,
+
+        rgba(188,235,255,.08) 35%,
+
+        transparent 75%
+
+    );
+
+    z-index:-1;
+
+    pointer-events:none;
 
 }
 .layout-option:first-child{

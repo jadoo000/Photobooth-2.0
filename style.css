@@ -400,19 +400,27 @@ HOME PAGE
 
     justify-content:center;
 
+    gap:8px;
+
     padding:12px 22px;
 
     border-radius:999px;
 
-    background:rgba(255,255,255,.72);
+    background:rgba(255,255,255,.82);
 
     border:1px solid rgba(255,255,255,.75);
 
-    backdrop-filter:blur(14px);
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+
+        0 12px 30px rgba(36,49,58,.05);
 
     font-size:.78rem;
 
-    letter-spacing:.16em;
+    font-weight:700;
+
+    letter-spacing:.18em;
 
     color:var(--muted);
 

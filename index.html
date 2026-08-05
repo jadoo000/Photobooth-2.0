@@ -1,32 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Photo Booth</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
 
 <body class="home-page">
 
     <main class="home-container">
 
-        <header class="site-header">
-            <h1>PHOTO BOOTH</h1>
-            <p>Capture your little memories</p>
+
+        <!-- =========================
+             HERO
+        ========================== -->
+
+        <header class="hero">
+
+            <span class="hero-badge">
+                PREMIUM PHOTO EXPERIENCE
+            </span>
+
+            <h1 class="hero-title">
+                PHOTO<br>BOOTH
+            </h1>
+
+            <p class="hero-description">
+                Every memory deserves a beautiful frame.
+                Choose a layout below and create timeless photo strips
+                with a clean, premium experience.
+            </p>
+
         </header>
 
 
+
+        <!-- =========================
+             LAYOUTS
+        ========================== -->
+
         <section class="layout-section">
 
-            <h2>Choose a layout</h2>
+            <div class="section-heading">
+
+                <h2>
+                    Choose your layout
+                </h2>
+
+                <p>
+                    Pick the style that best matches your memories.
+                </p>
+
+            </div>
+
 
             <div class="layout-grid">
 
-                <!-- Layout 1 -->
-                <button 
+
+                <!-- CLASSIC -->
+
+                <button
                     class="layout-option selected"
                     data-layout="classic"
                     data-photos="3"
@@ -35,9 +81,9 @@
 
                     <div class="mini-strip classic-strip">
 
-                        <div class="mini-photo">1</div>
-                        <div class="mini-photo">2</div>
-                        <div class="mini-photo">3</div>
+                        <div class="mini-photo"></div>
+                        <div class="mini-photo"></div>
+                        <div class="mini-photo"></div>
 
                         <div class="mini-label">
                             PHOTO BOOTH
@@ -45,13 +91,21 @@
 
                     </div>
 
-                    <span>Classic Strip</span>
+                    <h3>
+                        Classic Strip
+                    </h3>
+
+                    <p>
+                        Three timeless portraits.
+                    </p>
 
                 </button>
 
 
-                <!-- Layout 2 -->
-                <button 
+
+                <!-- FOUR -->
+
+                <button
                     class="layout-option"
                     data-layout="four"
                     data-photos="4"
@@ -60,10 +114,10 @@
 
                     <div class="mini-strip four-strip">
 
-                        <div class="mini-photo">1</div>
-                        <div class="mini-photo">2</div>
-                        <div class="mini-photo">3</div>
-                        <div class="mini-photo">4</div>
+                        <div class="mini-photo"></div>
+                        <div class="mini-photo"></div>
+                        <div class="mini-photo"></div>
+                        <div class="mini-photo"></div>
 
                         <div class="mini-label">
                             PHOTO BOOTH
@@ -71,13 +125,21 @@
 
                     </div>
 
-                    <span>Four Photos</span>
+                    <h3>
+                        Four Photos
+                    </h3>
+
+                    <p>
+                        The classic photo booth experience.
+                    </p>
 
                 </button>
 
 
-                <!-- Layout 3 -->
-                <button 
+
+                <!-- GRID -->
+
+                <button
                     class="layout-option"
                     data-layout="grid"
                     data-photos="4"
@@ -86,14 +148,20 @@
 
                     <div class="mini-grid">
 
-                        <div class="mini-photo">1</div>
-                        <div class="mini-photo">2</div>
-                        <div class="mini-photo">3</div>
-                        <div class="mini-photo">4</div>
+                        <div class="mini-photo"></div>
+                        <div class="mini-photo"></div>
+                        <div class="mini-photo"></div>
+                        <div class="mini-photo"></div>
 
                     </div>
 
-                    <span>Photo Grid</span>
+                    <h3>
+                        Photo Grid
+                    </h3>
+
+                    <p>
+                        A modern square collage.
+                    </p>
 
                 </button>
 
@@ -102,17 +170,29 @@
         </section>
 
 
-        <button 
-            class="main-button"
-            onclick="startPhotoBooth()"
-        >
-            TAKE A PIC
-        </button>
+
+        <!-- =========================
+             START
+        ========================== -->
+
+        <div class="home-action">
+
+            <button
+                class="main-button"
+                onclick="startPhotoBooth()"
+            >
+
+                Start Experience →
+
+            </button>
+
+        </div>
+
 
     </main>
-
 
     <script src="script.js"></script>
 
 </body>
+
 </html>
